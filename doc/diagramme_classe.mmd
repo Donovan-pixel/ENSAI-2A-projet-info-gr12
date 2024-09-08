@@ -1,0 +1,92 @@
+classDiagram
+    class Recettes {
+        +int id_recette
+        +String titre
+        +String ingrédients
+        +String consignes
+        +float note
+        +String catégorie
+        +String origine
+        +String commentaire
+        +ajouter()
+        +afficher_une_recette()
+    }
+
+    class Ingredients {
+        +int id_ingredient
+        +String nom
+        +float quantité
+        +afficher()
+        +ajouter_ingrédients()
+    }
+
+    class Utilisateur {
+        +int id_utilisateur
+        +String pseudo
+        +String adresse_mail
+        +String mot_de_passe
+        +se_connecter()
+        +créer_un_compte()
+        +supprimer()
+        +pseudo_deja_utiliser()
+        +modifier()
+    }
+
+    class Liste_des_courses {
+        +ajouter_ingredients()
+        +afficher()
+        +supprimer()
+    }
+    
+    class Recettes_favorites {
+        +int id_utilisateur
+        +ajouter()
+        +supprimer()
+        +afficher()
+    }
+
+    class Avis {
+        +int id_utilisateur
+        +int recette
+    }
+
+    class Ingredients_favoris {
+        +int id_utilisateur
+    }
+
+    class Ingredients_non_desires {
+        +int id_utilisateur
+    }
+
+    class Regime_alimentaire {
+        +int id_regime_alimentaire
+    }
+
+    class Recette_DAO {
+        +ajouter_recette()
+        +obtenir_recette_par_id()
+        +fermer_connexion()
+    }
+
+    class Recette_Service {
+        +ajouter_nouvelle_recette()
+        +afficher_recette()
+    }
+
+    %% Relations d'héritage
+    Liste_des_courses --|> Ingredients : hérite de
+    Recettes_favorites --|> Recettes : hérite de
+    Ingredients_favoris --|> Ingredients : hérite de
+    Ingredients_non_desires --|> Ingredients : hérite de
+    
+    %% Relations DAO et Service
+    Recette_Service --> RecetteDAO : utilise
+    Recette_DAO --> Recettes : gère
+    
+    %% Relations diverses avec cardinalités
+    Utilisateur "1..*" --> "0..*" Recettes_favorites : possède
+    Utilisateur "1" --> "0..*" Avis : donne des avis
+    Utilisateur "1..*" --> "0..*" Ingredients_favoris : possède
+    Utilisateur "1..*" --> "0..*" Ingredients_non_desires : ne consomme pas
+    Recettes "1" --> "0..*" Avis : reçoit
+    Recettes "1..*" --> "1..*" Ingredients : contient
