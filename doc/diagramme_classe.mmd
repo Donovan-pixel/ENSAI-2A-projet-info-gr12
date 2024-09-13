@@ -76,7 +76,7 @@ classDiagram
     class Utilisateur_Service {
 
     }
-        class Utilisateur_DAO {
+    class Utilisateur_DAO {
 
     }
 
@@ -84,11 +84,12 @@ classDiagram
     Recettes_favorites --|> Recettes : hérite de
     Ingredients_favoris --|> Ingredients : hérite de
     Ingredients_non_desires --|> Ingredients : hérite de
-    Utilisateur_Service --|> Utilisateur
 
     %% Relations DAO et Service
     Recette_Service --> Recette_DAO : utilise
     Recette_DAO --> Recettes : gère
+    Utilisateur_Service --> Utilisateur_DAO : utilise
+    Utilisateur_DAO --> Utilisateur : gère
 
     %% Relations diverses avec cardinalités
     Utilisateur "1..*" --> "0..*" Recettes_favorites : possède
