@@ -22,17 +22,16 @@ classDiagram
 
     class Utilisateur {
         +int id_utilisateur
-        +Stridfolujgitng pseudo
-        +String adresse_mail
+        +String pseudo
         +String mot_de_passe
         +se_connecter()
-        +créer_un_compte()
+        +creer_un_compte()
         +supprimer()
-        +pseudo_deja_utiliser()
+        +pseudo_deja_utilise()
         +modifier()
     }
 
-    class Liste_des_courses {
+    class Liste_de_courses {
         +ajouter_ingredients()
         +afficher()
         +supprimer()
@@ -90,5 +89,5 @@ classDiagram
     Recettes "1" --> "0..*" Avis : reçoit
     Recettes "1..*" --> "1..*" Ingredients : contient
      %% Relations de composition
-     Liste_des_courses *-- Ingredients : contient
+     Liste_de_courses *-- Ingredients : contient
 
