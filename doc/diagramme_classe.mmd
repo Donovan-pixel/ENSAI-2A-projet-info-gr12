@@ -22,7 +22,7 @@ classDiagram
 
     class Utilisateur {
         +int id_utilisateur
-        +String pseudo
+        +Stridfolujgitng pseudo
         +String adresse_mail
         +String mot_de_passe
         +se_connecter()
@@ -37,7 +37,7 @@ classDiagram
         +afficher()
         +supprimer()
     }
-    
+
     class Recettes_favorites {
         +int id_utilisateur
         +ajouter()
@@ -74,15 +74,14 @@ classDiagram
     }
 
     %% Relations d'héritage
-    Liste_des_courses --|> Ingredients : hérite de
     Recettes_favorites --|> Recettes : hérite de
     Ingredients_favoris --|> Ingredients : hérite de
     Ingredients_non_desires --|> Ingredients : hérite de
-    
+
     %% Relations DAO et Service
     Recette_Service --> RecetteDAO : utilise
     Recette_DAO --> Recettes : gère
-    
+
     %% Relations diverses avec cardinalités
     Utilisateur "1..*" --> "0..*" Recettes_favorites : possède
     Utilisateur "1" --> "0..*" Avis : donne des avis
@@ -90,3 +89,6 @@ classDiagram
     Utilisateur "1..*" --> "0..*" Ingredients_non_desires : ne consomme pas
     Recettes "1" --> "0..*" Avis : reçoit
     Recettes "1..*" --> "1..*" Ingredients : contient
+     %% Relations de composition
+     Liste_des_courses *-- Ingredients : contient
+
