@@ -9,14 +9,14 @@ classDiagram
         +String origine
         +String commentaire
         +ajouter()
-        +afficher_une_recette()
+        +afficher_une_recette() : str
     }
 
     class Ingredients {
         +int id_ingredient
         +String nom
         +float quantite
-        +afficher()
+        +afficher() : str
         +ajouter_ingredients()
     }
 
@@ -26,24 +26,24 @@ classDiagram
         +String mot_de_passe
         +se_connecter()
         +creer_un_compte()
-        +supprimer()
-        +pseudo_deja_utilise()
-        +modifier()
+        +supprimer() : bool
+        +pseudo_deja_utilise() : bool
+        +modifier() : bool
     }
 
     class Liste_de_courses {
         +int id_utilisateur
         +string elements
         +ajouter_ingredients()
-        +afficher()
-        +supprimer()
+        +afficher() : list[ingredients]
+        +supprimer_ingredient() : bool
     }
 
     class Recettes_favorites {
         +int id_utilisateur
-        +ajouter()
-        +supprimer()
-        +afficher()
+        +ajouter() : bool
+        +supprimer() : bool
+        +afficher() : str
     }
 
     class Avis {
@@ -59,19 +59,15 @@ classDiagram
         +int id_utilisateur
     }
 
-    class Regime_alimentaire {
-        +int id_regime_alimentaire
-    }
-
     class Recette_DAO {
         +ajouter_recette()
-        +obtenir_recette_par_id()
+        +obtenir_recette_par_id() :str
         +fermer_connexion()
     }
 
     class Recette_Service {
         +ajouter_nouvelle_recette()
-        +afficher_recette()
+        +afficher_recette() : str
     }
     class Utilisateur_Service {
 
@@ -97,8 +93,9 @@ classDiagram
     Utilisateur "1..*" --> "0..*" Ingredients_favoris : possède
     Utilisateur "1..*" --> "0..*" Ingredients_non_desires : ne consomme pas
     Recettes "1" --> "0..*" Avis : reçoit
-    Recettes "1..*" --> "1..*" Ingredients : contient
      %% Relations de composition
-     Liste_de_courses *-- Ingredients : contient
+     Liste_de_courses "1.."--* "1.." Ingredients : contient
+     Recettes "1.."--* "1.." Ingredients : contient
+
 
 
