@@ -2,10 +2,10 @@ classDiagram
     class Recettes {
         +int id_recette
         +String titre
-        +String ingrédients
+        +String ingredients
         +String consignes
         +float note
-        +String catégorie
+        +String categorie
         +String origine
         +String commentaire
         +ajouter()
@@ -32,6 +32,8 @@ classDiagram
     }
 
     class Liste_de_courses {
+        +int id_utilisateur
+        +string elements
         +ajouter_ingredients()
         +afficher()
         +supprimer()
@@ -71,11 +73,15 @@ classDiagram
         +ajouter_nouvelle_recette()
         +afficher_recette()
     }
+    class Utilisateur_Service {
+
+    }
 
     %% Relations d'héritage
     Recettes_favorites --|> Recettes : hérite de
     Ingredients_favoris --|> Ingredients : hérite de
     Ingredients_non_desires --|> Ingredients : hérite de
+    Utilisateur_Service --|> Utilisateur
 
     %% Relations DAO et Service
     Recette_Service --> RecetteDAO : utilise
@@ -90,4 +96,5 @@ classDiagram
     Recettes "1..*" --> "1..*" Ingredients : contient
      %% Relations de composition
      Liste_de_courses *-- Ingredients : contient
+
 
