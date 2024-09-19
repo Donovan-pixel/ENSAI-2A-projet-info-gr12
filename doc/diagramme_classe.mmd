@@ -1,5 +1,5 @@
 classDiagram
-    class Recettes {
+    class Recette {
         +int idRecette
         +String titre
         +List<Ingredients> ingredients
@@ -8,7 +8,7 @@ classDiagram
         +String origine
     }
 
-    class Ingredients {
+    class Ingredient {
         +int idIngredient
         +String nom
         +float quantite
@@ -39,62 +39,62 @@ classDiagram
     %% DAO and Service classes
 
     class RecetteDAO {
-        +ajouterRecette()
+        +ajouterRecette() : bool
         +obtenirRecetteParId() : str
-        +fermerConnexion()
+        +fermerConnexion() : bool
     }
 
     class RecetteService {
-        +ajouterNouvelleRecette()
+        +ajouterNouvelleRecette() : bool
         +afficherRecette() : str
     }
 
-    class IngredientsDAO {
-        +ajouterIngredient()
+    class IngredientDAO {
+        +ajouterIngredient() : bool
         +obtenirIngredientParId() : str
         +supprimerIngredient() : bool
     }
 
-    class IngredientsService {
-        +ajouterNouvelIngredient()
+    class IngredientService {
+        +ajouterNouvelIngredient() : bool
     }
 
     class UtilisateurService {
-        +seConnecter() : bool
+        +seConnecter(str,str) : bool
         +creerUnCompte() : bool
         +supprimerCompte() : bool
         +pseudoDejaUtilise() : bool
     }
 
     class UtilisateurDAO {
-        +ajouterUtilisateur()
+        +ajouterUtilisateur() : bool
         +obtenirUtilisateurParId() : Utilisateur
     }
 
     class ListeDeCoursesDAO {
-        +ajouterListeDeCourses()
+        +ajouterListeDeCourses() : bool
         +obtenirListeParId() : ListeDeCourses
     }
 
     class ListeDeCoursesService {
-        +ajouterNouvelleListe()
+        +ajouterNouvelleListe() : bool
     }
 
     class AvisDAO {
-        +ajouterAvis()
+        +ajouterAvis() : bool
         +obtenirAvisParId() : Avis
     }
 
     class AvisService {
-        +ajouterNouvelAvis()
+        +ajouterNouvelAvis() : bool
     }
 
     %% Relations
     RecetteService --> RecetteDAO : utilise
-    RecetteDAO --> Recettes : gère
+    RecetteDAO --> Recette : gère
 
-    IngredientsService --> IngredientsDAO : utilise
-    IngredientsDAO --> Ingredients : gère
+    IngredientService --> IngredientDAO : utilise
+    IngredientDAO --> Ingredient : gère
 
     UtilisateurService --> UtilisateurDAO : utilise
     UtilisateurDAO --> Utilisateur : gère
@@ -106,11 +106,11 @@ classDiagram
     AvisDAO --> Avis : gère
 
     %% Cardinalities
-    Utilisateur "1" --> "0..*" Recettes : crée
+    Utilisateur "1" --> "0..*" Recette : crée
     Utilisateur "1" --> "0..*" Avis : donne des avis
     Utilisateur "1" --> "0..1" ListeDeCourses : possède
-    Recettes "1.."--* "1.." Ingredients : contient
-    ListeDeCourses "1.."--* "1.." Ingredients : contient
-    Recettes "1" --> "0..*" Avis : reçoit
+    Recette "1.."--* "1.." Ingredient : contient
+    ListeDeCourses "1.."--* "1.." Ingredient : contient
+    Recette "1" --> "0..*" Avis : reçoit
 
 
