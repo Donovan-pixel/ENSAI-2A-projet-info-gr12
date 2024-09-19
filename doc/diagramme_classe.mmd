@@ -1,101 +1,122 @@
 classDiagram
     class Recettes {
-        +int id_recette
+        +int idRecette
         +String titre
-        +String ingredients
+        +List<Ingredients> ingredients
         +String consignes
         +float note
         +String categorie
         +String origine
         +String commentaire
         +ajouter()
-        +afficher_une_recette() : str
+        +afficherUneRecette() : str
     }
 
     class Ingredients {
-        +int id_ingredient
+        +int idIngredient
         +String nom
         +float quantite
         +afficher() : str
-        +ajouter_ingredients()
+        +ajouterIngredients()
     }
 
     class Utilisateur {
-        +int id_utilisateur
+        +int idUtilisateur
         +String pseudo
-        +String mot_de_passe
-        +se_connecter() :bool
-        +creer_un_compte() : bool
-        +supprimer() : bool
-        +pseudo_deja_utilise() : bool
-        +modifier() : bool
+        +String motDePasse
+        +String adresseMail
     }
 
-    class Liste_de_courses {
-        +int id_utilisateur
-        +string elements
-        +ajouter_ingredients()
-        +afficher() : list[ingredients]
-        +supprimer_ingredient() : bool
-    }
-
-    class Recettes_favorites {
-        +int id_utilisateur
-        +ajouter() : bool
-        +supprimer() : bool
-        +afficher() : str
+    class ListeDeCourses {
+        +int idListe
+        +List<Ingredients> ingredients
+        +ajouterIngredients()
+        +afficherListe() : list[Ingredients]
+        +supprimerIngredient() : bool
     }
 
     class Avis {
-        +int id_utilisateur
-        +int recette
+        +int idAvis
+        +int idUtilisateur
+        +int idRecette
+        +float note
+        +String commentaire
     }
 
-    class Ingredients_favoris {
-        +int id_utilisateur
+    %% DAO and Service classes
+
+    class RecetteDAO {
+        +ajouterRecette()
+        +obtenirRecetteParId() : str
+        +fermerConnexion()
     }
 
-    class Ingredients_non_desires {
-        +int id_utilisateur
+    class RecetteService {
+        +ajouterNouvelleRecette()
+        +afficherRecette() : str
     }
 
-    class Recette_DAO {
-        +ajouter_recette()
-        +obtenir_recette_par_id() :str
-        +fermer_connexion()
+    class IngredientsDAO {
+        +ajouterIngredient()
+        +obtenirIngredientParId() : str
     }
 
-    class Recette_Service {
-        +ajouter_nouvelle_recette()
-        +afficher_recette() : str
-    }
-    class Utilisateur_Service {
-
-    }
-    class Utilisateur_DAO {
-
+    class IngredientsService {
+        +ajouterNouvelIngredient()
     }
 
-    %% Relations d'héritage
-    Recettes_favorites --|> Recettes : hérite de
-    Ingredients_favoris --|> Ingredients : hérite de
-    Ingredients_non_desires --|> Ingredients : hérite de
+    class UtilisateurService {
+        +seConnecter() : bool
+        +creerUnCompte() : bool
+        +supprimerCompte() : bool
+        +pseudoDejaUtilise() : bool
+    }
 
-    %% Relations DAO et Service
-    Recette_Service --> Recette_DAO : utilise
-    Recette_DAO --> Recettes : gère
-    Utilisateur_Service --> Utilisateur_DAO : utilise
-    Utilisateur_DAO --> Utilisateur : gère
+    class UtilisateurDAO {
+        +ajouterUtilisateur()
+        +obtenirUtilisateurParId() : Utilisateur
+    }
 
-    %% Relations diverses avec cardinalités
-    Utilisateur "1..*" --> "0..*" Recettes_favorites : possède
+    class ListeDeCoursesDAO {
+        +ajouterListeDeCourses()
+        +obtenirListeParId() : ListeDeCourses
+    }
+
+    class ListeDeCoursesService {
+        +ajouterNouvelleListe()
+    }
+
+    class AvisDAO {
+        +ajouterAvis()
+        +obtenirAvisParId() : Avis
+    }
+
+    class AvisService {
+        +ajouterNouvelAvis()
+    }
+
+    %% Relations
+    RecetteService --> RecetteDAO : utilise
+    RecetteDAO --> Recettes : gère
+
+    IngredientsService --> IngredientsDAO : utilise
+    IngredientsDAO --> Ingredients : gère
+
+    UtilisateurService --> UtilisateurDAO : utilise
+    UtilisateurDAO --> Utilisateur : gère
+
+    ListeDeCoursesService --> ListeDeCoursesDAO : utilise
+    ListeDeCoursesDAO --> ListeDeCourses : gère
+
+    AvisService --> AvisDAO : utilise
+    AvisDAO --> Avis : gère
+
+    %% Cardinalities
+    Utilisateur "1" --> "0..*" Recettes : crée
     Utilisateur "1" --> "0..*" Avis : donne des avis
-    Utilisateur "1..*" --> "0..*" Ingredients_favoris : possède
-    Utilisateur "1..*" --> "0..*" Ingredients_non_desires : ne consomme pas
+    Utilisateur "1" --> "0..1" ListeDeCourses : possède
+    Recettes "1.."--* "1.." Ingredients : contient
+    ListeDeCourses "1.."--* "1.." Ingredients : contient
     Recettes "1" --> "0..*" Avis : reçoit
-     %% Relations de composition
-     Liste_de_courses "1.."--* "1.." Ingredients : contient
-     Recettes "1.."--* "1.." Ingredients : contient
-
 
 
