@@ -4,35 +4,28 @@ classDiagram
         +String titre
         +List<Ingredients> ingredients
         +String consignes
-        +float note
         +String categorie
         +String origine
-        +String commentaire
-        +ajouter()
-        +afficherUneRecette() : str
     }
 
     class Ingredients {
         +int idIngredient
         +String nom
         +float quantite
-        +afficher() : str
-        +ajouterIngredients()
+        +String description
     }
 
     class Utilisateur {
         +int idUtilisateur
         +String pseudo
         +String motDePasse
-        +String adresseMail
+        
     }
 
     class ListeDeCourses {
-        +int idListe
+        +int idListeDeCourses
+        +int idUtilisateur
         +List<Ingredients> ingredients
-        +ajouterIngredients()
-        +afficherListe() : list[Ingredients]
-        +supprimerIngredient() : bool
     }
 
     class Avis {
@@ -59,6 +52,7 @@ classDiagram
     class IngredientsDAO {
         +ajouterIngredient()
         +obtenirIngredientParId() : str
+        +supprimerIngredient() : bool
     }
 
     class IngredientsService {
