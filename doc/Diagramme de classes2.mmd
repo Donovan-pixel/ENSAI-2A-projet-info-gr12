@@ -26,7 +26,7 @@ classDiagram
     class ListeDeCourses {
         +int idListeDeCourses
         +int idUtilisateur
-        +List<Ingredients> Ingredient
+        +Map<Ingredient, float> (Ingredient, quantites)
     }
 
     class Avis {
@@ -96,7 +96,8 @@ classDiagram
 
     class ListeDeCoursesService {
         +creerListeDeCourses(int) : bool
-        +supprimerIngredientAchete(int, int) : bool
+        +supprimerIngredientAchete(Ingredient, int) : bool
+        +ajouterIngredients(Ingredient, int) : bool
     }
 
     class AvisDAO {
@@ -106,7 +107,7 @@ classDiagram
 
     class AvisService {
         +ajouterNouvelAvis() : bool
-        +calculerNoteMoyenne(int) : float
+        +calculerNoteMoyenne() : float
     }
 
     %% Relations
