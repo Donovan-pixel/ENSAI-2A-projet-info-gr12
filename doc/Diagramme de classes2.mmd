@@ -6,6 +6,7 @@ classDiagram
         +String consignes
         +String categorie
         +String origine
+        +float noteMoyenne
     }
 
     class Ingredient {
@@ -19,13 +20,13 @@ classDiagram
         +int idUtilisateur
         +String pseudo
         +String motDePasse
-        
+        +String role
     }
 
     class ListeDeCourses {
         +int idListeDeCourses
         +int idUtilisateur
-        +List<Ingredients> ingredients
+        +Map<Ingredient, float> Ingredientquantites
     }
 
     class Avis {
@@ -45,14 +46,18 @@ classDiagram
     }
 
     class RecetteService {
-        +ajouterNouvelleRecette() : bool
+        +ajouterNouvelleRecette(Recette) : bool
         +afficherRecette() : str
+        +rechercherRecettesParIngredients(List<Ingredient>) : List<Recette>
+        +rechercherRecettesParLettre(str) : List<Recette>
+        +suggererRecettes(List<Ingredient>, List<Ingredient>) : List<Recette>
     }
 
     class IngredientDAO {
-        +ajouterIngredient() : bool
-        +obtenirIngredientParId() : str
+        +ajouterIngredient(Ingredient) : bool
+        +obtenirIngredientParId(int) : Ingredient
         +supprimerIngredient() : bool
+        +obtenirTousLesIngredients() : List<Ingredient>
     }
 
     class IngredientService {
@@ -61,9 +66,19 @@ classDiagram
 
     class UtilisateurService {
         +seConnecter(str,str) : bool
+        +seDeconnecter() : bool
         +creerUnCompte() : bool
         +supprimerCompte() : bool
         +pseudoDejaUtilise() : bool
+        +ajouterRecetteFavorite(Recette) : bool
+        +supprimerRecetteFavorite(Recette) : bool
+        +obtenirRecettesFavorites() : List<Recette> 
+        +ajouterIngredientFavori(Ingredient) : bool
+        +supprimerIngredientFavori(Ingredient) : bool
+        +obtenirIngrédientsFavoris() : List<Ingredient> 
+        +ajouterIngredientNonDesire(Ingredient) : bool
+        +supprimerIngredientNonDesire(Ingredient) : bool
+        +obtenirIngrédientsNonDesires() : List<Ingredient> 
     }
 
     class UtilisateurDAO {
@@ -74,19 +89,25 @@ classDiagram
     class ListeDeCoursesDAO {
         +ajouterListeDeCourses() : bool
         +obtenirListeParId() : ListeDeCourses
+        +obtenirListeParUtilisateur(int) : ListeDeCourses
+        +ajouterIngredientAListe(int, QuantiteIngredient) : bool
+        +supprimerIngredientDeListe(int, int) : bool
     }
 
     class ListeDeCoursesService {
-        +ajouterNouvelleListe() : bool
+        +creerListeDeCourses(int) : bool
+        +supprimerIngredientAchete(Ingredient, int) : bool
+        +ajouterIngredients(Ingredient, int) : bool
     }
 
     class AvisDAO {
         +ajouterAvis() : bool
-        +obtenirAvisParId() : Avis
+        +obtenirAvisParRecette() : List<Avis>
     }
 
     class AvisService {
         +ajouterNouvelAvis() : bool
+        +calculerNoteMoyenne() : float
     }
 
     %% Relations
@@ -112,5 +133,3 @@ classDiagram
     Recette "1.."--* "1.." Ingredient : contient
     ListeDeCourses "1.."--* "1.." Ingredient : contient
     Recette "1" --> "0..*" Avis : reçoit
-
-
