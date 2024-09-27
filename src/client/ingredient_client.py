@@ -22,8 +22,13 @@ class IngredientClient:
         # Création d'une liste puis parcours du json pour ajouter tous les ingrédients à la liste
         ingredients = []
         if req.status_code == 200:
-            raw_types = req.json()["results"]
-            for t in raw_types:
-                ingredients.append(t["name"])
+            raw_ingredients = req.json()["meals"]
+            for t in raw_ingredients:
+                print(t["strIngredient"])
+                ingredients.append(t["strIngredient"])
 
         return sorted(ingredients)
+
+
+if __name__ == "__main__":
+    IngredientClient().get_ingredient()
