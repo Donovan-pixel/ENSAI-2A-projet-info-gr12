@@ -1,61 +1,58 @@
-"""-----------------------------------------------------
--- Joueur
------------------------------------------------------
-DROP TABLE IF EXISTS joueur CASCADE ;
-CREATE TABLE joueur(
-    id_joueur    SERIAL PRIMARY KEY,
-    pseudo       VARCHAR(30) UNIQUE,
-    mdp          VARCHAR(256),
-    age          INTEGER,
-    mail         VARCHAR(50),
-    fan_pokemon  BOOLEAN
-);
-"""
+
 ---create table
-DROP TABLE IF EXISTS Utilisateur;
-CREATE TABLE Utilisateur(
-    idUtilisateur SERIAL PRIMARY KEY,
+DROP TABLE IF EXISTS users CASCADE;
+CREATE TABLE users(
+    id_user SERIAL PRIMARY KEY,
     pseudo VARCHAR(30) UNIQUE,
-    motDePasse VARCHAR(200),
-    role VARCHAR(200)
+    mot_de_Passe TEXT,
+   
 );
-DROP TABLE IF EXISTS Recette;
-CREATE TABLE Recette(
-    idRecette SERIAL PRIMARY KEY,
-    titre VARCHAR(200),
-    consignes TEXT,
-    categorie VARCHAR(200),
-    origine VARCHAR(100)
-    noteMoyenne float,
+DROP TABLE IF EXISTS recettes CASCADE;
+CREATE TABLE recettes(
+    id_meal SERIAL PRIMARY KEY,
+    title TEXT,
+    category TEXT,
+    area TEXT,
+    instructions TEXT,
 
 );
-DROP TABLE IF EXISTS Ingredient;
-CREATE TABLE Ingredient(
-    idIngredient SERIAL PRIMARY KEY,
-    nom VARCHAR(200),
-    quantite float,
-    Description TEXT,
-
+DROP TABLE IF EXISTS ingredients CASCADE;
+CREATE TABLE ingredients(
+    id_ingredient SERIAL PRIMARY KEY,
+    nom VARCHAR(255),
 );
-DROP TABLE IF EXISTS Avis;
-CREATE TABLE Avis(
-    idAvis SERIAL PRIMARY KEY,
-    FOREIGN KEY idUtilisateur REFERENCES Utilisateur(idUtilisateur),
-    FOREIGN KEY idRecette REFERENCES Recette(idRecette),
+DROP TABLE IF EXISTS avis CASCADE;
+CREATE TABLE avis(
+    id_avis SERIAL PRIMARY KEY,
+    FOREIGN KEY id_user REFERENCES users(id_user),
+    FOREIGN KEY id_meal REFERENCES recettes(id_meal),
     note float,
     commentaire TEXT,
 );
 
-DROP TABLE IF EXISTS IngredientFavovis;
-CREATE TABLE IngredientFavovis (
-    PRIMARY KEY (idIngredient, idUtilisateur),
-    FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur(idUtilisateur),
-    FOREIGN KEY (idIngredient) REFERENCES Ingredient(idIngredient),
+DROP TABLE IF EXISTS ingredients_favoris CASCADE;
+CREATE TABLE ingredients_favovis (
+    PRIMARY KEY (id_ingredient, id_user),
+    FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient),
+    FOREIGN KEY (id_user) REFERENCES users(id_user),
 );
 
-DROP TABLE IF EXISTS RecetteFavorite;
-CREATE TABLE RecetteFavorite(
-    PRIMARY KEY (idRecette,idUtilisateur)
-    FOREIGN KEY (idRecette) REFERENCES Recette(idRecette),
-    FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur(idUtilisateur)
-)
+DROP TABLE IF EXISTS recettes_favorites CASCADE;
+CREATE TABLE recettes_favorites(
+    PRIMARY KEY (id_meal,id_user)
+    FOREIGN KEY (id_meal) REFERENCES recettes(id_meal),
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
+);
+
+DROP TABLE IF EXISTS meals_ingredients CASCADE;
+CREATE TABLE meals_ingredients(
+    PRIMARY KEY (id_meal,id_ingredient),
+    FOREIGN KEY (id_meal) REFERENCES recettes(id_meal),
+    FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient),
+);
+DROP TABLE IF EXISTS ingredients_non_desires CASCADE;
+CREATE TABL ingredients_non_desires(
+    PRIMARY KEY (id_ingredient,id_user),
+    FOREIGN KEY (id_user) REFERENCES users(id_user),
+    FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient),
+);
