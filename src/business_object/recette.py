@@ -11,7 +11,7 @@ class Recette:
     ingredients : List[Ingredient]
         liste des ingrédients
     consignes : str
-        consignes de préparation
+        instructions
     categorie : str
         catégorie du régime alimentaire
     origine : str
