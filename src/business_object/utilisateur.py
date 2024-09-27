@@ -1,6 +1,6 @@
 class Utilisateur:
     """
-    Classe représentant un Utilisateur
+    Classe représentant un utilisateur
 
     Attributs
     ----------
