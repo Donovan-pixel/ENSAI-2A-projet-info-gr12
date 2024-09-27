@@ -26,5 +26,7 @@ class Avis:
 
     def __str__(self):
         """Permet d'afficher les informations d'un avis"""
-        return f"Avis donné par({self.idUtilisateur}, pour la recette {self.idRecette}"
-        f"avec la note {self.note} et le commentaire {self.commentaire})"
+        return (
+            f"Avis donné par({self.idUtilisateur}, pour la recette {self.idRecette}"
+            "avec la note {self.note} et le commentaire {self.commentaire}"
+        )

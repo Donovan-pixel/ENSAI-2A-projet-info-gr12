@@ -8,15 +8,12 @@ class Ingredient:
         identifiant
     nom : str
         nom de l'ingrédient
-    quantite : float
-        quantité variable de l'ingrédient
     """
 
-    def __init__(self, idIngredient, nom, quantite):
+    def __init__(self, idIngredient, nom):
         """Constructeur"""
         self.idIngredient = idIngredient
         self.nom = nom
-        self.quantite = quantite
 
     def __str__(self):
         """Permet d'afficher les informations d'un ingrédient"""

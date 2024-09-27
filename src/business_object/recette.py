@@ -8,8 +8,8 @@ class Recette:
         identifiant
     titre : str
         nom de la recette
-    ingredients : List[Ingredient]
-        liste des ingrédients
+    ingredientQuantite : dict
+        dictionnaire des ingrédients et leur quantité associée
     consignes : str
         instructions
     categorie : str
@@ -20,11 +20,13 @@ class Recette:
         note moyenne donnée par les utilisateurs pour cette recette
     """
 
-    def __init__(self, idRecette, titre, ingredients, consignes, categorie, origine, noteMoyenne):
+    def __init__(
+        self, idRecette, titre, ingredientQuantite, consignes, categorie, origine, noteMoyenne
+    ):
         """Constructeur"""
         self.idRecette = idRecette
         self.titre = titre
-        self.ingredients = ingredients
+        self.ingredientQuantite = ingredientQuantite
         self.consignes = consignes
         self.categorie = categorie
         self.origine = origine
@@ -32,5 +34,7 @@ class Recette:
 
     def __str__(self):
         """Permet d'afficher les informations d'une recette"""
-        return f"Recette({self.titre}, {self.ingredients}, {self.consignes}, {self.categorie},"
-        f"{self.origine}, {self.noteMoyenne})"
+        return (
+            f"Recette({self.titre}, {self.ingredientQuantite}, {self.consignes}, {self.categorie},"
+            "{self.origine}, {self.noteMoyenne}"
+        )

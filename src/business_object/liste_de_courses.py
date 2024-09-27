@@ -8,17 +8,19 @@ class ListeDeCourses:
         identifiant de la liste de courses
     idUtilisateur : int
         identifiant de l'utilisateur
-    IngredientQuantites : dict
+    ingredientQuantite : dict
         quantité de chaque ingrédient
     """
 
-    def __init__(self, idListeDeCourses, idUtilisateur, IngredientQuantites):
+    def __init__(self, idListeDeCourses, idUtilisateur, ingredientQuantite):
         """Constructeur"""
         self.idListeDeCourses = idListeDeCourses
         self.idUtilisateur = idUtilisateur
-        self.IngredientQuantites = IngredientQuantites
+        self.ingredientQuantite = ingredientQuantite
 
     def __str__(self):
         """Permet d'afficher les informations d'une liste de courses"""
-        return f"L'utilisateur({self.idUtilisateur} a dans sa liste de courses"
-        f"{self.IngredientQuantites})"
+        return (
+            f"L'utilisateur({self.idUtilisateur} a dans sa liste de courses"
+            "{self.ingredientQuantite}"
+        )
