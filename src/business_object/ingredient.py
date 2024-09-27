@@ -7,7 +7,7 @@ class Ingredient:
     idIngrédient : int
         identifiant
     nom : str
-        nom de l'ingrédient'
+        nom de l'ingrédient
     quantite : float
         quantité variable de l'ingrédient
     """
