@@ -146,7 +146,7 @@ class IngredientDao(metaclasse=Singleton):
 
         Returns
         -------
-        bool :  True si le joueur a bien été supprimé,
+        bool :  True si l'ingrédient a bien été supprimé,
                 False sinon
         """
 
