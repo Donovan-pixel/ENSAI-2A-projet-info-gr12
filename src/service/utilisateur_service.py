@@ -12,7 +12,15 @@ class UtilisateurService:
     """Classe contenant les méthodes de service des Utilisateurs"""
 
     @log
-    def creerUnCompte(self, pseudo, motDePasse, role, ingredients_favoris, recettes_favorites, ingredients_non_desires) -> bool:
+    def creerUnCompte(
+        self,
+        pseudo,
+        motDePasse,
+        role,
+        ingredients_favoris,
+        recettes_favorites,
+        ingredients_non_desires,
+    ) -> bool:
         """Création d'un utilisateur à partir de ses attributs"""
 
         nouvel_utilisateur = Utilisateur(
@@ -24,7 +32,7 @@ class UtilisateurService:
         return True if UtilisateurDao().creer(nouvel_utilisateur) else False
 
     @log
-    def lister_tous(self, inclure_mdp=False) -> list[Utilisateurs]:
+    def lister_tous(self, inclure_mdp=False) -> list[Utilisateur]:
         """Lister tous les utilisateurs
         Si inclure_mdp=True, les mots de passe seront inclus
         Par défaut, tous les mdp des utilisateurs sont à None
@@ -50,7 +58,7 @@ class UtilisateurService:
     @log
     def supprimerUnCompte(self, utilisateur) -> bool:
         """Supprimer le compte d'un utilisateur"""
-        return JoueurDao().supprimer(utilisateur)
+        return UtilisateurDao().supprimer(utilisateur)
 
     @log
     def afficher_tous(self) -> str:
