@@ -31,7 +31,7 @@ CREATE TABLE avis(
 );
 
 DROP TABLE IF EXISTS ingredients_favoris CASCADE;
-CREATE TABLE ingredients_favovis (
+CREATE TABLE ingredients_favoris (
     PRIMARY KEY (id_ingredient, id_user),
     FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient),
     FOREIGN KEY (id_user) REFERENCES users(id_user),
@@ -39,7 +39,7 @@ CREATE TABLE ingredients_favovis (
 
 DROP TABLE IF EXISTS recettes_favorites CASCADE;
 CREATE TABLE recettes_favorites(
-    PRIMARY KEY (id_meal,id_user)
+    PRIMARY KEY (id_meal,id_user),
     FOREIGN KEY (id_meal) REFERENCES recettes(id_meal),
     FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
@@ -51,7 +51,7 @@ CREATE TABLE meals_ingredients(
     FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient),
 );
 DROP TABLE IF EXISTS ingredients_non_desires CASCADE;
-CREATE TABL ingredients_non_desires(
+CREATE TABLE ingredients_non_desires(
     PRIMARY KEY (id_ingredient,id_user),
     FOREIGN KEY (id_user) REFERENCES users(id_user),
     FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient),
