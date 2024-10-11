@@ -73,10 +73,7 @@ class IngredientFavoriDao(metaclasse=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(
-                        "SELECT *                              "
-                        "FROM ingredients_favoris;                     "
-                    )
+                    cursor.execute("SELECT *                     " "FROM ingredients_favoris;    ")
                     res = cursor.fetchall()
 
         except Exception as e:
