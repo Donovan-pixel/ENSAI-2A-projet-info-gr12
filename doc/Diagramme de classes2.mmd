@@ -2,7 +2,7 @@ classDiagram
     class Recette {
         +int idRecette
         +String titre
-        +List<Ingredients> ingredients
+        +Map<Ingredients, quantite> ingredientQuantite
         +String consignes
         +String categorie
         +String origine
@@ -12,8 +12,6 @@ classDiagram
     class Ingredient {
         +int idIngredient
         +String nom
-        +float quantite
-        +String description
     }
 
     class Utilisateur {
@@ -26,14 +24,14 @@ classDiagram
     class ListeDeCourses {
         +int idListeDeCourses
         +int idUtilisateur
-        +Map<Ingredient, float> Ingredientquantites
+        +Map<Ingredient, quantite> ingredientQuantite
     }
 
     class Avis {
         +int idAvis
         +int idUtilisateur
         +int idRecette
-        +float note
+        +int note
         +String commentaire
     }
 
@@ -127,7 +125,6 @@ classDiagram
     AvisDAO --> Avis : gère
 
     %% Cardinalities
-    Utilisateur "1" --> "0..*" Recette : crée
     Utilisateur "1" --> "0..*" Avis : donne des avis
     Utilisateur "1" --> "0..1" ListeDeCourses : possède
     Recette "1.."--* "1.." Ingredient : contient
