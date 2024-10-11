@@ -33,11 +33,24 @@ class AvisDao(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
+
                     cursor.execute(
-                        "INSERT INTO Avis(id_user, id_meal, note, commentaire) VALUES        "
-                        "(%(id_user)s, %(id_meal)s, %(note)s, %(commentaire)s)             "
+                    """
+                    SELECT COUNT(*) FROM avis;
+                    """,
+                    {"id_meal": avis.id_meal},
+                    )
+                    
+                    count_result = cursor.fetchone()
+
+                    new_id_avis = count_result[0] + 1
+
+                    cursor.execute(
+                        "INSERT INTO avis(id_avis, id_user, id_meal, note, commentaire) VALUES"
+                        "(%(id_ avis)s, %(id_user)s, %(id_meal)s, %(note)s, %(commentaire)s)             "
                         "  RETURNING id_avis;                                                ",
                         {
+                            "id_avis": new_id_avis,
                             "id_user": avis.id_user,
                             "id_meal": avis.id_meal,
                             "note": avis.note,
@@ -48,12 +61,13 @@ class AvisDao(metaclass=Singleton):
         except Exception as e:
             logging.info(e)
 
-        created = False
-        if res:
-            self.id_meal = res["id_meal"]
-            created = True
+        added = True
 
-        return created
+        if res:
+            avis.id_avis = res["id_avis"]
+            added = True
+
+        return added
 
         @log
         def obtenirAvisParRecette(self, recette:Recette) -> List:
@@ -85,6 +99,7 @@ class AvisDao(metaclass=Singleton):
                         res = cursor.fetchall()
             except Exception as e:
                 logging.info(e)
+
 
             return res
             
