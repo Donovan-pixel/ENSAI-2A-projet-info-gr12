@@ -127,7 +127,7 @@ class IngredientDao(metaclasse=Singleton):
         if res:
             for row in res:
                 ingredient = Ingredient(
-                    idIngredient=res["id-ingredient"],
+                    idIngredient=res["id_ingredient"],
                     nom=res["nom"],
                 )
 
