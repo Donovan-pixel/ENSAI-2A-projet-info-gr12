@@ -51,6 +51,7 @@ class RecetteDao(metaclass=Singleton):
 
         return created
 
+    @log
     def obtenirRecetteParId(self, id_recette) -> Recette:
         """Trouver une recette grâce à son id
         Parameters
@@ -62,3 +63,29 @@ class RecetteDao(metaclass=Singleton):
         recette : Recette
         renvoie la recette que l'on cherche par id
         """
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT *                           "
+                        "  FROM recettes                      "
+                        " WHERE id_meal = %(id_meal)s;  ",
+                        {"id_meal": id_recette},
+                    )
+                    res = cursor.fetchone()
+        except Exception as e:
+            logging.info(e)
+            raise
+
+        recette = None
+        if res:
+            recette = Recette(
+                idRecette=res["id_meal"],
+                titre=res["title"],
+                origine=res["area"],
+                categorie=res["category"],
+                consignes=res["instructions"],
+            )
+
+        return recette
