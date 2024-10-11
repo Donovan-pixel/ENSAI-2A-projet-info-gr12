@@ -14,7 +14,7 @@ class Utilisateur:
         rôle de l'utilisateur
     """
 
-    def __init__(self, idUtilisateur, pseudo, motDePasse, role, recettes_favorites, ingredients_favoris):
+    def __init__(self, idUtilisateur, pseudo, motDePasse, role, recettes_favorites = [], ingredients_favoris = []):
         """Constructeur"""
         self.idUtilisateur = idUtilisateur
         self.pseudo = pseudo
