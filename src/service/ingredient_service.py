@@ -24,11 +24,6 @@ class IngredientService:
         return IngredientDao().obtenirTousLesIngredients()
 
     @log
-    def obtenirIngredientParId(self, idIngredient) -> Ingredient:
-        """Trouver un ingredient à partir de son id"""
-        return IngredientDao().obtenirIngredientParId(idIngredient)
-
-    @log
     def supprimer(self, ingredient) -> bool:
         """Supprimer un ingredient"""
-        return IngredientDao().supprimer(ingredient)
+        return IngredientDao().supprimerIngredient(ingredient)

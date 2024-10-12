@@ -12,7 +12,7 @@ class UtilisateurDao(metaclass=Singleton):
     """Classe contenant les méthodes pour gérer les utilisateurs de la base de données"""
 
     @log
-    def creer(self, utilisateur) -> bool:
+    def creer(self, utilisateur: Utilisateur) -> bool:
         """Creation d'un utilisateur dans la base de données
 
         Parameters
@@ -33,7 +33,7 @@ class UtilisateurDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO users(pseudo, mot_de_Passe, role) VALUES"
+                        "INSERT INTO users(pseudo, mot_de_passe, role) VALUES"
                         "(%(pseudo)s, %(motDePasse)s, %(role)s)              "
                         "RETURNING id_user;                                ",
                         {
@@ -55,7 +55,7 @@ class UtilisateurDao(metaclass=Singleton):
         return created
 
     @log
-    def trouver_par_id(self, idUtilisateur) -> Utilisateur:
+    def trouver_par_id(self, idUtilisateur: int) -> Utilisateur:
         """trouver un utilisateur grâce à son id
 
         Parameters
@@ -111,8 +111,9 @@ class UtilisateurDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT *                              "
-                        "  FROM users;                        "
+                        """
+                        SELECT * FROM users;
+                        """,
                     )
                     res = cursor.fetchall()
         except Exception as e:
@@ -126,7 +127,7 @@ class UtilisateurDao(metaclass=Singleton):
                 utilisateur = Utilisateur(
                     idUtilisateur=row["id_user"],
                     pseudo=row["pseudo"],
-                    motDePasse=row["mot_de_Passe"],
+                    motDePasse=row["mot_de_passe"],
                     role=row["role"],
                 )
 
@@ -157,7 +158,7 @@ class UtilisateurDao(metaclass=Singleton):
                     cursor.execute(
                         "UPDATE users                                 "
                         "   SET pseudo             = %(pseudo)s,            "
-                        "       mot_de_Passe         = %(motDePasse)s,      "
+                        "       mot_de_passe         = %(motDePasse)s,      "
                         "       role               = %(role)s,              "
                         " WHERE id_user = %(idUtilisateur)s;                ",
                         {
@@ -194,7 +195,7 @@ class UtilisateurDao(metaclass=Singleton):
                     cursor.execute(
                         "DELETE FROM users                  "
                         " WHERE id_user=%(idUtilisateur)s      ",
-                        {"idUtilisateur": user.idUtilisateur},
+                        {"idUtilisateur": utilisateur.idUtilisateur},
                     )
                     res = cursor.rowcount
         except Exception as e:
@@ -204,8 +205,8 @@ class UtilisateurDao(metaclass=Singleton):
         return res > 0
 
     @log
-    def se_connecter(self, pseudo, motDePasse) -> Utilisateur:
-        """se connecter grâce à son pseudo et son mot de passe
+    def se_connecter(self, pseudo: str, motDePasse: str) -> Utilisateur:
+        """Se connecter grâce à son pseudo et son mot de passe
 
         Parameters
         ----------
@@ -227,7 +228,7 @@ class UtilisateurDao(metaclass=Singleton):
                         "SELECT *                           "
                         "  FROM users                      "
                         " WHERE pseudo = %(pseudo)s         "
-                        "   AND mot_de_Passe = %(motDePasse)s;              ",
+                        "   AND mot_de_passe = %(motDePasse)s;              ",
                         {
                             "pseudo": utilisateur.pseudo, 
                             "motDePasse": utilisateur.motDePasse

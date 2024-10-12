@@ -23,7 +23,7 @@ class AvisDao(metaclass=Singleton):
 
         Returns
         -------
-        added : bool
+        bool :
             True si l'ajout est un succès
             False sinon
         """
@@ -38,8 +38,8 @@ class AvisDao(metaclass=Singleton):
                         "(%(id_user)s, %(id_meal)s, %(note)s, %(commentaire)s)             "
                         "  RETURNING id_avis;                                              ",
                         {
-                            "id_user": avis.id_user,
-                            "id_meal": avis.id_meal,
+                            "id_user": avis.idUtilisateur,
+                            "id_meal": avis.idRecette,
                             "note": avis.note,
                             "commentaire": avis.commentaire,
                         },
@@ -52,7 +52,7 @@ class AvisDao(metaclass=Singleton):
         return bool(res)
 
         @log
-        def obtenirAvisParRecette(self, recette:Recette) -> List:
+        def obtenirAvisParRecette(self, recette:Recette) -> list[Avis]:
             """Obtention des avis par recette
 
             Parameters
@@ -98,5 +98,35 @@ class AvisDao(metaclass=Singleton):
                     liste.append(avis)
 
             return liste
+    
+    @log
+    def supprimer_avis(self, avis: Avis) -> bool:
+        """Suppression d'un avis dans la base de données
+
+        Parameters
+        ----------
+        avis : Avis
+            L'avis à supprimer
+
+        Returns
+        -------
+        bool :
+            True si la suppression est un succès
+            False sinon
+        """
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "DELETE FROM avis WHERE id_avis = %(id_avis)s;",
+                        {"id_avis": avis.idAvis},
+                    )
+                    res = cursor.rowcount
+        except Exception as e:
+            logging.exception(e)
+            return False
+
+        return res > 0
+
             
 

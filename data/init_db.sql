@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users(
     id_user SERIAL PRIMARY KEY,
     pseudo VARCHAR(30) UNIQUE,
-    mot_de_Passe TEXT,
+    mot_de_passe TEXT,
    
 );
 DROP TABLE IF EXISTS recettes CASCADE;

@@ -49,48 +49,6 @@ class IngredientDao(metaclasse=Singleton):
         bool(res)
 
     @log
-    def obtenirIngredientParId(self, idIngredient) -> Ingredient:
-        """
-        Trouver un ingrédient grâce à son identifiant
-
-        Parameters
-        ----------
-        idIngredient : int
-            identifiant de l'ingrédient
-
-        Returns
-        -------
-        ingredient : Ingredient
-            renvoie l'ingrédient que l'on cherche par id
-        """
-
-        res = None
-
-        try:
-            with DBConnection().connection as connection:
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        "SELECT *                                   "
-                        "FROM ingredients                           "
-                        "WHERE id_ingredient = %(idIngredient)s;    ",
-                        {"idIngredient": idIngredient},
-                    )
-                    res = cursor.fetchone()
-
-        except Exception as e:
-            logging.info(e)
-            raise
-
-        ingredient = None
-        if res:
-            ingredient = Ingredient(
-                idIngredient=res["id-ingredient"],
-                nom=res["nom"],
-            )
-
-        return ingredient
-
-    @log
     def obtenirTousLesIngredients(self) -> list[Ingredient]:
         """
         Lister tous les ingrédients
@@ -132,7 +90,7 @@ class IngredientDao(metaclasse=Singleton):
         return liste_ingredients
 
     @log
-    def supprimer(self, ingredient: Ingredient) -> bool:
+    def supprimerIngredient(self, ingredient: Ingredient) -> bool:
         """Suppression d'un ingredient dans la base de données
 
         Parameters
