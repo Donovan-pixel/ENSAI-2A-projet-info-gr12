@@ -44,8 +44,8 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                         RETURNING id_ingredient;
                         """,
                         {
-                            "id_ingredient": ingredient.id_ingredient,
-                            "id_user": utilisateur.id_user,
+                            "id_ingredient": ingredient.idIngredient,
+                            "id_user": utilisateur.idUtilisateur,
                         },
                     )
                     res = cursor.fetchone()
@@ -83,13 +83,13 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                             WHERE id_ingredient = %(id_ingredient)s AND id_user = %(id_user)s;
                             """,
                             {
-                                "id_ingredient": ingredient.id_ingredient,
-                                "id_user": utilisateur.id_user,
+                                "id_ingredient": ingredient.idIngredient,
+                                "id_user": utilisateur.idUtilisateur,
                             },
                         )   
 
                         res = cursor.rowcount
-                        
+
             except Exception as e:
                 logging.exception(e)
                 return False
@@ -133,8 +133,8 @@ class IngredientNonDesireDAO(metaclass=Singleton):
         if res:
             for row in res:
                 ingredient_non_desire = Ingredient(
-                    id_ingredient = row[0],
-                    nom = row[1]
+                    id_ingredient = row["id_ingredient"],
+                    nom = row["nom"]
                 )
 
                 liste.append(ingredient_non_desire)

@@ -73,7 +73,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "DELETE FROM recettes_favorites                             "
-                        " WHERE id_meal=%(idRecette)s AND id_user=%(idUtilisateur)s;",
+                        "WHERE id_meal=%(idRecette)s AND id_user=%(idUtilisateur)s;",
                         {
                             "idRecette": recette.idRecette,
                             "idUtilisateur": utilisateur.idUtilisateur,
