@@ -49,13 +49,7 @@ class AvisDao(metaclass=Singleton):
             logging.exception(e)
             return False
 
-        added = False
-
-        if res:
-            avis.id_avis = res["id_avis"]
-            added = True
-
-        return added
+        return bool(res)
 
         @log
         def obtenirAvisParRecette(self, recette:Recette) -> List:

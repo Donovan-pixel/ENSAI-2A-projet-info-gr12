@@ -19,6 +19,7 @@ class IngredientDao(metaclasse=Singleton):
         Parameters
         ----------
         ingredient : Ingredient
+            L'ingrédient à ajouter
 
         Returns
         -------
@@ -45,12 +46,7 @@ class IngredientDao(metaclasse=Singleton):
         except Exception as e:
             logging.info(e)
 
-        created = False
-        if res:
-            ingredient.id_ingredient = res["id_ingredient"]
-            created = True
-
-        return created
+        bool(res)
 
     @log
     def obtenirIngredientParId(self, idIngredient) -> Ingredient:

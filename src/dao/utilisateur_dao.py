@@ -9,7 +9,7 @@ from business_object.utilisateur import Utilisateur
 
 
 class UtilisateurDao(metaclass=Singleton):
-    """Classe contenant les méthodes pour accéder aux Utilisateur de la base de données"""
+    """Classe contenant les méthodes pour gérer les utilisateurs de la base de données"""
 
     @log
     def creer(self, utilisateur) -> bool:
@@ -18,6 +18,7 @@ class UtilisateurDao(metaclass=Singleton):
         Parameters
         ----------
         utilisateur : Utilisateur
+            L'utilisateur à créer
 
         Returns
         -------
@@ -32,14 +33,13 @@ class UtilisateurDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO users(pseudo, mot_de_Passe, role) VALUES        "
-                        "(%(pseudo)s, %(motDePasse)s, %(role)s)             "
-                        "  RETURNING id_user;                                                ",
+                        "INSERT INTO users(pseudo, mot_de_Passe, role) VALUES"
+                        "(%(pseudo)s, %(motDePasse)s, %(role)s)              "
+                        "RETURNING id_user;                                ",
                         {
                             "pseudo": utilisateur.pseudo,
                             "motDePasse": utilisateur.motDePasse,
                             "role": utilisateur.role,
-                            "id_user": utilisateur.idUtilisateur
                         },
                     )
                     res = cursor.fetchone()
@@ -47,6 +47,7 @@ class UtilisateurDao(metaclass=Singleton):
             logging.info(e)
 
         created = False
+
         if res:
             utilisateur.idUtilisateur = res["idUtilisateur"]
             created = True

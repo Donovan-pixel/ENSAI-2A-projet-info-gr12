@@ -49,46 +49,210 @@ class RecetteDao(metaclass=Singleton):
 
         created = False
         if res:
-            recette.id_meal = res["id_meal"]
+            recette.idRecette = res["id_meal"]
             created = True
 
         return created
 
     @log
-    def obtenirRecetteParId(self, id_recette) -> Recette:
-        """Trouver une recette grâce à son id
-        Parameters
-        ----------
-        id_recette : int
-        l'id de la recette qu'on souhaite trouver
-        Return
+    def obtenirRecettesparLettre(self, lettre) -> list[Recette]:
+        """Rechercher des recettes commençant par une lettre donnée
+
+        Parameters:
+        ---------
+        lettre : str
+            Première lettre des recettes recherchées
+
+        Returns:
         ------
-        recette : Recette
-        renvoie la recette que l'on cherche par id
+        list[Recette] :
+            Liste des recettes commençant par la lettre
         """
 
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT *                           "
-                        "  FROM recettes                      "
-                        " WHERE id_meal = %(id_meal)s;  ",
-                        {"id_meal": id_recette},
+                        """
+                        SELECT * FROM recettes
+                        WHERE nom ILIKE '%(lettre)s%'
+                        """,
+                        {
+                            "lettre": lettre,
+                        },
                     )
-                    res = cursor.fetchone()
+                    res = cursor.fetchall()
+        
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
+            raise
+        
+        recettes = []
+
+        if res:
+            for row in res:
+                recette = Recette(
+                    idRecette=row["id_recette"],
+                    titre=row["title"],
+                    categorie=row["category"],
+                    origine=row["area"],
+                    consignes=row["instructions"],
+                )
+                recettes.append(recette)
+
+        return recettes
+
+    @log
+    def obtenirRecettesParIngredient(self, ingredient: Ingredient) -> List[Recette]:
+        """Obtention des recettes contenant un ingrédient spécifique
+
+        Parameters
+        ----------
+        ingredient : Ingredient
+            L'ingrédient contenu dans les recettes recherchées
+
+        Returns
+        -------
+        List[Recette]
+            Liste des recettes contenant l'ingrédient spécifié
+        """
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT * FROM recettes
+                        JOIN recettes_ingredients ri ON r.id_recette = ri.id_recette
+                        WHERE ri.id_ingredient = %(id_ingredient)s;
+                        """,
+                        {"id_ingredient": ingredient.id_ingredient},
+                    )
+                    res = cursor.fetchall()
+
+        except Exception as e:
+            logging.exception(e)
             raise
 
-        recette = None
-        if res:
-            recette = Recette(
-                idRecette=res["id_meal"],
-                titre=res["title"],
-                origine=res["area"],
-                categorie=res["category"],
-                consignes=res["instructions"],
-            )
+        recettes = []
 
-        return recette
+        if res:
+            for row in res:
+                recette = Recette(
+                    idRecette=row["id_recette"],
+                    titre=row["nom"],
+                    categorie=row["categorie"],
+                    origine=row["origine"],
+                    consignes=row["instructions"],
+                )
+                recettes.append(recette)
+
+        return recettes
+
+
+
+    @log
+    def obtenirRecettesParIngrédients(self, ingredients:list[Ingredient]) -> list[Recette]:
+        """Obtention de recettes contenant certains ingrédients
+
+        Parameters:
+        ---------
+        ingredients : list[Ingredient]
+            Liste des ingrédients contenus dans les recettes recherchées
+
+        Returns:
+        ------
+        list[Recette] :
+            Liste des recettes contenant les ingrédients voulus
+        """
+
+        ingredients_id = tuple([ing.idIngredient for ing in ingredients])
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+
+                    cursor.execute(
+                        """
+                        SELECT * FROM recettes
+                        JOIN meals_ingredients
+                        ON meals_ingredients.id_meal = recettes.id_meal
+                        WHERE meals_ingredients.id_ingredient IN %(ingredients_id)s
+                        GROUP BY recettes.id_meal
+                        """,
+                        {
+                            "ingredients_id": ingredients_id,
+                        },
+                    )
+                    res = cursor.fetchall()
+        
+        except Exception as e:
+            logging.exception(e)
+            raise
+        
+        recettes = []
+
+        if res:
+            for row in res:
+                recette = Recette(
+                    idRecette=row["id_recette"],
+                    titre=row["title"],
+                    categorie=row["category"],
+                    origine=row["area"],
+                    consignes=row["instructions"],
+                )
+                recettes.append(recette)
+
+        return recettes
+
+        @log
+        def obtenirRecettesParCategorie(self, categorie:str) -> list[Recette]:
+            """Obtention de recettes par catégorie
+
+            Parameters:
+            ---------
+            categorie : str
+                Catégorie de recettes recherchées
+
+            Returns:
+            ------
+            list[Recette] :
+                Liste des recettes de la catégorie recherchée
+            """
+
+            try:
+                with DBConnection().connection as connection:
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            """
+                            SELECT * FROM recettes
+                            WHERE categorie = %(categorie)s;
+                            """,
+                            {"categorie": categorie},
+                        )
+                        res = cursor.fetchall()
+
+            except Exception as e:
+                logging.exception(e)
+                raise
+
+            recettes = []
+
+            if res:
+                for row in res:
+                    recette = Recette(
+                        idRecette=row["id_recette"],
+                        titre=row["nom"],
+                        categorie=row["categorie"],
+                        origine=row["origine"],
+                        consignes=row["instructions"],
+                    )
+                    recettes.append(recette)
+
+            return recettes
+        
+
+
+
+
+    

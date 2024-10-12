@@ -25,7 +25,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
         
         Returns
         -------
-        bool
+        bool :
             True si l'ajout est un succès
             False sinon
         """
