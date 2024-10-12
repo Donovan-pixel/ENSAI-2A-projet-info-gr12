@@ -33,24 +33,11 @@ class AvisDao(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-
-                    cursor.execute(
-                    """
-                    SELECT COUNT(*) FROM avis;
-                    """,
-                    {"id_meal": avis.id_meal},
-                    )
-                    
-                    count_result = cursor.fetchone()
-
-                    new_id_avis = count_result[0] + 1
-
                     cursor.execute(
                         "INSERT INTO avis(id_avis, id_user, id_meal, note, commentaire) VALUES"
-                        "(%(id_ avis)s, %(id_user)s, %(id_meal)s, %(note)s, %(commentaire)s)             "
-                        "  RETURNING id_avis;                                                ",
+                        "(%(id_user)s, %(id_meal)s, %(note)s, %(commentaire)s)             "
+                        "  RETURNING id_avis;                                              ",
                         {
-                            "id_avis": new_id_avis,
                             "id_user": avis.id_user,
                             "id_meal": avis.id_meal,
                             "note": avis.note,
@@ -59,9 +46,10 @@ class AvisDao(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
+            return False
 
-        added = True
+        added = False
 
         if res:
             avis.id_avis = res["id_avis"]
@@ -80,7 +68,7 @@ class AvisDao(metaclass=Singleton):
 
             Returns
             -------
-            res : List
+            list[Avis]
                 Liste contenant les avis correspondant à la recette indiquée
             """
 
@@ -90,17 +78,31 @@ class AvisDao(metaclass=Singleton):
                 with DBConnection().connection as connection:
                     with connection.cursor() as cursor:
                         cursor.execute(
-                            "SELECT * FROM avis JOIN recettes ON recettes.id_meal = avis.id_meal"
-                            "WHERE id_meals = %(id_recette)s", 
+                            "SELECT * FROM avis" 
+                            "JOIN recettes ON recettes.id_meal = avis.id_meal"
+                            "WHERE id_meals = %(id_recette)s;", 
                             {
-                                "id_recette": recettes.id_meal,
+                                "id_recette": recette.id_meal,
                             },
                         )
                         res = cursor.fetchall()
             except Exception as e:
-                logging.info(e)
+                logging.exception(e)
+                return []
 
+            liste = []
 
-            return res
+            if res:
+                for row in res:
+                    avis = Avis(
+                        id_avis = res["id_avis"],
+                        id_user = res["id_user"],
+                        id_meal = res["id_meal"],
+                        note = res["note"],
+                        commentaire = res["commentaire"]
+                    )
+                    liste.append(avis)
+
+            return liste
             
 
