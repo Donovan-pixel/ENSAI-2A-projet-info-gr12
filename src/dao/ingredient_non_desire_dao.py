@@ -88,10 +88,13 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                             },
                         )   
 
-                        return cursor.rowcount > 0
+                        res = cursor.rowcount
+                        
             except Exception as e:
                 logging.exception(e)
                 return False
+
+            return res > 0
 
     @log
     def obtenirIngredientsNonDesires(self, utilisateur:Utilisateur) -> list[Ingredient]:

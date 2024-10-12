@@ -13,17 +13,19 @@ class RecettesFavoritesDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux recettes favorites des utilisateurs"""
 
     @log
-    def ajouter_recette_favorite(self, utilisateur, recette) -> bool:
-        """Ajout d'une recette comme favorite pour un utilisateur
+    def ajouter_recette_favorite(self, recette:Recette, utilisateur:Utilisateur) -> bool:
+        """Ajout d'une recette favorite pour un utilisateur
 
         Parameters
         ----------
-        utilisateur : Utilisateur
         recette : Recette
-
+            La recette qu'il faut ajouter aux favorites
+        utilisateur : Utilisateur
+            L'utilisateur qui en fait la demande
+        
         Returns
         -------
-        created : bool
+        bool
             True si l'ajout est un succès
             False sinon
         """
@@ -34,8 +36,9 @@ class RecettesFavoritesDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO recettes_favorites(id_meal, id_user) VALUES        "
-                        "(%(idRecette)s, %(idUtilisateur)s             "
+                        "INSERT INTO recettes_favorite(id_meal, id_user)"
+                        "VALUES (%(idRecette)s, %(idUtilisateur)s       "
+                        "RETURNING id_meal;                             ",
                         {
                             "idRecette": recette.idRecette,
                             "idUtilisateur": utilisateur.idUtilisateur,
@@ -43,26 +46,25 @@ class RecettesFavoritesDao(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
+            raise
 
-        created = False
-        if res:
-            created = True
-
-        return created
+        return bool(res)
 
     @log
-    def supprimer_recette_favorite(self, utilisateur, recette) -> bool:
+    def supprimer_recette_favorite(self, recette:Recette, utilisateur:Utilisateur) -> bool:
         """Suppression d'une recette favorite pour un utilisateur
 
         Parameters
         ----------
-        utilisateur : Utilisateur
         recette : Recette
-
+            La recette à supprimer des favorites
+        utilisateur : Utilisateur
+            L'utilisateur qui en fait la demande
+        
         Returns
         -------
-        deleted : bool
+        bool :
             True si la suppression est un succès
             False sinon
         """
@@ -70,17 +72,16 @@ class RecettesFavoritesDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "DELETE FROM recettes_favorites      "
-                        " WHERE id_meal=%(idRecette)s AND id_user=%(idUtilisateur)s      ",
-                        {"idRecette": recette.idRecette,
-                        "idUtilisateur": utilisateur.idUtilisateur},
+                        "DELETE FROM recettes_favorites                             "
+                        " WHERE id_meal=%(idRecette)s AND id_user=%(idUtilisateur)s;",
+                        {
+                            "idRecette": recette.idRecette,
+                            "idUtilisateur": utilisateur.idUtilisateur,
+                        },
                     )
-                    res = cursor.fetchone()
+                    res = cursor.rowcount
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
             raise
 
-        deleted = False
-        if res:
-            deleted = True
-        return deleted
+        return res > 0

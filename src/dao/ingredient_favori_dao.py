@@ -42,8 +42,8 @@ class IngredientFavoriDao(metaclasse=Singleton):
                         "(%(id_ingredient)s, %(id_user)s)                              "
                         "RETURNING id_ingredient;                                      ",
                         {
-                            "id_ingredient": ingredient.id_ingredient,
-                            "id_user": utilisateur.id_user,
+                            "id_ingredient": ingredient.idIngredient,
+                            "id_user": utilisateur.idUtilisateur,
                         },
                     )
                     res = cursor.fetchone()
@@ -124,8 +124,8 @@ class IngredientFavoriDao(metaclasse=Singleton):
                         AND id_user = %(id_user)s;
                         """,
                         {
-                            "id_ingredient": ingredient.id_ingredient,
-                            "id_user": utilisateur.id_user
+                            "id_ingredient": ingredient.idIngredient,
+                            "id_user": utilisateur.idUtilisateur,
                         },
                     )
                     res = cursor.rowcount
