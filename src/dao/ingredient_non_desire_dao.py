@@ -50,7 +50,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
         except Exception as e:
-            logging.error(f"Erreur lors de l'ajout de l'ingrédient non désiré : {e}")
+            logging.exception(e)
             return False
 
         added = False
@@ -101,7 +101,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                 return False
 
     @log
-    def obtenirIngredientsNonDesires(self, utilisateur:Utilisateur) -> List[Ingredient]:
+    def obtenirIngredientsNonDesires(self, utilisateur:Utilisateur) -> list[Ingredient]:
         """Obtention des ingrédients non désirés d'un utilisateur
 
         Parameters
@@ -111,22 +111,35 @@ class IngredientNonDesireDAO(metaclass=Singleton):
 
         Returns
         -------
-        List[Ingredient]:
+        list[Ingredient]:
             Liste contenant tous les ingrédients non désirés associés à l'utilisateur
         """
-
-        ingredients_non_desires = []
 
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT * FROM ingredients_non_desires JOIN recettes ON recettes.id_meal = avis.id_meal"
-                        "WHERE id_meals = %(id_recette)s", 
+                        "SELECT (id_ingredient, nom) FROM ingredient" 
+                        "JOIN ingredients_non_desires ON ingredients_non_desires.id_ingredient = ingredient.id_ingredient"
+                        "WHERE id_user = %(id_user)s;", 
                         {
-                            "id_recette": recettes.id_meal,
+                            "id_user": utilisateur.id_user,
                         },
                     )
                     res = cursor.fetchall()
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
+            raise
+
+        liste = []
+
+        if res:
+            for row in res:
+                ingredient_non_desire = Ingredient(
+                    id_ingredient = row[0],
+                    nom = row[1]
+                )
+
+                liste = liste.append(ingredient_non_desire)
+        
+        return liste
