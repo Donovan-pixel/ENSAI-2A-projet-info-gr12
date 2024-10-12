@@ -6,24 +6,28 @@ from utils.log_decorator import log
 from dao.db_connection import DBConnection
 
 from business_object.ingredient import Ingredient
+from business_object.utilisateur import Utilisateur
+
 
 
 class IngredientFavoriDao(metaclasse=Singleton):
     """Classe contenant les méthodes pour accéder aux Ingrédients Favoris de la base de données"""
 
     @log
-    def ajouterIngredientFavori(self, ingredient, utilisateur) -> bool:
+    def ajouterIngredientFavori(self, ingredient:Ingredient, utilisateur:Utilisateur) -> bool:
         """
         Ajouter un ingrédient favori, associé à un utilisateur, dans la base de données
 
         Parameters
         ----------
         ingredient : Ingredient
+            L'ingrédient à ajouter
         utilisateur : Utilisateur
+            L'utilisateur pour qui c'est un ingrédient favori
 
         Returns
         -------
-        added : bool
+        bool :
             True si l'ajout est un succès,
             False sinon
         """
@@ -34,29 +38,23 @@ class IngredientFavoriDao(metaclasse=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO ingredients_favoris(id_ingredient, id_user) VALUES    "
-                        "(%(id_ingredient)s, %(id_user)s)                                  ",
+                        "INSERT INTO ingredients_favoris(id_ingredient, id_user) VALUES"
+                        "(%(id_ingredient)s, %(id_user)s)                              "
+                        "RETURNING id_ingredient;                                      ",
                         {
-                            "id_ingredient": ingredient.idIngredient,
-                            "id_user": utilisateur.idUtilisateur,
+                            "id_ingredient": ingredient.id_ingredient,
+                            "id_user": utilisateur.id_user,
                         },
                     )
                     res = cursor.fetchone()
-
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
             raise
 
-        added = False
-
-        if res:
-            ingredient.idIngredient = res["idIngredient"]
-            added = True
-
-        return added
+        return bool(res)
 
     @log
-    def obtenirTousLesIngredientsFavoris(self, utilisateur) -> list[Ingredient]:
+    def obtenirIngredientsFavoris(self, utilisateur:Utilisateur) -> list[Ingredient]:
         """
         Lister tous les ingrédients favoris d'un utilisateur
 
@@ -73,11 +71,15 @@ class IngredientFavoriDao(metaclasse=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute("SELECT *                     " "FROM ingredients_favoris;    ")
+                    cursor.execute(
+                        "SELECT ingredient.id_ingredient, ingredient.nom"
+                        "FROM ingredients_favoris"
+                        "JOIN ingredient ON ingredient.id_ingredient = ingredients_favoris.id_ingredient"
+                        "WHERE id_user = %(id_user)s;"
+                    )
                     res = cursor.fetchall()
-
         except Exception as e:
-            logging.info(e)
+            logging.exeption(e)
             raise
 
         liste_ingredients_favoris = []
@@ -85,8 +87,8 @@ class IngredientFavoriDao(metaclasse=Singleton):
         if res:
             for row in res:
                 ingredient_favori = Ingredient(
-                    idIngredient=res["id_ingredient"],
-                    nom=res["nom"],
+                    id_ingredient = res["id_ingredient"],
+                    nom = res["nom"],
                 )
 
                 liste_ingredients_favoris.append(ingredient_favori)
@@ -94,8 +96,8 @@ class IngredientFavoriDao(metaclasse=Singleton):
         return liste_ingredients_favoris
 
     @log
-    def supprimer(self, ingredient, utilisateur) -> bool:
-        """Suppression d'un ingredient dans la base de données
+    def supprimerIngredientFavori(self, ingredient:Ingredient, utilisateur:Utilisateur) -> bool:
+        """Supprimer un ingrédient favori, associé à un utilisateur, de la base de données
 
         Parameters
         ----------
@@ -103,25 +105,33 @@ class IngredientFavoriDao(metaclasse=Singleton):
             ingrédient à supprimer
 
         utilisateur : Utilisateur
+            L'utilisateur qui en fait la demande
 
         Returns
         -------
-        bool :  True si l'ingrédient a bien été supprimé,
-                False sinon
+        bool :  
+            True si l'ingrédient a bien été supprimé,
+            False sinon
         """
 
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "DELETE FROM ingredients_favoris                     "
-                        " WHERE id_ingredient=%(idIngredient)s;      ",
-                        {"idIngredient": ingredient.idIngredient},
+                        """
+                        DELETE FROM ingredients_favoris
+                        WHERE id_ingredient=%(id_ingredient)s
+                        AND id_user = %(id_user)s;
+                        """,
+                        {
+                            "id_ingredient": ingredient.id_ingredient,
+                            "id_user": utilisateur.id_user
+                        },
                     )
                     res = cursor.rowcount
 
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
             raise
 
         return res > 0

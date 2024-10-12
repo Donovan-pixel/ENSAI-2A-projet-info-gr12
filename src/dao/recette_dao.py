@@ -12,16 +12,19 @@ class RecetteDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux recettes de la base de données"""
 
     @log
-    def ajouterRecette(self, recette) -> bool:
-        """Classe pour créer une recette de la base de données
+    def ajouterRecette(self, recette:Recette) -> bool:
+        """Ajout d'une recette de la base de données
+
         Parameters
         ---------
         recette : Recette
-        Return
+            Recette qu'il faut ajouter
+
+        Returns
         ------
-        booléen :
-        True si la recette a bien été crée
-        False si non
+        bool :
+            True si la recette a bien été ajoutée
+            False sinon
         """
 
         res = None

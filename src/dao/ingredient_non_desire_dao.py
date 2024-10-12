@@ -27,7 +27,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
 
         Returns
         -------
-        added : bool
+        bool :
             True si l'ajout est un succès
             False sinon
         """
@@ -53,11 +53,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
             logging.exception(e)
             return False
 
-        added = False
-        if res:
-            added = True
-
-        return added
+        return bool(res)
 
         @log
         def supprimerIngredientNonDesire(self, ingredient:Ingredient, utilisateur:Utilisateur) -> bool:
