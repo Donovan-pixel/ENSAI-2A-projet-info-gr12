@@ -92,10 +92,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                             },
                         )   
 
-                        if cursor.rowcount > 0:
-                            return True
-                        else:
-                            return False
+                        return cursor.rowcount > 0
             except Exception as e:
                 logging.exception(e)
                 return False
@@ -107,7 +104,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
         Parameters
         ----------
         utilisateur : Utilisateur
-            L'utilisateur duquel on souhaite obtenir ses ingrédients non désirée
+            L'utilisateur duquel on souhaite obtenir les ingrédients non désirée
 
         Returns
         -------
@@ -120,7 +117,8 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "SELECT (id_ingredient, nom) FROM ingredient" 
-                        "JOIN ingredients_non_desires ON ingredients_non_desires.id_ingredient = ingredient.id_ingredient"
+                        "JOIN ingredients_non_desires" 
+                        "ON ingredients_non_desires.id_ingredient = ingredient.id_ingredient"
                         "WHERE id_user = %(id_user)s;", 
                         {
                             "id_user": utilisateur.id_user,
@@ -140,6 +138,6 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                     nom = row[1]
                 )
 
-                liste = liste.append(ingredient_non_desire)
+                liste.append(ingredient_non_desire)
         
         return liste
