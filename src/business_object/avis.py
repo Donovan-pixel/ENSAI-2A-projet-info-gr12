@@ -30,3 +30,5 @@ class Avis:
             f"Avis donné par({self.idUtilisateur}, pour la recette {self.idRecette}"
             "avec la note {self.note} et le commentaire {self.commentaire}"
         )
+
+
