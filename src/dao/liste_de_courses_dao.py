@@ -10,6 +10,7 @@ from business_object.ListeDecourses import ListeDeCourse
 class ListeDeCourseDAO(metaclass=Singleton):
     """Classe contenant les méthodes pour interagir avec la base de données pour les listes de courses"""
 
+    # Il faut la supprimer car on ne se servira pas de l'id dans les recherches
     @log
     def trouver_par_id(self, idListeDeCourses) -> ListeDeCourses:
         """trouver une liste de course grace à son id
