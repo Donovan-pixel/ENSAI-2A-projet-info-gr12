@@ -12,7 +12,7 @@ class RecetteDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux recettes de la base de données"""
 
     @log
-    def ajouterRecette(self, recette:Recette) -> bool:
+    def ajouterRecette(self, recette: Recette) -> bool:
         """Ajout d'une recette de la base de données
 
         Parameters
@@ -82,11 +82,11 @@ class RecetteDao(metaclass=Singleton):
                         },
                     )
                     res = cursor.fetchall()
-        
+
         except Exception as e:
             logging.exception(e)
             raise
-        
+
         recettes = []
 
         if res:
@@ -149,10 +149,8 @@ class RecetteDao(metaclass=Singleton):
 
         return recettes
 
-
-
     @log
-    def obtenirRecettesParIngrédients(self, ingredients:list[Ingredient]) -> list[Recette]:
+    def obtenirRecettesParIngrédients(self, ingredients: list[Ingredient]) -> list[Recette]:
         """Obtention de recettes contenant certains ingrédients
 
         Parameters:
@@ -185,11 +183,11 @@ class RecetteDao(metaclass=Singleton):
                         },
                     )
                     res = cursor.fetchall()
-        
+
         except Exception as e:
             logging.exception(e)
             raise
-        
+
         recettes = []
 
         if res:
@@ -206,7 +204,7 @@ class RecetteDao(metaclass=Singleton):
         return recettes
 
         @log
-        def obtenirRecettesParCategorie(self, categorie:str) -> list[Recette]:
+        def obtenirRecettesParCategorie(self, categorie: str) -> list[Recette]:
             """Obtention de recettes par catégorie
 
             Parameters:
@@ -250,9 +248,3 @@ class RecetteDao(metaclass=Singleton):
                     recettes.append(recette)
 
             return recettes
-        
-
-
-
-
-    
