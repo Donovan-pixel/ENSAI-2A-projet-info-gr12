@@ -41,8 +41,12 @@ class RecetteService:
         )
 
     @log
-    def rechercherRecettesParIngredients(self, ingredient: list) -> list:
+    def obtenirRecettesparLettre(self, lettre) -> list[Recette]:
         """Afficher toutes les recettes qui comportent les ingrédients dans la liste
         Parameters
         ----------
+        lettre : str
+        Return
+        ------
+        une liste de recette qui commence par cette lettre
         """

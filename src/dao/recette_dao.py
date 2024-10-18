@@ -6,6 +6,7 @@ from utils.log_decorator import log
 from dao.db_connection import DBConnection
 
 from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
 
 
 class RecetteDao(metaclass=Singleton):
@@ -103,7 +104,7 @@ class RecetteDao(metaclass=Singleton):
         return recettes
 
     @log
-    def obtenirRecettesParIngredient(self, ingredient: Ingredient) -> List[Recette]:
+    def obtenirRecettesParIngredient(self, ingredient: Ingredient) -> list[Recette]:
         """Obtention des recettes contenant un ingrédient spécifique
 
         Parameters
