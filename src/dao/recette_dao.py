@@ -204,48 +204,48 @@ class RecetteDao(metaclass=Singleton):
 
         return recettes
 
-        @log
-        def obtenirRecettesParCategorie(self, categorie: str) -> list[Recette]:
-            """Obtention de recettes par catégorie
+    @log
+    def obtenirRecettesParCategorie(self, categorie: str) -> list[Recette]:
+        """Obtention de recettes par catégorie
 
-            Parameters:
-            ---------
-            categorie : str
-                Catégorie de recettes recherchées
+        Parameters:
+        ---------
+        categorie : str
+            Catégorie de recettes recherchées
 
-            Returns:
-            ------
-            list[Recette] :
-                Liste des recettes de la catégorie recherchée
-            """
+        Returns:
+        ------
+        list[Recette] :
+            Liste des recettes de la catégorie recherchée
+        """
 
-            try:
-                with DBConnection().connection as connection:
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            """
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
                             SELECT * FROM recettes
                             WHERE categorie = %(categorie)s;
                             """,
-                            {"categorie": categorie},
-                        )
-                        res = cursor.fetchall()
-
-            except Exception as e:
-                logging.exception(e)
-                raise
-
-            recettes = []
-
-            if res:
-                for row in res:
-                    recette = Recette(
-                        idRecette=row["id_recette"],
-                        titre=row["nom"],
-                        categorie=row["categorie"],
-                        origine=row["origine"],
-                        consignes=row["instructions"],
+                        {"categorie": categorie},
                     )
-                    recettes.append(recette)
+                    res = cursor.fetchall()
 
-            return recettes
+        except Exception as e:
+            logging.exception(e)
+            raise
+
+        recettes = []
+
+        if res:
+            for row in res:
+                recette = Recette(
+                    idRecette=row["id_recette"],
+                    titre=row["nom"],
+                    categorie=row["categorie"],
+                    origine=row["origine"],
+                    consignes=row["instructions"],
+                )
+                recettes.append(recette)
+
+        return recettes

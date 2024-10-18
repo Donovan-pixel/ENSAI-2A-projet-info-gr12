@@ -1,6 +1,7 @@
 from utils.log_decorator import log
 from business_object.recette import Recette
 from dao.recette_dao import RecetteDao
+from src.business_object.ingredient import Ingredient
 
 
 class RecetteService:
@@ -50,3 +51,40 @@ class RecetteService:
         ------
         une liste de recette qui commence par cette lettre
         """
+        return RecetteDao().obtenirRecettesparLettre(lettre=lettre)
+
+    @log
+    def obtenirRecettesParIngredient(self, ingredient: Ingredient) -> list[Recette]:
+        """obtenir la liste des recettes contenant un ingrédient spécifique
+        Parameters
+        ----------
+        ingredient : Ingredient
+        Return
+        -----
+        Recette : une liste d'objets de type Recette
+        """
+        return RecetteDao().obtenirRecettesParIngredient(ingredient)
+
+    @log
+    def obtenirRecettesParIngrédients(self, ingredients: list[Ingredient]) -> list[Recette]:
+        """obtenir la liste des recettes contenant deux ou plusieurs ingrédients
+        Parameters
+        ----------
+        list : liste d'objets de type d'ingrédients
+        Return
+        ------
+        liste d'objets de type Recette
+        """
+        return RecetteDao().obtenirRecettesParIngrédients()
+
+    @log
+    def obtenirRecettesParCategorie(self, categorie: str) -> list[Recette]:
+        """Obtenir la liste des recettes qui sont d'une catégorie donnée
+        Parameters
+        ---------
+        categorie : str
+        Return
+        -----
+        list : liste d'objets de type Recette
+        """
+        return RecetteDao().obtenirRecettesParCategorie(categorie=categorie)
