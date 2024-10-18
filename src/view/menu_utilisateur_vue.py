@@ -6,7 +6,7 @@ from view.session import Session
 from service.joueur_service import JoueurService
 
 
-class MenuJoueurVue(VueAbstraite):
+class MenuUtilisateurVue(VueAbstraite):
     """Vue du menu du joueur
 
     Attributes
@@ -49,11 +49,11 @@ class MenuJoueurVue(VueAbstraite):
                 return AccueilVue()
 
             case "Infos de session":
-                return MenuJoueurVue(Session().afficher())
+                return MenuUtilisateurVue(Session().afficher())
 
             case "Afficher les joueurs de la base de données":
                 joueurs_str = JoueurService().afficher_tous()
-                return MenuJoueurVue(joueurs_str)
+                return MenuUtilisateurVue(joueurs_str)
 
             case "Afficher des pokemons (par appel à un Webservice)":
                 from view.pokemon_vue import PokemonVue

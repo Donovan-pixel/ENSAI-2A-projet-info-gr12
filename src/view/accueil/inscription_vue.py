@@ -7,7 +7,7 @@ from prompt_toolkit.validation import ValidationError, Validator
 
 
 from view.vue_abstraite import VueAbstraite
-from service.joueur_service import JoueurService
+from src.service.utilisateur_service import UtilisateurService
 
 
 class InscriptionVue(VueAbstraite):
@@ -15,7 +15,7 @@ class InscriptionVue(VueAbstraite):
         # Demande à l'utilisateur de saisir pseudo, mot de passe...
         pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()
 
-        if JoueurService().pseudo_deja_utilise(pseudo):
+        if UtilisateurService().pseudoDejaUtilise(pseudo):
             from view.accueil.accueil_vue import AccueilVue
 
             return AccueilVue(f"Le pseudo {pseudo} est déjà utilisé.")
@@ -30,28 +30,13 @@ class InscriptionVue(VueAbstraite):
             ),
         ).execute()
 
-        age = inquirer.number(
-            message="Entrez votre age : ",
-            min_allowed=0,
-            max_allowed=120,
-            validate=EmptyInputValidator(),
-        ).execute()
-
-        mail = inquirer.text(message="Entrez votre mail : ", validate=MailValidator()).execute()
-
-        fan_pokemon = inquirer.confirm(
-            message="Etes-vous fan de pokemons : ",
-            confirm_letter="o",
-            reject_letter="n",
-        ).execute()
-
         # Appel du service pour créer le joueur
-        joueur = JoueurService().creer(pseudo, mdp, age, mail, fan_pokemon)
+        user = UtilisateurService().creerUnCompte(pseudo, mdp, role)
 
         # Si le joueur a été créé
-        if joueur:
+        if user:
             message = (
-                f"Votre compte {joueur.pseudo} a été créé. Vous pouvez maintenant vous connecter."
+                f"Votre compte {user.pseudo} a été créé. Vous pouvez maintenant vous connecter."
             )
         else:
             message = "Erreur de connexion (pseudo ou mot de passe invalide)"
