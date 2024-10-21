@@ -26,9 +26,8 @@ class IngredientClient:
         if req.status_code == 200:
             raw_ingredients = req.json()["meals"]
             for t in raw_ingredients:
-                for t in raw_ingredients:
-                    print(t["strIngredient"])
-                    ingredients.append(t["strIngredient"])
+                print(t["strIngredient"])
+                ingredients.append(t["strIngredient"])
 
         return sorted(ingredients)
 
