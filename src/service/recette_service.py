@@ -1,7 +1,7 @@
 from utils.log_decorator import log
 from business_object.recette import Recette
 from dao.recette_dao import RecetteDao
-from src.business_object.ingredient import Ingredient
+from business_object.ingredient import Ingredient
 
 
 class RecetteService:
