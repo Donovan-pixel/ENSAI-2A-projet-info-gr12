@@ -27,7 +27,6 @@ class IngredientClient:
             raw_ingredients = req.json()["meals"]
             for t in raw_ingredients:
                 for t in raw_ingredients:
-                    print(t["strIngredient"])
                     ingredients.append(t["strIngredient"])
 
         return sorted(ingredients)
