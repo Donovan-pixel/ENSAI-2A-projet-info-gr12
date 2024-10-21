@@ -10,7 +10,7 @@ class ListeDeCourses:
         identifiant de l'utilisateur
     """
 
-    def __init__(self, idListeDecourses, idUtilisateur):
+    def __init__(self, idUtilisateur, idListeDecourses=None):
         """Constructeur"""
         self.idListeDecourses = idListeDecourses
         self.idUtilisateur = idUtilisateur

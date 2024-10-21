@@ -51,7 +51,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
 
     @log
     def listerTous(self, idUtilisateur) -> list[ListeDeCourses]:
-        """lister toutes les listes de courses du joeur grâce à son id
+        """lister toutes les listes de courses de l'utilisateur grâce à son id
 
         Parameters
         ----------
