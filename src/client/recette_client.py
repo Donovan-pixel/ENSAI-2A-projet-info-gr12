@@ -1,5 +1,6 @@
 import os
 import requests
+import string
 
 from utils.log_decorator import log
 from typing import List
@@ -16,15 +17,16 @@ class RecetteClient:
         """Retourne la liste des recettes"""
 
         # appel du webservice
-        req = requests.get(f"{self.__host}/list.php?i=list")
+        for letter in list(string.ascii_lowercase):
+            req = requests.get(f"{self.__host}/search.php?f={letter}")
 
-        # Création d'une liste puis parcours du json pour ajouter toutes les recettes à la liste
-        recettes = []
-        if req.status_code == 200:
-            raw_recettes = req.json()["meals"]
-            for t in raw_recettes:
-                print(t["strMeal"], t["strCategory"], t["strArea"], t["strInstructions"])
-                recettes.append(t["strMeal"])
+            # Création d'une liste puis parcours du json pour ajouter toutes les recettes à la liste
+            recettes = []
+            if req.status_code == 200:
+                raw_recettes = req.json()["meals"]
+                for t in raw_recettes:
+                    print(t["strMeal"], t["strCategory"], t["strArea"], t["strInstructions"])
+                    recettes.append(t["strMeal"])
 
         return sorted(recettes)
 
