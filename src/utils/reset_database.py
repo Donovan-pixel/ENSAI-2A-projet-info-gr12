@@ -8,6 +8,8 @@ from dao.db_connection import DBConnection
 
 from client.ingredient_client import IngredientClient
 from service.ingredient_service import IngredientService
+from client.recette_client import RecetteClient
+from service.recette_service import RecetteService
 
 
 class ResetDatabase(metaclass=Singleton):
@@ -45,6 +47,11 @@ class ResetDatabase(metaclass=Singleton):
 
         for i in liste_ingredients:
             IngredientService().ajouterNouvelIngredient(i)
+
+        liste_recettes = RecetteClient().get_recette()
+
+        for i in liste_recettes:
+            RecetteService().ajouterNouvelleRecette(i)
 
         return True
 
