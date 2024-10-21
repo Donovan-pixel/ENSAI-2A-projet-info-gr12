@@ -10,7 +10,7 @@ class Ingredient:
         nom de l'ingrédient
     """
 
-    def __init__(self, idIngredient, nom):
+    def __init__(self, nom, idIngredient=None):
         """Constructeur"""
         self.idIngredient = idIngredient
         self.nom = nom

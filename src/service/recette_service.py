@@ -11,7 +11,6 @@ class RecetteService:
     def ajouterNouvelleRecette(self, recette: Recette) -> bool:
         """Ajout d'une nouvelle recette à partir de ses attributs"""
         nouvelle_recette = Recette(
-            idRecette=recette.idRecette,
             titre=recette.titre,
             ingredientQuantite=recette.ingredientQuantite,
             consignes=recette.consignes,
