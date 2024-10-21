@@ -70,5 +70,4 @@ class MenuUtilisateurVue(VueAbstraite):
 
             case "Afficher des pokemons (par appel à un Webservice)":
                 from view.pokemon_vue import PokemonVue
-
                 return PokemonVue()
