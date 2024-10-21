@@ -10,7 +10,7 @@ from client.ingredient_client import IngredientClient
 from service.ingredient_service import IngredientService
 
 
-class ResetDatabase(metaclass=Singleton):
+class ResetDatabase(metaclasse=Singleton):
     """
     Reinitialisation de la base de données
     """
