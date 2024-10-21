@@ -47,7 +47,6 @@ class MenuUtilisateurVue(VueAbstraite):
             case "Se déconnecter":
                 Session().deconnexion()
                 from view.accueil.accueil_vue import AccueilVue
-
                 return AccueilVue()
 
             case "Afficher la liste des recettes":

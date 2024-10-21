@@ -35,10 +35,21 @@ class RecetteService:
         une chaîne de caractères
         """
         return (
-            f"Recette({self.idRecette}, {self.titre}, {self.ingredientQuantite}, {self.consignes},"
+            f"Recette({self.titre}, {self.ingredientQuantite}, {self.consignes},"
             "{self.categorie},"
             "{self.origine}"
         )
+
+    @log
+    def obtenirToutesLesRecettes(self) -> list[Recette]:
+        """Récupère et retourne toutes les recettes disponibles dans la base de données.
+
+        Returns:
+        -------
+        list[Recette]:
+            Liste des recettes récupérées.
+        """
+        return RecetteDao().obtenirToutesLesRecettes()
 
     @log
     def obtenirRecettesparLettre(self, lettre) -> list[Recette]:

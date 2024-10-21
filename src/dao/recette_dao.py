@@ -56,6 +56,44 @@ class RecetteDao(metaclass=Singleton):
         return created
 
     @log
+    def obtenirToutesLesRecettes(self) -> list[Recette]:
+        """Obtention de toutes les recettes de la base de données
+
+        Returns:
+        -------
+        list[Recette]:
+            Liste des recettes
+        """
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT * FROM recettes;
+                        """
+                    )
+                    res = cursor.fetchall()
+
+        except Exception as e:
+            logging.exception(e)
+            raise
+
+        recettes = []
+
+        if res:
+            for row in res:
+                recette = Recette(
+                    idRecette=row["id_recette"],
+                    titre=row["title"],
+                    categorie=row["category"],
+                    origine=row["area"],
+                    consignes=row["instructions"],
+                )
+                recettes.append(recette)
+
+        return recettes
+
+    @log
     def obtenirRecettesparLettre(self, lettre) -> list[Recette]:
         """Rechercher des recettes commençant par une lettre donnée
 
