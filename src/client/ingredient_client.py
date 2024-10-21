@@ -26,13 +26,9 @@ class IngredientClient:
         if req.status_code == 200:
             raw_ingredients = req.json()["meals"]
             for t in raw_ingredients:
-                # boucle sur les 20 colonnes ingredients
-                for i in range(1, 21):
-                    ingredient_key = f"strIngredient{i}"  # Génère les clés strIngredient1,...20
-                    ingredient = t.get(ingredient_key)  # Récupère l'ingrédient correspondant
-
-                    if ingredient:
-                        ingredients.append(ingredient)
+                for t in raw_ingredients:
+                    print(t["strIngredient"])
+                    ingredients.append(t["strIngredient"])
 
         return sorted(ingredients)
 
