@@ -1,7 +1,7 @@
 from utils.log_decorator import log
 from business_object.recette import Recette
 from dao.recette_dao import RecetteDao
-from src.business_object.ingredient import Ingredient
+from business_object.ingredient import Ingredient
 
 
 class RecetteService:
@@ -11,7 +11,6 @@ class RecetteService:
     def ajouterNouvelleRecette(self, recette: Recette) -> bool:
         """Ajout d'une nouvelle recette à partir de ses attributs"""
         nouvelle_recette = Recette(
-            idRecette=recette.idRecette,
             titre=recette.titre,
             ingredientQuantite=recette.ingredientQuantite,
             consignes=recette.consignes,
