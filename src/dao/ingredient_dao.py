@@ -8,7 +8,7 @@ from dao.db_connection import DBConnection
 from business_object.ingredient import Ingredient
 
 
-class IngredientDao(metaclasse=Singleton):
+class IngredientDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux Ingrédients de la base de données"""
 
     @log
