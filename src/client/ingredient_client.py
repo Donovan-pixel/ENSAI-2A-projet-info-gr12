@@ -2,6 +2,7 @@ import os
 import requests
 import dotenv
 from typing import List
+from utils.log_decorator import log
 
 
 class IngredientClient:
@@ -11,6 +12,7 @@ class IngredientClient:
         dotenv.load_dotenv()
         self.__host = os.environ["WEBSERVICE_HOST"]
 
+    @log
     def get_ingredient(self) -> List[str]:
         """
         Retourne la liste des ingrédients

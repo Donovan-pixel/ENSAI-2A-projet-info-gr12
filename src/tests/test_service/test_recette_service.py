@@ -7,7 +7,7 @@ from src.service.recette_service import RecetteService
 from src.dao.recette_dao import RecetteDao
 
 #on remplace la DAO par le mock
-RecetteService(). RecetteDao = MagicMock
+RecetteService().ajouterNouvelleRecette RecetteDao = MagicMock
 
 #exemple de recette et d'ingrédient
 recette = Recette(
@@ -18,11 +18,13 @@ recette = Recette(
             categorie="Dessert",
             origine="France")
 
+ingredient = Ingredient(id=1, nom="Pommes")
+
 def test_nouvellerecette_succes():
     """Ajout d'une nouvelle recette réussie"""
 
     # Configurer le mock pour simuler un ajout réussi
-    self.mock_dao.ajouterRecette.return_value = True
+    MagicMock.ajouterRecette.return_value = True
 
     # Appel de la méthode
     result = self.service.ajouterNouvelleRecette(self.recette)
