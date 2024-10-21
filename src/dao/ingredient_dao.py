@@ -18,8 +18,8 @@ class IngredientDao(metaclasse=Singleton):
 
         Parameters
         ----------
-        ingredient : Ingredient
-            L'ingrédient à ajouter
+        ingredient : str
+            nom de l'ingrédient à ajouter
 
         Returns
         -------
