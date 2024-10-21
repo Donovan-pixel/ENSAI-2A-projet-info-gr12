@@ -15,6 +15,21 @@ class AccueilVue(VueAbstraite):
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
 
+        print("\n" + 
+            """
+            ___  ___        _   ___ _       _                
+            |  \/  |       | | / (_) |     | |               
+            | .  . |_   _  | |/ / _| |_ ___| |__   ___ _ __  
+            | |\/| | | | | |    \| | __/ __| '_ \ / _ \ '_ \ 
+            | |  | | |_| | | |\  \ | || (__| | | |  __/ | | |
+            \_|  |_/\__, | \_| \_/_|\__\___|_| |_|\___|_| |_|
+                     __/ |                                   
+                    |___/   
+            """
+            + "\n"                                 
+        )                  
+
+
         print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
 
         choix = inquirer.select(
