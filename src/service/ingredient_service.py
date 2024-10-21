@@ -8,9 +8,12 @@ class IngredientService:
     """Classe contenant les méthodes de service des Ingrédients"""
 
     @log
-    def ajouterNouvelIngredient(self, nom_ingredient) -> bool:
+    def ajouterNouvelIngredient(self, nom) -> bool:
         """Ajout d'un ingrédient à la bdd à partir de son nom"""
-        return IngredientDao().ajouterIngredient(nom_ingredient)
+        nouvel_ingredient = Ingredient(
+            nom=nom,
+        )
+        return IngredientDao().ajouterIngredient(nouvel_ingredient)
 
     @log
     def obtenirTousLesIngredients(self) -> list[Ingredient]:
