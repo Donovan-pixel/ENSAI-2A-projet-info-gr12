@@ -4,7 +4,7 @@ from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
 from service.utilisateur_service import UtilisateurService
-
+from service.recette_service import RecetteService
 
 class MenuUtilisateurVue(VueAbstraite):
     """Vue du menu du joueur
@@ -29,14 +29,16 @@ class MenuUtilisateurVue(VueAbstraite):
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
 
-        print("\n" + "-" * 50 + "\nMenu Joueur\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 50 + "\nTableau de bord\n" + "-" * 50 + "\n")
 
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Afficher les joueurs de la base de données",
-                "Afficher des pokemons (par appel à un Webservice)",
-                "Infos de session",
+                "Afficher la liste des recettes",
+                "Voir mes recettes favorites",
+                "Gérer mes ingrédients favoris/non désirés",
+                "Obtenir des suggestions de recettes",
+                "Accéder à ma liste de courses"
                 "Se déconnecter",
             ],
         ).execute()
@@ -47,6 +49,17 @@ class MenuUtilisateurVue(VueAbstraite):
                 from view.accueil.accueil_vue import AccueilVue
 
                 return AccueilVue()
+
+            case "Afficher la liste des recettes":
+                recettes_str = RecetteService().afficherTous()
+
+            case "Gérer mes ingrédients favoris/non désirés":
+
+            case "Obtenir des suggestions de recettes": 
+
+            case "Accéder à ma liste de courses":
+                liste_de_courses_str = 
+                return 
 
             case "Infos de session":
                 return MenuUtilisateurVue(Session().afficher())
