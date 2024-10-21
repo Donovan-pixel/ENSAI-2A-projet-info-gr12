@@ -26,7 +26,9 @@ class RecetteClient:
                 raw_recettes = req.json()["meals"]
                 for t in raw_recettes:
                     print(t["strMeal"], t["strCategory"], t["strArea"], t["strInstructions"])
-                    recettes.append(t["strMeal"])
+                    recettes.append(
+                        (t["strMeal"], t["strCategory"], t["strArea"], t["strInstructions"])
+                    )
 
         return sorted(recettes)
 
