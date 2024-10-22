@@ -7,7 +7,7 @@ from typing import List
 
 
 class RecetteClient:
-    """Faire appel à mealdb endpoint"""
+    """Fait appel à mealdb endpoint"""
 
     def __init__(self) -> None:
         self.__host = os.environ["WEBSERVICE_HOST"]
@@ -15,10 +15,11 @@ class RecetteClient:
     @log
     def get_recette(self) -> List[str]:
         """Retourne la liste des recettes"""
-        # Creation de la liste recette vide
+
+        # Création de la liste recette vide
         recettes = []
 
-        # appel du webservice
+        # Appel du webservice
         for letter in list(string.ascii_lowercase):
             req = requests.get(f"{self.__host}/search.php?f={letter}")
 
