@@ -38,7 +38,7 @@ def test_creer_echec():
     AvisDao.__new__ = MagicMock(return_value=avis_dao_mock)  # Injection du mock
 
     avis_dao_mock.ajouter_avis.return_value = False  # Simule un échec de la DAO
-
+    print(avis_dao_mock)
     # WHEN
     avis = AvisService().ajouterNouvelAvis(avis_dao_mock)
 
