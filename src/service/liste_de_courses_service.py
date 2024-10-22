@@ -23,11 +23,11 @@ class ListeDeCoursesService:
         return liste_DeCourses
 
     @log
-    def ajouterUnIngredient(self, idListeDeCourses, idIngredient, quantite) -> bool:
+    def ajouterUnIngredient(self, idUtilisateur, IngredientQuantite) -> bool:
         """Ajoute ou met à jour un ingrédient dans la liste de courses."""
-        return ListeDeCourseDAO().ajouterUnIngredient(idListeDeCourses, idIngredient, quantite)
+        return ListeDeCourseDAO().ajouterUnIngredient(idUtilisateur, IngredientQuantite)
 
     @log
-    def retirerUnIngredient(self, idListeDeCourses, idIngredient) -> bool:
+    def retirerUnIngredient(self, idUtilisateur, Ingredient) -> bool:
         """Retire un ingrédient de la liste de courses."""
-        return ListeDeCourseDAO().retirerUnIngredient(idListeDeCourses, idIngredient)
+        return ListeDeCourseDAO().retirerUnIngredient(idUtilisateur, Ingredient)

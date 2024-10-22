@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import patch
 from unittest.mock import MagicMock
 
-from dao.ingredient_dao import IngredientDao
+from dao.ingredient_dao_dao import IngredientDao
 from business_object.ingredient import Ingredient
 
 

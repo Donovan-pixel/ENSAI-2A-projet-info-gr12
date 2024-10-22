@@ -9,8 +9,8 @@ from business_object.utilisateur import Utilisateur
 
 liste_utilisateur = [
     Utilisateur(pseudo="jp", role="Utilisateur", motDePasse="1234"),
-    Utilisateur(pseudo="lea", age="Utilisateur", motDePasse="0000"),
-    Utilisateur(pseudo="gg", age="Utilisateur", motDePasse="abcd"),
+    Utilisateur(pseudo="lea", role="Utilisateur", motDePasse="0000"),
+    Utilisateur(pseudo="gg", role="Utilisateur", motDePasse="abcd"),
 ]
 
 
