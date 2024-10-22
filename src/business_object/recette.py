@@ -19,7 +19,9 @@ class Recette:
 
     """
 
-    def __init__(self, titre, ingredientQuantite, consignes, categorie, origine, idRecette=None):
+    def __init__(
+        self, titre, ingredientQuantite, consignes, categorie=None, origine=None, idRecette=None
+    ):
         """Constructeur"""
         self.idRecette = idRecette
         self.titre = titre

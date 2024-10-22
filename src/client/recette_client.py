@@ -25,9 +25,12 @@ class RecetteClient:
             if req.status_code == 200:
                 raw_recettes = req.json()["meals"]
                 for t in raw_recettes:
-                    recettes.append(
-                        (t["strMeal"], t["strCategory"], t["strArea"], t["strInstructions"])
-                    )
+                    try:
+                        recettes.append(
+                            (t["strMeal"], t["strCategory"], t["strArea"], t["strInstructions"])
+                        )
+                    except:
+                        print("Erreur : " + str(t))
 
         return sorted(recettes)
 
