@@ -11,7 +11,7 @@ from dao.ingredient_favori_dao import IngredientFavoriDao
 import random
 
 
-class SuggestionDao:
+class SuggestionService:
     """Classe contenant les méthodes pour faire une suggestion de recette à l'utilisateur"""
 
     @log
