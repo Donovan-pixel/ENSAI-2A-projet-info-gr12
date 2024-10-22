@@ -21,7 +21,7 @@ if __name__ == "__main__":
             break
         try:
             # Affichage du menu
-            vue_courante.afficher()
+            # vue_courante.afficher()
 
             # Affichage des choix possibles
             vue_courante = vue_courante.choisir_menu()
