@@ -13,9 +13,9 @@ class SuggestionService:
     """Classe contenant les méthodes pour faire une suggestion de recette à l'utilisateur"""
 
     @log
-    def obtenirSuggestionRecette(self, utilisateur: Utilisateur) -> Recette:
+    def obtenirSuggestionRecette(self, utilisateur: Utilisateur) -> list[Recette]:
         """
-        Suggerer à l'utilisateur une recette n'étant pas dans ses recettes favorites,
+        Suggerer à l'utilisateur des recettes n'étant pas dans ses recettes favorites,
         sans ingredient non désiré et avec au moins un ingredient favori
 
         Parameters
