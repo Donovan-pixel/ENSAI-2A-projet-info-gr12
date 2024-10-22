@@ -5,7 +5,6 @@ from utils.log_decorator import log
 
 from dao.db_connection import DBConnection
 from business_object.liste_de_course import ListeDeCourses
-from dao.ingredient_dao import IngredientDao
 
 
 class ListeDeCourseDAO(metaclass=Singleton):
@@ -118,7 +117,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
                         "SELECT * "
                         "FROM ListeDeCourses "
                         "WHERE idListeDeCourses = %(idListeDeCourses)s;",
-                        {"idListeDeCourses": idListeDeCourses},
+                        {"idListeDeCourses": id_liste_de_courses},
                     )
                     res = cursor.fetchone()
 
