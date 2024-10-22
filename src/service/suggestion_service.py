@@ -8,8 +8,6 @@ from dao.recette_dao import RecetteDao
 from dao.ingredient_non_desire_dao import IngredientNonDesireDAO
 from dao.ingredient_favori_dao import IngredientFavoriDao
 
-import random
-
 
 class SuggestionService:
     """Classe contenant les méthodes pour faire une suggestion de recette à l'utilisateur"""
