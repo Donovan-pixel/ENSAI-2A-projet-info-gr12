@@ -24,3 +24,8 @@ class IngredientService:
     def supprimer(self, ingredient) -> bool:
         """Supprimer un ingredient"""
         return IngredientDao().supprimerIngredient(ingredient)
+
+    @log
+    def obtenirIdPArNom(self, nom) -> int:
+        """Récupérer l'id d'un ingrédient par son nom"""
+        return IngredientDao().obtenirIdParNom(nom)
