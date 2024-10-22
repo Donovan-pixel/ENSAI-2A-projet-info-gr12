@@ -15,19 +15,26 @@ class RecetteClient:
     @log
     def get_recette(self) -> List[str]:
         """Retourne la liste des recettes"""
+        # Creation de la liste recette vide
+        recettes = []
 
         # appel du webservice
         for letter in list(string.ascii_lowercase):
             req = requests.get(f"{self.__host}/search.php?f={letter}")
 
-            # Création d'une liste puis parcours du json pour ajouter toutes les recettes à la liste
-            recettes = []
+            # Parcours du json pour ajouter toutes les recettes à la liste
             if req.status_code == 200:
                 raw_recettes = req.json()["meals"]
                 for t in raw_recettes:
                     try:
                         recettes.append(
-                            (t["strMeal"], t["strCategory"], t["strArea"], t["strInstructions"])
+                            (
+                                t["strMeal"],
+                                t["strCategory"],
+                                t["strArea"],
+                                t["strInstructions"],
+                                {t["strIngredient1"], t["strMeasure1"]},
+                            )
                         )
                     except:
                         print("Erreur : " + str(t))
