@@ -13,7 +13,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux recettes favorites des utilisateurs"""
 
     @log
-    def ajouter_recette_favorite(self, recette:Recette, utilisateur:Utilisateur) -> bool:
+    def ajouter_recette_favorite(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """Ajout d'une recette favorite pour un utilisateur
 
         Parameters
@@ -22,7 +22,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
             La recette qu'il faut ajouter aux favorites
         utilisateur : Utilisateur
             L'utilisateur qui en fait la demande
-        
+
         Returns
         -------
         bool :
@@ -52,7 +52,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
         return bool(res)
 
     @log
-    def supprimer_recette_favorite(self, recette:Recette, utilisateur:Utilisateur) -> bool:
+    def supprimer_recette_favorite(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """Suppression d'une recette favorite pour un utilisateur
 
         Parameters
@@ -61,7 +61,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
             La recette à supprimer des favorites
         utilisateur : Utilisateur
             L'utilisateur qui en fait la demande
-        
+
         Returns
         -------
         bool :
@@ -85,3 +85,48 @@ class RecettesFavoritesDao(metaclass=Singleton):
             raise
 
         return res > 0
+
+    @log
+    def obtenirRecettesFavorites(self, utilisateur: Utilisateur) -> list[Recette]:
+        """
+        Lister toutes les recettes favorites d'un utilisateur
+
+        Parameters
+        ----------
+        utilisateur : Utilisateur
+
+        Returns
+        -------
+        liste_recette_favorites : list[Recettes]
+            renvoie la liste de toutes les recettes favorites de l'utilisateur
+        """
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT recette.id_meal, recette.title"
+                        "FROM recettes_favorites"
+                        "JOIN recettes ON recettes.id_meal = recettes_favorites.id_meal"
+                        "WHERE id_user = %(id_user)s;",
+                        {
+                            "id_user": utilisateur.idUtilisateur,
+                        },
+                    )
+                    res = cursor.fetchall()
+        except Exception as e:
+            logging.exeption(e)
+            raise
+
+        liste_recettes_favorites = []
+
+        if res:
+            for row in res:
+                recette_favorite = Recette(
+                    idRecette=res["id_meal"],
+                    titre=res["title"],
+                )
+
+                liste_recettes_favorites.append(recette_favorite)
+
+        return liste_recettes_favorites

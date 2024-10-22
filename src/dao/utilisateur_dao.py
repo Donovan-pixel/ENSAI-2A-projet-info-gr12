@@ -229,10 +229,7 @@ class UtilisateurDao(metaclass=Singleton):
                         "  FROM users                      "
                         " WHERE pseudo = %(pseudo)s         "
                         "   AND mot_de_passe = %(motDePasse)s;              ",
-                        {
-                            "pseudo": utilisateur.pseudo, 
-                            "motDePasse": utilisateur.motDePasse
-                        },
+                        {"pseudo": pseudo, "motDePasse": motDePasse},
                     )
                     res = cursor.fetchone()
         except Exception as e:
