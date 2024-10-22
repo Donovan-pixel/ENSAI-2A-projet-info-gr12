@@ -52,6 +52,7 @@ DROP TABLE IF EXISTS meals_ingredients CASCADE;
 CREATE TABLE meals_ingredients(
     id_meal INTEGER,
     id_ingredient INTEGER,
+    quantite VARCHAR(200),
     PRIMARY KEY (id_meal, id_ingredient),
     FOREIGN KEY (id_meal) REFERENCES recettes(id_meal),
     FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient)
@@ -63,4 +64,18 @@ CREATE TABLE ingredients_non_desires(
     PRIMARY KEY (id_ingredient, id_user),
     FOREIGN KEY (id_user) REFERENCES users(id_user),
     FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient)
+);
+DROP TABLE IF EXISTS liste_de_courses CASCADE;
+CREATE TABLE liste_de_courses(
+    id_liste_de_courses SERIAL PRIMARY KEY,
+    id_user INTEGER
+); 
+DROP TABLE IF EXISTS ingredients_courses CASCADE;
+CREATE TABLE ingredient_courses(
+    id_ingredient_courses SERIAL PRIMARY KEY,
+    id_ingredient INTEGER,
+    id_liste_de_courses INTEGER,
+    quantite VARCHAR(200),
+    FOREIGN KEY (id_ingredient) REFERENCES ingredients(id_ingredient),
+    FOREIGN KEY (id_liste_de_courses) REFERENCES liste_de_courses(id_liste_de_courses)
 );
