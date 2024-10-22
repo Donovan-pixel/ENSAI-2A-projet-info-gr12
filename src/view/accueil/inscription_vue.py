@@ -30,10 +30,10 @@ class InscriptionVue(VueAbstraite):
 
         role = "Utilisateur"
 
-        # Appel du service pour créer le joueur
+        # Appel du service pour créer le l'utilisateur
         user = UtilisateurService().creerUnCompte(pseudo, mdp, role)
 
-        # Si le joueur a été créé
+        # Si l'utilisateur a été créé
         if user:
             message = (
                 f"Votre compte {user.pseudo} a été créé. Vous pouvez maintenant vous connecter."

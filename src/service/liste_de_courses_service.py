@@ -8,7 +8,7 @@ class ListeDeCoursesService:
 
     @log
     def creerListeDeCourses(self, idUtilisateur) -> ListeDeCourses:
-        """Création d'un joueur à partir de ses attributs"""
+        """Création d'une liste de courses"""
         nouvelle_ListeDeCourses = ListeDeCourses(idUtilisateur)
 
         if ListeDeCourseDAO(nouvelle_ListeDeCourses).creerListeDeCourses:

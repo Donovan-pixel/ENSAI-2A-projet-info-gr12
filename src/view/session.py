@@ -15,7 +15,7 @@ class Session(metaclass=Singleton):
         self.utilisateur = None
         self.debut_connexion = None
 
-    def connexion(self, joueur):
+    def connexion(self, utilisateur):
         """Enregistement des données en session"""
         self.utilisateur = utilisateur
         self.debut_connexion = datetime.now().strftime("%d/%m/%Y %H:%M:%S")

@@ -185,13 +185,13 @@ class UtilisateurDao(metaclass=Singleton):
 
         Returns
         -------
-            True si le joueur a bien été supprimé
+            True si l'utilisateur a bien été supprimé
         """
 
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    # Supprimer le compte d'un joueur
+                    # Supprimer le compte d'un utilisateur
                     cursor.execute(
                         "DELETE FROM users                  "
                         " WHERE id_user=%(idUtilisateur)s      ",
@@ -239,7 +239,7 @@ class UtilisateurDao(metaclass=Singleton):
 
         if res:
             utilisateur = Utilisateur(
-                id_joueur=res["id_joueur"],
+                idUtilisateur=res["id_user"],
                 pseudo=res["pseudo"],
                 motDePasse=res["motDePasse"],
                 role=res["role"],

@@ -20,7 +20,7 @@ class ConnexionVue(VueAbstraite):
         # Appel du service pour trouver l'utilisateur
         user = UtilisateurService().seConnecter(pseudo, mdp)
 
-        # Si le joueur a été trouvé à partir des ses identifiants de connexion
+        # Si l'utilisateur a été trouvé à partir des ses identifiants de connexion
         if user:
             message = f"Vous êtes connecté sous le pseudo {user.pseudo}"
             Session().connexion(user)
