@@ -5,20 +5,21 @@ from utils.log_decorator import log
 
 from dao.db_connection import DBConnection
 from business_object.liste_de_course import ListeDeCourses
+from dao.ingredient_dao import IngredientDao
+from business_object.ingredient import Ingredient
 
 
 class ListeDeCourseDAO(metaclass=Singleton):
     """Classe contenant les méthodes pour interagir avec la liste de courses de la base"""
 
     @log
-    def creerListeDeCourses(self, listeDeCourse) -> bool:
+    def creerListeDeCourses(self, ListeDeCourse) -> bool:
         """Création d'une nouvelle liste de courses dans la base de données.
 
         Parameters
         ----------
-        listeDeCourse : ListeDeCourses
-             L'objet ListeDeCourses contenant les informations de la liste à créer.
-
+        listeDeCourse : ListeDeCourse
+             La liste de courses à créer
         Returns
         -------
         created : bool
@@ -30,13 +31,10 @@ class ListeDeCourseDAO(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO ListeDeCourses(idUtilisateur, IngredientQuantite) "
-                        "VALUES (%(idUtilisateur)s, %(ingredientQuantite)s) "
-                        "RETURNING idListeDeCourses;",
-                        {
-                            "idUtilisateur": listeDeCourse.idUtilisateur,
-                            "ingredientQuantite": listeDeCourse.ingredientQuantite,
-                        },
+                        "INSERT INTO liste_de_courses(id_user) "
+                        "VALUES %(idUtilisateur)s, "
+                        "RETURNING id_liste_de_courses;",
+                        {"idUtilisateur": ListeDeCourse.idUtilisateur},
                     )
                 res = cursor.fetchone()
         except Exception as e:
@@ -44,14 +42,45 @@ class ListeDeCourseDAO(metaclass=Singleton):
 
         created = False
         if res:
-            listeDeCourse.idListeDeCourses = res["idListeDeCourses"]
+            ListeDeCourse.idListeDecourses = res["id_liste_de_courses"]
             created = True
 
         return created
 
     @log
+    def obtenirIdListeDeCourses(self, idUtilisateur):
+        """Obtenir l'identifiant de la liste de courses d'un utilisateur.
+
+        Parameters
+        ----------
+        idUtilisateur : int
+             L'identifiant de l'utilisateur
+
+        Returns
+        -------
+        created : bool
+        True si l'identifiant est trouvé, False sinon.
+        """
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT id_liste_de_courses         "
+                        "FROM liste_de_courses             "
+                        "WHERE id_user = %(idUtilisateur)s;           ",
+                        {"idUtilisateur": idUtilisateur},
+                    )
+                    res = cursor.fetchone()
+
+        except Exception as e:
+            logging.info(e)
+            raise
+
+        return res[0]
+
+    @log
     def listerTous(self, idUtilisateur) -> list[ListeDeCourses]:
-        """lister toutes les listes de courses de l'utilisateur grâce à son id
+        """lister les listes de courses de l'utilisateur grâce à son id
 
         Parameters
         ----------
@@ -61,7 +90,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
         Returns
         -------
         ListeDeCourses : list[ListeDecourses]
-            renvoie la liste de toutes les listes de courses de l'utilisateur
+            renvoie la liste de courses de l'utilisateur
             dans la base de données.
         """
 
@@ -69,9 +98,12 @@ class ListeDeCourseDAO(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT *                              "
-                        "  FROM ListeDeCourses                 "
-                        "  WHERE idUtilisateur=%(idUtilisateur)s;  ",
+                        "SELECT ing.nom , ingc.quantite           "
+                        "FROM ingredient_courses ingc                 "
+                        "JOIN liste_de_courses lc using (id_ingredient_courses)  "
+                        "JOIN users u using (id_user) "
+                        "JOIN ingredients ing using (id_ingredient)"
+                        "WHERE id_user=%(idUtilisateur)s;  ",
                         {"idUtilisateur": idUtilisateur},
                     )
                     res = cursor.fetchall()
@@ -79,18 +111,16 @@ class ListeDeCourseDAO(metaclass=Singleton):
             logging.info(e)
             raise
 
-        ListeDecourses = []
+        Listecourses = []
 
         if res:
             for row in res:
-                Listecourses = ListeDecourses(
-                    idListeDeCourses=res["idListeDeCourses"],
-                    idUtilisateur=res["idUtilisateur"],
-                    ingredientQuantite=res["ingredientQuantite"],
-                )
-                ListeDecourses.append(Listecourses)
+                liste_courses = Listecourses(idUtilisateur)
+                ingredient = Ingredient(row["nom"])
+                liste_courses.ajouterIngredient(ingredient, row["quantite"])
+                Listecourses.append(liste_courses)
 
-        return ListeDecourses
+        return Listecourses
 
     @log
     def ajouterUnIngredient(self, idUtilisateur, IngredientQuantite) -> bool:
@@ -112,51 +142,41 @@ class ListeDeCourseDAO(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    # Récupérer la liste de courses depuis la base de données
-                    cursor.execute(
-                        "SELECT * "
-                        "FROM ListeDeCourses "
-                        "WHERE idListeDeCourses = %(idListeDeCourses)s;",
-                        {"idListeDeCourses": id_liste_de_courses},
-                    )
-                    res = cursor.fetchone()
-
-                    if res:
-                        # Instancier un objet ListeDeCourses avec les données récupérées
-                        liste_de_courses = ListeDeCourses(
-                            idListeDeCourses=res["idListeDeCourses"],
-                            idUtilisateur=res["idUtilisateur"],
-                            ingredientQuantite=res["ingredientQuantite"],
-                        )
-
-                        # Utiliser la méthode ajouterIngredient de l'objet ListeDeCourses
-                        liste_de_courses.ajouterIngredient(idIngredient, quantite)
-
-                        # Mettre à jour la base de données
+                    id_liste_de_courses = ListeDeCourseDAO().obtenirIdListeDeCourses(idUtilisateur)
+                    res = []
+                    for ingredient, quantite in IngredientQuantite.items():
+                        id_ingredient = IngredientDao().obtenirIdParNom(ingredient)
                         cursor.execute(
-                            "UPDATE ListeDeCourses "
-                            "SET ingredientQuantite = %(ingredientQuantite)s "
-                            "WHERE idListeDeCourses = %(idListeDeCourses)s;",
+                            "INSERT INTO  "
+                            "ingredient_courses(id_ingredient,id_liste_de_courses,quantite)"
+                            "VALUES (%(id_ingredient)s, %(id_liste_de_courses)s, %(quantite)s) "
+                            "ON CONFLICT (id_liste_de_courses,id_ingredient) "
+                            "DO UPDATE SET quantite=%(quantite)s "
+                            "RETURNING id_ingredient_courses; ",
                             {
-                                "ingredientQuantite": liste_de_courses.ingredientQuantite,
-                                "idListeDeCourses": idListeDeCourses,
+                                "id_ingredient": id_ingredient,
+                                "id_liste_de_courses": id_liste_de_courses,
+                                "quantite": quantite,
                             },
                         )
-                        res = cursor.rowcount
+                        res = res.append(cursor.fetchone())
         except Exception as e:
             logging.info(e)
 
-        return res == 1
+        created = False
+        if len(res) == len(IngredientQuantite):
+            created = True
+        return created
 
     @log
-    def retirerUnIngredient(self, idListeDeCourses, idIngredient) -> bool:
+    def retirerUnIngredient(self, idUtilisateur, Ingredient) -> bool:
         """Retire un ingrédient de la liste de courses.
         Parameters
         ----------
-        idListeDeCourses : int
-            L'identifiant de la liste de courses.
-        idIngredient : int
-            L'identifiant de l'ingrédient à retirer.
+        idUtilisateur : int
+            L'identifiant de l'utilisateur.
+        Ingredient : Ingredient
+            L'ingrédient à retirer.
 
         Returns
         -------
@@ -166,29 +186,18 @@ class ListeDeCourseDAO(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    # Obtenir le dictionnaire ingredientQuantite
+                    id_liste_de_courses = ListeDeCourseDAO().obtenirIdListeDeCourses(idUtilisateur)
+                    # Supprimer l'ingrédient
                     cursor.execute(
-                        "SELECT IngredientQuantite "
-                        "FROM ListeDeCourses"
-                        "WHERE idListeDeCourses = %(idListeDeCourses)s;",
-                        {"idListeDeCourses": idListeDeCourses},
+                        "DELETE FROM ingredient_courses                  "
+                        " WHERE id_ingredient=%(id_ingredient)s      "
+                        "AND id_liste_de_courses=%(id_liste_de_courses)s ",
+                        {
+                            "id_ingredient": Ingredient.idIngredient,
+                            "id_liste_de_courses": id_liste_de_courses,
+                        },
                     )
-                res = cursor.fetchone()
-
-                if res:
-                    # Retirer l'ingrédient du dictionnaire
-                    if str(idIngredient) in res:
-                        del res[str(idIngredient)]
-
-                        # Mettre à jour la base de données
-                        cursor.execute(
-                            "UPDATE ListeDeCourses "
-                            "SET ingredientQuantite = %(ingredientQuantite)s "
-                            "WHERE idListeDeCourses = %(idListeDeCourses)s;",
-                            {"ingredientQuantite": res, "idListeDeCourses": idListeDeCourses},
-                        )
-                        res = cursor.rowcount
-
+                    res = cursor.rowcount
         except Exception as e:
             logging.info(e)
 
