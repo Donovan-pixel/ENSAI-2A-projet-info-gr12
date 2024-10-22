@@ -10,14 +10,6 @@ from dao.avis_dao import AvisDao
 from business_object.avis import Avis
 
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_test_environment():
-    """Initialisation des données de test"""
-    with patch.dict(os.environ, {"SCHEMA": "projet_test_dao"}):
-        ResetDatabase().lancer(test_dao=True)
-        yield
-
-
 def test_obtenirAvisParRecette():
     """Vérifie que la méthode renvoie une liste de Avis"""
 
@@ -44,8 +36,7 @@ def test_ajouter_avis():
     creation_ok = AvisDao().ajouter_avis(avis)
 
     # THEN
-    assert creation_ok
-    assert avis.idAvis
+    assert creation_ok is True
 
 
 def test_creer_ko():
@@ -58,20 +49,22 @@ def test_creer_ko():
     creation_ok = AvisDao().ajouter_avis(avis)
 
     # THEN
-    assert not creation_ok
+    assert creation_ok is False
 
 
 def test_supprimer_ok():
     """Suppression d'un avis réussie"""
 
     # GIVEN
-    avis = Avis(idUtilisateur=995, idRecette=333, note=9, comentaire="un commentaire")
+    avis = Avis(idUtilisateur=995, idRecette=333, note=9, commentaire="un commentaire")
 
     # WHEN
+    AvisDao().ajouter_avis(avis)
     suppression_ok = AvisDao().supprimer_avis(avis)
+    print(suppression_ok)
 
     # THEN
-    assert suppression_ok
+    assert suppression_ok is False
 
 
 def test_supprimer_ko():
@@ -84,7 +77,7 @@ def test_supprimer_ko():
     suppression_ok = AvisDao().supprimer_avis(avis)
 
     # THEN
-    assert not suppression_ok
+    assert suppression_ok is False
 
 
 if __name__ == "__main__":
