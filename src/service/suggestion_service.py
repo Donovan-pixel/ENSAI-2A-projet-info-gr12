@@ -1,10 +1,13 @@
 from utils.log_decorator import log
+
 from business_object.recette import Recette
-from dao.recette_favorite_dao import RecettesFavoritesDao
 from business_object.utilisateur import Utilisateur
+
+from dao.recette_favorite_dao import RecettesFavoritesDao
 from dao.recette_dao import RecetteDao
 from dao.ingredient_non_desire_dao import IngredientNonDesireDAO
 from dao.ingredient_favori_dao import IngredientFavoriDao
+
 import random
 
 
