@@ -5,6 +5,7 @@ from view.session import Session
 
 from service.joueur_service import JoueurService
 
+
 class MenuAdministrateurVue(VueAbstraite):
     """Vue du tableau de bord de l'administrateur
 

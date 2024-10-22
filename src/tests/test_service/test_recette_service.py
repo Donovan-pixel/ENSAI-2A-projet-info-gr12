@@ -1,65 +1,156 @@
-from unittest.mock import MagicMock
+import unittest
+from unittest import TestCase, mock
+from unittest.mock import patch, MagicMock
 
 from src.business_object.recette import Recette
 
 from src.service.recette_service import RecetteService
 
-from src.dao.recette_dao import RecetteDao
+from src.business_object.ingredient import Ingredient
 
-#on remplace la DAO par le mock
-RecetteService().ajouterNouvelleRecette RecetteDao = MagicMock
 
-#exemple de recette et d'ingrédient
-recette = Recette(
+class TestRecetteService(TestCase):
+
+    @patch("service.recette_service.RecetteDao.ajouterRecette")
+    def test_ajouterNouvelleRecette_succes(self):
+        """Ajout d'une nouvelle recette réussie"""
+
+        # GIVEN
+        recette_service = RecetteService()
+        recette = Recette(
             idRecette=1,
             titre="Recette Test",
             ingredientQuantite="2 pommes",
             consignes="Couper et cuire",
             categorie="Dessert",
-            origine="France")
+            origine="France",
+        )
 
-ingredient = Ingredient(id=1, nom="Pommes")
+        # WHEN
+        mock_ajouterRecette.return_value = True
+        result = recette_service.ajouterNouvelleRecette(recette)
 
-def test_nouvellerecette_succes():
-    """Ajout d'une nouvelle recette réussie"""
+        # THEN
+        self.assertTrue(result)
 
-    # Configurer le mock pour simuler un ajout réussi
-    MagicMock.ajouterRecette.return_value = True
+    @patch("dao.recette_dao.RecetteDao.ajouterRecette")
+    def test_nouvellerecette_echec(self):
+        """Ajout d'une nouvelle recette échouée
+        car la méthode recetteDAO.ajouter renvoie FAlse"""
 
-    # Appel de la méthode
-    result = self.service.ajouterNouvelleRecette(self.recette)
+        # GIVEN
+        recette_service = RecetteService()
+        recette = Recette(
+            idRecette=1,
+            titre="Recette Test",
+            ingredientQuantite="2 pommes",
+            consignes="Couper et cuire",
+            categorie="Dessert",
+            origine="France",
+        )
 
-    # Vérification que la méthode a retourné True
-    self.assertTrue(result)
+        # WHEN
+        mock_ajouterRecette.return_value = False
+        result = recette_service.ajouterNouvelleRecette(recette)
 
-        # Vérification que la méthode ajouterRecette a été appelée avec la bonne recette
-        self.mock_dao.ajouterRecette.assert_called_once_with(self.recette)
+        # THEN
+        self.assertIsNone(result)
 
-def test_nouvellerecette_echec():
-    """Ajout d'une nouvelle recette échouée
-    car la méthode recetteDAO.ajouter renvoie FAlse"""
+    def test_afficherRecette(self):
+        """Vérifier l'affichage d'une recette"""
 
-def test_afficherRecette():
-    """Vérifier l'affichage d'une recette"""
+        # GIVEN
+        recette_service = RecetteService()
+        recette = Recette(
+            idRecette=1,
+            titre="Recette Test",
+            ingredientQuantite="2 pommes",
+            consignes="Couper et cuire",
+            categorie="Dessert",
+            origine="France",
+        )
 
-    #GIVEN
-    output = "Recette(1, Recette Test, 2 pommes, Couper et cuire, Dessert, France)"
+        # WHEN
+        sortie_attendu = "Recette(1, Recette Test, 2 pommes, Couper et cuire, Dessert, France)"
+        resultat = recette_service.afficherRecette(recette)
 
-    #WHEN
-    resultat = RecetteService().afficherRecette(recette)
+        # THEN
+        self.assertEqual(resultat, sortie_attendu)
 
-    #THEN
-    assertEqual(output, resultat)
+    @patch("dao.recette_dao.RecetteDao.obtenirToutesLesRecettes")
+    def test_obtenirToutesLesRecettes(self):
+        """Teste l'obtention de toutes les recettes de la base de données"""
 
-def test_obtenirRecettesparLettre():
-    """Teste de l'affichage d'une recette par lettre """
+    @patch("dao.recette_dao.RecetteDao.obtenirRecettesparLettre")
+    def test_obtenirRecettesparLettre(self):
+        """Teste de l'affichage d'une recette par lettre"""
 
-    result = self.service.obtenirRecettesparLettre('R')
-    self.assertEqual(result, [self.recette])
+        # GIVEN
+        recette_service = RecetteService()
+        recette = Recette(
+            idRecette=1,
+            titre="Recette Test",
+            ingredientQuantite="2 pommes",
+            consignes="Couper et cuire",
+            categorie="Dessert",
+            origine="France",
+        )
 
-def test_obtenirRecettesParIngredient():
+        # WHEN
+        mock_obtenirRecettesparLettre.return_value = [recette]
+        result = recette_service.obtenirRecettesparLettre("R")
 
-def test_obtenirRecettesParIngrédients():
+        # THEN
+        self.assertEqual(result, [recette])
+
+    @patch("dao.recette_dao.RecetteDao.obtenirRecettesParIngredient")
+    def test_obtenirRecettesParIngredient(self):
+        """Teste l'affichage des recettes qui ont un ingrédient spécifique"""
+        # GIVEN
+        recette_service = RecetteService()
+        recette = Recette(
+            idRecette=1,
+            titre="Recette Test",
+            ingredientQuantite="2 pommes",
+            consignes="Couper et cuire",
+            categorie="Dessert",
+            origine="France",
+        )
+        ingredient = Ingredient(id=1, nom="Pommes")
+
+        # WHEN
+        mock_obtenirRecettesParIngredient.return_value = [recette]
+        result = recette_service.obtenirRecettesParIngredient(ingredient)
+
+        # THEN
+        self.assertEqual(result, [recette])
+
+    @patch("dao.recette_dao.RecetteDao.obtenirRecettesParIngredients")
+    def test_obtenirRecettesParIngrédients(self):
+        """Teste l'affichage des recettes selon des ingrédients"""
+        # GIVEN
+        recette_service = RecetteService()
+        recette = Recette(
+            idRecette=1,
+            titre="Recette Test",
+            ingredientQuantite="2 pommes",
+            consignes="Couper et cuire",
+            categorie="Dessert",
+            origine="France",
+        )
+        ingredients = [Ingredient(id=1, nom="Pommes")]
+
+        # WHEN
+        mock_obtenirRecettesParIngrédients.return_value = [recette]
+        result = recette_service.obtenirRecettesParIngrédients(ingredients)
+
+        # THEN
+        self.assertEqual(result, [recette])
+
+    @patch("dao.recette_dao.RecetteDao.obtenirRecettesParCategorie")
+    def test_obtenirRecettesParCategorie(self):
+        """Teste l'affichage des recettes selon une catégorie donnée"""
+
 
 if __name__ == "__main__":
     import pytest
