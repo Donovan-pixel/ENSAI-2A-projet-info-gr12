@@ -1,3 +1,4 @@
+import sys
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
@@ -43,7 +44,8 @@ class AccueilVue(VueAbstraite):
 
         match choix:
             case "Quitter":
-                pass
+                print("Merci d'avoir utilisé l'application. À bientôt !")
+                sys.exit()
 
             case "Se connecter":
                 from view.accueil.connexion_vue import ConnexionVue

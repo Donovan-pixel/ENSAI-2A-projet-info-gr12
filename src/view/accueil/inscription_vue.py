@@ -28,6 +28,8 @@ class InscriptionVue(VueAbstraite):
             ),
         ).execute()
 
+        role  = "Utilisateur"
+
         # Appel du service pour créer le joueur
         user = UtilisateurService().creerUnCompte(pseudo, mdp, role)
 

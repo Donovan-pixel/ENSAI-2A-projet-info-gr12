@@ -2,6 +2,9 @@ from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
+from view.menu_administrateur_vue import MenuAdministrateurVue
+from view.menu_utilisateur_vue import MenuUtilisateurVue
+from view.accueil.accueil_vue import AccueilVue
 
 from src.service.utilisateur_service import UtilisateurService
 
@@ -22,11 +25,11 @@ class ConnexionVue(VueAbstraite):
             message = f"Vous êtes connecté sous le pseudo {user.pseudo}"
             Session().connexion(user)
 
-            from view.menu_utilisateur_vue import MenuUtilisateurVue
-
+            if user.role == "Administrateur" :
+                return MenuAdministrateurVue(message)
+            
             return MenuUtilisateurVue(message)
 
         message = "Erreur de connexion (pseudo ou mot de passe invalide)"
-        from view.accueil.accueil_vue import AccueilVue
 
         return AccueilVue(message)
