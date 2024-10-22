@@ -9,12 +9,11 @@ from business_object.ingredient import Ingredient
 from business_object.utilisateur import Utilisateur
 
 
-
 class IngredientFavoriDao(metaclasse=Singleton):
     """Classe contenant les méthodes pour accéder aux Ingrédients Favoris de la base de données"""
 
     @log
-    def ajouterIngredientFavori(self, ingredient:Ingredient, utilisateur:Utilisateur) -> bool:
+    def ajouterIngredientFavori(self, ingredient: Ingredient, utilisateur: Utilisateur) -> bool:
         """
         Ajouter un ingrédient favori, associé à un utilisateur, dans la base de données
 
@@ -54,7 +53,7 @@ class IngredientFavoriDao(metaclasse=Singleton):
         return bool(res)
 
     @log
-    def obtenirIngredientsFavoris(self, utilisateur:Utilisateur) -> list[Ingredient]:
+    def obtenirIngredientsFavoris(self, utilisateur: Utilisateur) -> list[Ingredient]:
         """
         Lister tous les ingrédients favoris d'un utilisateur
 
@@ -90,8 +89,8 @@ class IngredientFavoriDao(metaclasse=Singleton):
         if res:
             for row in res:
                 ingredient_favori = Ingredient(
-                    id_ingredient = res["id_ingredient"],
-                    nom = res["nom"],
+                    id_ingredient=res["id_ingredient"],
+                    nom=res["nom"],
                 )
 
                 liste_ingredients_favoris.append(ingredient_favori)
@@ -99,7 +98,7 @@ class IngredientFavoriDao(metaclasse=Singleton):
         return liste_ingredients_favoris
 
     @log
-    def supprimerIngredientFavori(self, ingredient:Ingredient, utilisateur:Utilisateur) -> bool:
+    def supprimerIngredientFavori(self, ingredient: Ingredient, utilisateur: Utilisateur) -> bool:
         """Supprimer un ingrédient favori, associé à un utilisateur, de la base de données
 
         Parameters
@@ -112,7 +111,7 @@ class IngredientFavoriDao(metaclasse=Singleton):
 
         Returns
         -------
-        bool :  
+        bool :
             True si l'ingrédient a bien été supprimé,
             False sinon
         """

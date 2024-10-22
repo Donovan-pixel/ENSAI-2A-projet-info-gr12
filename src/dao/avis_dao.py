@@ -13,7 +13,7 @@ class AvisDao(metaclass=Singleton):
     "Classe contenant les méthodes pour accéder aux avis de la base de données"
 
     @log
-    def ajouter_avis(self, avis:Avis) -> bool:
+    def ajouter_avis(self, avis: Avis) -> bool:
         """Ajout d'un avis dans la base de données
 
         Parameters
@@ -52,12 +52,12 @@ class AvisDao(metaclass=Singleton):
         return bool(res)
 
         @log
-        def obtenirAvisParRecette(self, recette:Recette) -> list[Avis]:
+        def obtenirAvisParRecette(self, recette: Recette) -> list[Avis]:
             """Obtention des avis par recette
 
             Parameters
             ----------
-            recette : Recette 
+            recette : Recette
                 La recette à partir de laquelle faire la recherche
 
             Returns
@@ -72,9 +72,9 @@ class AvisDao(metaclass=Singleton):
                 with DBConnection().connection as connection:
                     with connection.cursor() as cursor:
                         cursor.execute(
-                            "SELECT * FROM avis" 
+                            "SELECT * FROM avis"
                             "JOIN recettes ON recettes.id_meal = avis.id_meal"
-                            "WHERE id_meals = %(id_recette)s;", 
+                            "WHERE id_meals = %(id_recette)s;",
                             {
                                 "id_recette": recette.id_meal,
                             },
@@ -89,16 +89,16 @@ class AvisDao(metaclass=Singleton):
             if res:
                 for row in res:
                     avis = Avis(
-                        id_avis = res["id_avis"],
-                        id_user = res["id_user"],
-                        id_meal = res["id_meal"],
-                        note = res["note"],
-                        commentaire = res["commentaire"]
+                        id_avis=res["id_avis"],
+                        id_user=res["id_user"],
+                        id_meal=res["id_meal"],
+                        note=res["note"],
+                        commentaire=res["commentaire"],
                     )
                     liste.append(avis)
 
             return liste
-    
+
     @log
     def supprimer_avis(self, avis: Avis) -> bool:
         """Suppression d'un avis dans la base de données
@@ -127,6 +127,3 @@ class AvisDao(metaclass=Singleton):
             return False
 
         return res > 0
-
-            
-

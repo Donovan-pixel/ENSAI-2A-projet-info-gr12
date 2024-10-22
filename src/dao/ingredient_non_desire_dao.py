@@ -5,16 +5,15 @@ from utils.log_decorator import log
 
 from dao.db_connection import DBConnection
 
-from business_object.avis import Avis
 from business_object.ingredient import Ingredient
 from business_object.utilisateur import Utilisateur
+
 
 class IngredientNonDesireDAO(metaclass=Singleton):
     "Classe contenant les méthodes pour gérer les ingrédients non désirés de la base de données"
 
-
     @log
-    def ajouterIngredientNonDesire(self, ingredient:Ingredient, utilisateur:Utilisateur) -> bool:
+    def ajouterIngredientNonDesire(self, ingredient: Ingredient, utilisateur: Utilisateur) -> bool:
         """Ajout d'un ingrédient non désiré dans la base de données
 
         Parameters
@@ -56,7 +55,9 @@ class IngredientNonDesireDAO(metaclass=Singleton):
         return bool(res)
 
         @log
-        def supprimerIngredientNonDesire(self, ingredient:Ingredient, utilisateur:Utilisateur) -> bool:
+        def supprimerIngredientNonDesire(
+            self, ingredient: Ingredient, utilisateur: Utilisateur
+        ) -> bool:
             """Suppression d'un ingrédient non désiré dans la base de données
 
             Parameters
@@ -86,7 +87,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
                                 "id_ingredient": ingredient.idIngredient,
                                 "id_user": utilisateur.idUtilisateur,
                             },
-                        )   
+                        )
 
                         res = cursor.rowcount
 
@@ -97,7 +98,7 @@ class IngredientNonDesireDAO(metaclass=Singleton):
             return res > 0
 
     @log
-    def obtenirIngredientsNonDesires(self, utilisateur:Utilisateur) -> list[Ingredient]:
+    def obtenirIngredientsNonDesires(self, utilisateur: Utilisateur) -> list[Ingredient]:
         """Obtention des ingrédients non désirés d'un utilisateur
 
         Parameters
@@ -115,10 +116,10 @@ class IngredientNonDesireDAO(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT (id_ingredient, nom) FROM ingredient" 
-                        "JOIN ingredients_non_desires" 
+                        "SELECT (id_ingredient, nom) FROM ingredient"
+                        "JOIN ingredients_non_desires"
                         "ON ingredients_non_desires.id_ingredient = ingredient.id_ingredient"
-                        "WHERE id_user = %(id_user)s;", 
+                        "WHERE id_user = %(id_user)s;",
                         {
                             "id_user": utilisateur.id_user,
                         },
@@ -133,10 +134,9 @@ class IngredientNonDesireDAO(metaclass=Singleton):
         if res:
             for row in res:
                 ingredient_non_desire = Ingredient(
-                    id_ingredient = row["id_ingredient"],
-                    nom = row["nom"]
+                    id_ingredient=row["id_ingredient"], nom=row["nom"]
                 )
 
                 liste.append(ingredient_non_desire)
-        
+
         return liste

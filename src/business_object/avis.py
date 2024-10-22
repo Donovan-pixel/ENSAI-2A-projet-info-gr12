@@ -16,7 +16,7 @@ class Avis:
         commentaire donnée par l'utilisateur pour la recette
     """
 
-    def __init__(self, idAvis, idUtilisateur, idRecette, note, commentaire):
+    def __init__(self, idUtilisateur, idRecette, note, commentaire, idAvis=None):
         """Constructeur"""
         self.idAvis = idAvis
         self.idUtilisateur = idUtilisateur
@@ -30,5 +30,3 @@ class Avis:
             f"Avis donné par({self.idUtilisateur}, pour la recette {self.idRecette}"
             "avec la note {self.note} et le commentaire {self.commentaire}"
         )
-
-

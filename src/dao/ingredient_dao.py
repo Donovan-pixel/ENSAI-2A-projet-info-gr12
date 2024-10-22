@@ -119,3 +119,34 @@ class IngredientDao(metaclass=Singleton):
             raise
 
         return res > 0
+
+    @log
+    def obtenirIdParNom(self, nom: str) -> int:
+        """Récupérer l'id d'un ingrédient par son nom
+
+        Parameters
+        ----------
+        nom : str
+            nom de l'ingrédient
+
+        Returns
+        -------
+        int : id de l'ingrédient
+        """
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT id_ingredient           "
+                        "FROM ingredients               "
+                        "WHERE nom = %(nom)s;           ",
+                        {"nom": nom},
+                    )
+                    res = cursor.fetchone()
+
+        except Exception as e:
+            logging.info(e)
+            raise
+
+        return res[0]
