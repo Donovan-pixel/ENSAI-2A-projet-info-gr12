@@ -1,8 +1,8 @@
 from unittest.mock import patch
 from unittest.mock import MagicMock
 
-from dao.ingredient_dao_dao import IngredientDao
-from business_object.ingredient import Ingredient
+from src.dao.ingredient_dao import IngredientDao
+from src.business_object.ingredient import Ingredient
 
 
 @patch("dao.db_connection.DBConnection")
