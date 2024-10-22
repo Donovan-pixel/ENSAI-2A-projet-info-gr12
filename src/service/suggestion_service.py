@@ -58,5 +58,4 @@ class SuggestionDao:
                     booleen = True
             if booleen is False:
                 recettes.remove(recette)
-        recette = random.choice(recettes)
-        return recette
+        return recettes
