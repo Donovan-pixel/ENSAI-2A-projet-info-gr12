@@ -17,7 +17,7 @@ class AccueilVue(VueAbstraite):
         """                
 
         print(
-            """
+            r"""
             ___  ___        _   ___ _       _                
             |  \/  |       | | / (_) |     | |               
             | .  . |_   _  | |/ / _| |_ ___| |__   ___ _ __  
@@ -27,7 +27,8 @@ class AccueilVue(VueAbstraite):
                      __/ |                                   
                     |___/   
             """                              
-        )  
+        )
+
 
         print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
 
