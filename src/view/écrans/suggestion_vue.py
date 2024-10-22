@@ -6,7 +6,7 @@ from view.session import Session
 from service.suggestion_service import SuggestionDao
 from service.recette_service import RecetteService
 
-class RSuggestionVue(VueAbstraite):
+class SuggestionVue(VueAbstraite):
     """Vue qui affiche :
     - La liste des recettes suggérées à l'utilisateur
     """

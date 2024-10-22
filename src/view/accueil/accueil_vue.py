@@ -16,7 +16,7 @@ class AccueilVue(VueAbstraite):
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
 
-        print("\n" + 
+        print(
             """
             ___  ___        _   ___ _       _                
             |  \/  |       | | / (_) |     | |               
@@ -26,8 +26,7 @@ class AccueilVue(VueAbstraite):
             \_|  |_/\__, | \_| \_/_|\__\___|_| |_|\___|_| |_|
                      __/ |                                   
                     |___/   
-            """
-            + "\n"                                 
+            """                              
         )                  
 
 
