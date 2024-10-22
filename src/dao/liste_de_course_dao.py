@@ -5,6 +5,7 @@ from utils.log_decorator import log
 
 from dao.db_connection import DBConnection
 from business_object.liste_de_course import ListeDeCourses
+from dao.ingredient_dao import IngredientDao
 
 
 class ListeDeCourseDAO(metaclass=Singleton):
@@ -93,24 +94,21 @@ class ListeDeCourseDAO(metaclass=Singleton):
         return ListeDecourses
 
     @log
-    def ajouterUnIngredient(self, idListeDeCourses, idIngredient, quantite) -> bool:
-        """Ajoute ou met à jour un ingrédient dans la liste de courses.
+    def ajouterUnIngredient(self, idUtilisateur, IngredientQuantite) -> bool:
+        """Ajoute un ingrédient dans la liste de courses.
 
         Parameters
         ----------
 
-        idIngredient : int
-            L'identifiant de l'ingrédient.
-        quantite : float
-            La quantité à ajouter ou mettre à jour.
-        idListeDeCourses : int
-            L'identifiant de la liste de courses.
-
+        IngredientQuantite : dict
+            un dictionnaire d'ingrédients et leurs quantités
+        idUtilisateur : int
+            L'identifiant de l'utilisateur
 
         Returns
         -------
         bool
-            True si l'ajout/mise à jour est un succès, False sinon.
+            True si l'ajout est un succès, False sinon.
         """
         try:
             with DBConnection().connection as connection:
