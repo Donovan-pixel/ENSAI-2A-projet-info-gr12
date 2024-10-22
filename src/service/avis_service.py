@@ -17,7 +17,7 @@ class AvisService:
             note=note,
             commentaire=commentaire,
         )
-        return AvisDao().ajouterAvis(nouvel_avis)
+        return AvisDao().ajouter_avis(nouvel_avis)
 
     @log
     def obtenirAvisParRecette(self, recette: Recette) -> list[Avis]:
