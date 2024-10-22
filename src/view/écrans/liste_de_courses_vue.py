@@ -26,7 +26,7 @@ class ListeDeCoursesVue(VueAbstraite):
         # Affichage des ingrédients dans la liste de courses
         if liste_de_courses:
             for i, ingredient in enumerate(liste_de_courses):
-                print(f"{i + 1}. {ingredient.nom} (quantité: {ingredient.quantite})")
+                print(f"{i + 1} -- {ingredient.nom} (quantité: {ingredient.quantite})")
         else:
             print("Votre liste de courses est vide.")
 
@@ -57,13 +57,17 @@ class ListeDeCoursesVue(VueAbstraite):
 
     def ajouter_ingredient(self, service_liste_courses, idUtilisateur):
         # Choisir l'ingrédient à ajouter depuis une liste d'ingrédients disponibles
-        ingredients = IngredientService().listerTous()  # Suppose une méthode pour obtenir les ingrédients disponibles
+        ingredients = IngredientService().obtenirTousLesIngredients()
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à ajouter :",
             choices=[ing.nom for ing in ingredients]
         ).execute()
 
-        quantite = inquirer.text(message="Entrez la quantité : ").execute()
+        quantite = inquirer.number(
+            message="Entrez la quantité :",
+            float_allowed=True,  
+            min_allowed=1 
+        ).execute()
 
         # Ajouter l'ingrédient à la liste de courses
         ingredient = next(ing for ing in ingredients if ing.nom == ingredient_choisi)
