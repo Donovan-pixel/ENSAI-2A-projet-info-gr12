@@ -43,10 +43,14 @@ class IngredientDao(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
 
+            if res is None:
+                return False
+
         except Exception as e:
             logging.info(e)
+            raise
 
-        bool(res)
+        return bool(res)
 
     @log
     def obtenirTousLesIngredients(self) -> list[Ingredient]:
@@ -63,6 +67,8 @@ class IngredientDao(metaclass=Singleton):
             renvoie la liste de tous les ingrédients dans la base de données
         """
 
+        liste_ingredients = []
+
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -72,20 +78,18 @@ class IngredientDao(metaclass=Singleton):
                     )
                     res = cursor.fetchall()
 
+                    if res:
+                        for row in res:
+                            ingredient = Ingredient(
+                                idIngredient=row["id_ingredient"],
+                                nom=row["nom"],
+                            )
+
+                            liste_ingredients.append(ingredient)
+
         except Exception as e:
             logging.info(e)
             raise
-
-        liste_ingredients = []
-
-        if res:
-            for row in res:
-                ingredient = Ingredient(
-                    idIngredient=res["id_ingredient"],
-                    nom=res["nom"],
-                )
-
-                liste_ingredients.append(ingredient)
 
         return liste_ingredients
 
@@ -116,7 +120,7 @@ class IngredientDao(metaclass=Singleton):
 
         except Exception as e:
             logging.info(e)
-            raise
+            return False
 
         return res > 0
 
@@ -147,6 +151,15 @@ class IngredientDao(metaclass=Singleton):
 
         except Exception as e:
             logging.info(e)
-            raise
+            return None
 
-        return res[0]
+        # Vérification si 'res' est un tuple et contient au moins un élément
+        if res is None:
+            return None  # Si aucun résultat n'est trouvé, retourner None
+
+        if isinstance(res, tuple) and len(res) > 0:
+            return res[0]
+
+        # Si 'res' n'est pas au format attendu
+        logging.warning("Le résultat retourné n'est pas dans le format attendu")
+        return None
