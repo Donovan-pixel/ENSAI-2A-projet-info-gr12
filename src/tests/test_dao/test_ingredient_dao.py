@@ -1,7 +1,9 @@
+import pytest
+
 from unittest.mock import patch
 from unittest.mock import MagicMock
 
-from dao.ingredient_dao_dao import IngredientDao
+from dao.ingredient_dao import IngredientDao
 from business_object.ingredient import Ingredient
 
 
@@ -11,7 +13,7 @@ def test_ajouterIngredient_succes(mock_db):
     # GIVEN un ingrédient à ajouter et un base de données
 
     mock_cursor = MagicMock()
-    mock_cursor.fetchone.return_value = [1]  # L'ingrédient est ajouté avec succès
+    mock_cursor.fetchone.return_value = (1,)  # L'ingrédient est ajouté avec succès
     mock_db().connection.__enter__().cursor.return_value = mock_cursor
 
     ingredient = Ingredient(nom="Tomate")
@@ -59,7 +61,7 @@ def test_obtenirTousLesIngredients_succes(mock_db):
 
     # WHEN
 
-    res = IngredientDao().obternirTousLesIngredients()
+    res = IngredientDao().obtenirTousLesIngredients()
 
     # THEN
 
@@ -75,11 +77,11 @@ def test_obtenirTousLesIngredients_echec(mock_db):
 
     mock_cursor = MagicMock()
     mock_cursor.fetchall.return_value = []
-    mock_db().connection.__enter__().return_value = mock_db
+    mock_db().connection.__enter__().cursor.return_value = mock_db
 
     # WHEN
 
-    res = IngredientDao().obternirTousLesIngredients()
+    res = IngredientDao().obtenirTousLesIngredients()
 
     # THEN
 
@@ -93,7 +95,27 @@ def test_supprimerIngredient_succes(mock_db):
 
     mock_cursor = MagicMock()
     mock_cursor.rowcount = 1  # Suppression réussie
-    mock_db().connection.__enter__().return_value = mock_cursor
+    mock_db().connection.__enter__().cursor.return_value = mock_cursor
+
+    ingredient = Ingredient(nom="Tomate")
+
+    # WHEN
+
+    res = IngredientDao().supprimerIngredient(ingredient)
+
+    # THEN
+
+    assert res is True
+
+
+@patch("dao.db_connection.DBConnection")
+def test_supprimerIngredient_echec(mock_db):
+
+    # GIVEN
+
+    mock_cursor = MagicMock()
+    mock_cursor.rowcount = 0  # Aucune ligne supprimée
+    mock_db().connection.__enter__().cursor.return_value = mock_cursor
 
     ingredient = Ingredient(idIngredient=1, nom="Tomate")
 
@@ -103,4 +125,44 @@ def test_supprimerIngredient_succes(mock_db):
 
     # THEN
 
-    assert res is True
+    assert res is False
+
+
+@patch("dao.db_connection.DBConnection")
+def test_obtenirIdParNom_succes(mock_db):
+
+    # GIVEN
+
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = (1,)
+    mock_db().connection.__enter__().cursor.return_value = mock_cursor
+
+    # WHEN
+
+    res = IngredientDao().obtenirIdParNom("Tomate")
+
+    # THEN
+
+    assert res == 1
+
+
+@patch("dao.db_connection.DBConnection")
+def test_obtenirIdParNom_echec(mock_db):
+
+    # GIVEN
+
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = None
+    mock_db().connection.__enter__().cursor.return_value = mock_cursor
+
+    # WHEN
+
+    res = IngredientDao().obtenirIdParNom("Tomate")
+
+    # THEN
+
+    assert res is None
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
