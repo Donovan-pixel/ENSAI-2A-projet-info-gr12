@@ -34,7 +34,7 @@ class AvisDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO avis(id_avis, id_user, id_meal, note, commentaire) VALUES"
+                        "INSERT INTO avis(id_user, id_meal, note, commentaire) VALUES"
                         "(%(id_user)s, %(id_meal)s, %(note)s, %(commentaire)s)             "
                         "  RETURNING id_avis;                                              ",
                         {
@@ -125,5 +125,5 @@ class AvisDao(metaclass=Singleton):
         except Exception as e:
             logging.exception(e)
             return False
-
-        return res > 0
+        print(res)
+        return bool(res)
