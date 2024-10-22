@@ -16,13 +16,13 @@ class ListeDeCourses:
         self.idUtilisateur = idUtilisateur
         self.ingredientQuantite = {}  # Dictionnaire {Ingredient: quantite}
 
-    def ajouterIngredient(self, idIngredient, quantite) -> bool:
+    def ajouterIngredient(self, Ingredient, quantite) -> bool:
         """Ajoute ou met à jour un ingrédient dans la liste.
 
         Parameters
         ----------
-        idIngredient : int
-            L'identifiant de l'ingrédient.
+        Ingredient : Ingrédient
+            L'ingrédient à ajouter
         quantite : float
             La quantité à ajouter ou mettre à jour.
 
@@ -32,14 +32,8 @@ class ListeDeCourses:
             True si l'ajout/mise à jour est un succès, False sinon.
         """
         if quantite > 0:
-            if str(idIngredient) in self.ingredientQuantite:
-                # Si l'ingrédient existe déjà, on ajoute la quantité
-                self.ingredientQuantite[str(idIngredient)] += quantite
-                return True
-            else:
-                # Sinon, on ajoute un nouvel ingrédient avec sa quantité
-                self.ingredientQuantite[str(idIngredient)] = quantite
-                return True
+            self.ingredientQuantite[Ingredient.nom] = quantite
+            return True
         else:
             return False
 
