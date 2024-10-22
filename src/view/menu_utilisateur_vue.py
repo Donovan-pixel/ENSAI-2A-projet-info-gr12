@@ -54,7 +54,7 @@ class MenuUtilisateurVue(VueAbstraite):
                 return RecettesFavoritesVue()
 
             case "Afficher la liste des recettes":
-                recettes_str = RecetteService().obtenirToutesLesRecettes()
+                from view.écrans.liste_des_recettes_vue import L
                 return liste_des_recettes_vue(rece)
 
             case "Gérer mes ingrédients favoris/non désirés":
