@@ -15,7 +15,7 @@ class ListeDeCoursesVue(VueAbstraite):
         self.message = message
 
     def choisir_menu(self):
-        utilisateur = Session().get_utilisateur()
+        utilisateur = Session().utilisateur
         service_liste_courses = ListeDeCoursesService()
 
         # Obtenir la liste de courses de l'utilisateur

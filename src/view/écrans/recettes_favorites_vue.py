@@ -16,7 +16,7 @@ class RecettesFavoritesVue(VueAbstraite):
         self.message = message
 
     def choisir_menu(self):
-        utilisateur = Session().get_utilisateur()
+        utilisateur = Session().utilisateur
         service_recettes_favorites = RecetteFavoritesService()
 
         recettes_favorites = service_recettes_favorites.obtenirRecettesFavorites(utilisateur)
