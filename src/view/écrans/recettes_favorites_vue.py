@@ -10,6 +10,8 @@ from service.recette_service import RecetteService
 class RecettesFavoritesVue(VueAbstraite):
     """Vue qui affiche :
     - La liste des recettes favorites de l'utilisateur
+    - La possibilité d'afficher les détails d'une recette
+    - La possibilité d'ajouter ou de supprimer une recette de la liste
     """
 
     def __init__(self, message=""):
@@ -50,6 +52,14 @@ class RecettesFavoritesVue(VueAbstraite):
             case "Retourner au menu principal":
                 from view.menu_utilisateur_vue import MenuUtilisateurVue
                 return MenuUtilisateurVue()
+
+    def afficher_details_recette(self, recette):
+        """Afficher les détails complets d'une recette."""
+        print(f"\n{'-' * 50}\nDétails de la recette : {recette.titre}\n{'-' * 50}")
+        print(f"Catégorie : {recette.categorie}")
+        print(f"Origine : {recette.origine}")
+        print(f"Ingrédients : {', '.join([ingredient.nom for ingredient in recette.ingredients])}")
+        print(f"Instructions : {recette.instructions}\n")
 
     def ajouter_recette_favorite(self, service_recettes_favorites, utilisateur):
         recettes = RecetteService().obtenirToutesLesRecettes()

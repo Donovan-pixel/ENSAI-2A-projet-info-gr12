@@ -7,7 +7,7 @@ from service.utilisateur_service import UtilisateurService
 from service.recette_service import RecetteService
 
 class MenuUtilisateurVue(VueAbstraite):
-    """Vue du menu du joueur
+    """Vue du menu de l'utilisateur
 
     Attributes
     ----------
@@ -17,7 +17,7 @@ class MenuUtilisateurVue(VueAbstraite):
     Returns
     ------
     view
-        retourne la prochaine vue, celle qui est choisie par l'utilisateur
+        Retourne la prochaine vue, celle qui est choisie par l'utilisateur
     """
 
     def choisir_menu(self):
@@ -38,7 +38,7 @@ class MenuUtilisateurVue(VueAbstraite):
                 "Voir mes recettes favorites",
                 "Gérer mes ingrédients favoris/non désirés",
                 "Obtenir des suggestions de recettes",
-                "Accéder à ma liste de courses"
+                "Accéder à ma liste de courses",
                 "Se déconnecter",
             ],
         ).execute()
@@ -49,24 +49,22 @@ class MenuUtilisateurVue(VueAbstraite):
                 from view.accueil.accueil_vue import AccueilVue
                 return AccueilVue()
 
+            case "Voir mes recettes favorites":
+                from view.écrans.recettes_favorites_vue import RecettesFavoritesVue
+                return RecettesFavoritesVue()
+
             case "Afficher la liste des recettes":
-                recettes_str = RecetteService().afficherTous()
+                recettes_str = RecetteService().obtenirToutesLesRecettes()
+                return liste_des_recettes_vue(rece)
 
             case "Gérer mes ingrédients favoris/non désirés":
+                from view.écrans.ingredients_fav_non_desire_vue import IngredientsFavorisNonDesiresVue
+                return IngredientsFavorisNonDesiresVue()
 
             case "Obtenir des suggestions de recettes": 
+                from view.écrans.suggestion_vue import SuggestionVue
+                return SuggestionVue()
 
             case "Accéder à ma liste de courses":
-                liste_de_courses_str = 
-                return 
-
-            case "Infos de session":
-                return MenuUtilisateurVue(Session().afficher())
-
-            case "Afficher les joueurs de la base de données":
-                joueurs_str = JoueurService().afficher_tous()
-                return MenuUtilisateurVue(joueurs_str)
-
-            case "Afficher des pokemons (par appel à un Webservice)":
-                from view.pokemon_vue import PokemonVue
-                return PokemonVue()
+                from view.écrans.liste_de_courses_vue import ListeDeCoursesVue
+                return ListeDeCoursesVue()
