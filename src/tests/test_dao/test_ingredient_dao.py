@@ -97,7 +97,7 @@ def test_supprimerIngredient_succes(mock_db):
     mock_cursor.rowcount = 1  # Suppression réussie
     mock_db().connection.__enter__().cursor.return_value = mock_cursor
 
-    ingredient = Ingredient(nom="Tomate")
+    ingredient = Ingredient(idIngredient=1, nom="Tomate")
 
     # WHEN
 
