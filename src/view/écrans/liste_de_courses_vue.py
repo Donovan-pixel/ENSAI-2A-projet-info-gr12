@@ -23,14 +23,12 @@ class ListeDeCoursesVue(VueAbstraite):
 
         print("\n" + "-" * 50 + "\nVotre liste de courses\n" + "-" * 50 + "\n")
 
-        # Affichage des ingrédients dans la liste de courses
         if liste_de_courses:
             for i, ingredient in enumerate(liste_de_courses):
                 print(f"{i + 1} -- {ingredient.nom} (quantité: {ingredient.quantite})")
         else:
             print("Votre liste de courses est vide.")
 
-        # Choix d'actions possibles
         choix = inquirer.select(
             message="Que voulez-vous faire ?",
             choices=[
@@ -42,12 +40,10 @@ class ListeDeCoursesVue(VueAbstraite):
 
         match choix:
             case "Ajouter un ingrédient à la liste":
-                # L'utilisateur peut ajouter un ingrédient
                 self.ajouter_ingredient(service_liste_courses, utilisateur.idUtilisateur)
                 return ListeDeCoursesVue("Ingrédient ajouté à la liste de courses.")
 
             case "Retirer un ingrédient de la liste":
-                # L'utilisateur peut retirer un ingrédient
                 self.retirer_ingredient(service_liste_courses, liste_de_courses, utilisateur.idUtilisateur)
                 return ListeDeCoursesVue("Ingrédient retiré de la liste de courses.")
 
@@ -56,7 +52,6 @@ class ListeDeCoursesVue(VueAbstraite):
                 return MenuUtilisateurVue()
 
     def ajouter_ingredient(self, service_liste_courses, idUtilisateur):
-        # Choisir l'ingrédient à ajouter depuis une liste d'ingrédients disponibles
         ingredients = IngredientService().obtenirTousLesIngredients()
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à ajouter :",
@@ -69,17 +64,14 @@ class ListeDeCoursesVue(VueAbstraite):
             min_allowed=1 
         ).execute()
 
-        # Ajouter l'ingrédient à la liste de courses
         ingredient = next(ing for ing in ingredients if ing.nom == ingredient_choisi)
         service_liste_courses.ajouterUnIngredient(idUtilisateur, ingredient.idIngredient, quantite)
 
     def retirer_ingredient(self, service_liste_courses, liste_de_courses, idUtilisateur):
-        # Choisir l'ingrédient à retirer depuis la liste de courses actuelle
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à retirer :",
             choices=[ing.nom for ing in liste_de_courses]
         ).execute()
 
-        # Retirer l'ingrédient de la liste de courses
         ingredient = next(ing for ing in liste_de_courses if ing.nom == ingredient_choisi)
         service_liste_courses.retirerUnIngredient(idUtilisateur, ingredient.idIngredient)

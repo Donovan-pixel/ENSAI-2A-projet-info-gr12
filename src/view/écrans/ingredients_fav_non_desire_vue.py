@@ -30,7 +30,6 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
         else:
             print("Vous n'avez pas d'ingrédients favoris.")
 
-        # Affichage des ingrédients non désirés
         print("\n" + "-" * 50 + "\nIngrédients non désirés\n" + "-" * 50 + "\n")
         if ingredients_non_desires:
             for _, ingredient in enumerate(ingredients_non_desires):
@@ -38,7 +37,6 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
         else:
             print("Vous n'avez pas d'ingrédients non désirés.")
 
-        # Choix d'actions possibles
         choix = inquirer.select(
             message="Que voulez-vous faire ?",
             choices=[
@@ -72,12 +70,10 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
                 return MenuUtilisateurVue()
 
     def ajouter_ingredient_favori(self, favoris_service, utilisateur):
-        # Choisir un ingrédient à ajouter parmi les ingrédients disponibles
         nom_ingredient = inquirer.text(message="Entrez le nom de l'ingrédient favori :").execute()
         favoris_service.ajouterIngredientFavori(nom_ingredient, utilisateur)
 
     def retirer_ingredient_favori(self, favoris_service, ingredients_favoris, utilisateur):
-        # Choisir un ingrédient à retirer parmi les favoris
         if ingredients_favoris:
             ingredient_choisi = inquirer.select(
                 message="Choisissez un ingrédient favori à retirer :",
@@ -86,12 +82,10 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
             favoris_service.supprimerIngredientFavori(ingredient_choisi, utilisateur)
 
     def ajouter_ingredient_non_desire(self, non_desires_service, utilisateur):
-        # Choisir un ingrédient à ajouter parmi les ingrédients disponibles
         nom_ingredient = inquirer.text(message="Entrez le nom de l'ingrédient non désiré :").execute()
         non_desires_service.ajouterIngredientNonDesire(nom_ingredient, utilisateur)
 
     def retirer_ingredient_non_desire(self, non_desires_service, ingredients_non_desires, utilisateur):
-        # Choisir un ingrédient à retirer parmi les non désirés
         if ingredients_non_desires:
             ingredient_choisi = inquirer.select(
                 message="Choisissez un ingrédient non désiré à retirer :",
