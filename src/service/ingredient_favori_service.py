@@ -22,9 +22,9 @@ class IngredientFavorisService:
         return IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
 
     @log
-    def supprimerIngredientFavori(self, nom_ingredient) -> bool:
-        """Supprimer un ingredient"""
+    def supprimerIngredientFavori(self, nom_ingredient, utilisateur: Utilisateur) -> bool:
+        """Supprimer un ingredient favori"""
         ingred = Ingredient(
             nom=nom_ingredient,
         )
-        return IngredientFavoriDao().supprimerIngredientFavori(ingred)
+        return IngredientFavoriDao().supprimerIngredientFavori(ingred, utilisateur)
