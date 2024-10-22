@@ -1,7 +1,7 @@
 import sys
 from InquirerPy import inquirer
 
-from src.view.vue_abstraite import VueAbstraite
+from view.vue_abstraite import VueAbstraite
 
 
 class AccueilVue(VueAbstraite):
