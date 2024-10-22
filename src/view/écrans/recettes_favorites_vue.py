@@ -22,33 +22,26 @@ class RecettesFavoritesVue(VueAbstraite):
         utilisateur = Session().utilisateur
         service_recettes_favorites = RecetteFavoritesService()
 
-        # Obtenir les recettes favorites de l'utilisateur
         recettes_favorites = service_recettes_favorites.obtenirRecettesFavorites(utilisateur)
 
-        # Vérification de l'existence de recettes favorites
         if not recettes_favorites:
             print("Vous n'avez aucune recette favorite.")
-            return self.retourner_menu_principal()
 
         print("\n" + "-" * 50 + "\nVos recettes favorites\n" + "-" * 50 + "\n")
 
-        # Créer une liste d'options avec les titres des recettes
         choix_recettes = [
             Choice(recette.titre, extra_data=recette) for recette in recettes_favorites
         ] + [Choice("Ajouter une recette aux favoris"), Choice("Supprimer une recette des favoris"), Choice("Retourner au menu principal")]
 
-        # Sélectionner une recette ou une action
         choix = inquirer.select(
             message="Sélectionnez une recette pour afficher les détails ou une action :",
             choices=choix_recettes,
-            vi_mode=True  # Active le mode de navigation avec vi (optionnel)
+            vi_mode=True
         ).execute()
 
-        # Si l'utilisateur choisit "Retourner au menu principal"
         if choix == "Retourner au menu principal":
             return self.retourner_menu_principal()
 
-        # Si l'utilisateur choisit "Ajouter une recette aux favoris"
         if choix == "Ajouter une recette aux favoris":
             self.ajouter_recette_favorite(service_recettes_favorites, utilisateur)
             return RecettesFavoritesVue("Recette ajoutée aux favoris.")
