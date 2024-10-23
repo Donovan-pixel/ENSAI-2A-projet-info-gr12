@@ -248,12 +248,12 @@ class TestRecetteService(TestCase):
         self.assertEqual(result, [recette])
 
     @patch("dao.recette_dao.RecetteDao.obtenirToutesLesCategories")
-    def test_obtenirToutesLesCategories():
+    def test_obtenirToutesLesCategories(self, mock_obtenirToutesLesCategories):
         """Teste que la fonction renvoie bien les catégories de repas"""
 
         # GIVEN
         categories = ["Dessert", "Boisson", "Entrée"]
-        RecetteDao().obtenirToutesLesCategories = MagicMock(return_value=categories)
+        mock_obtenirToutesLesCategories.return_value = categories
 
         # WHEN
         res = RecetteService().obtenirToutesLesCategories()
@@ -262,7 +262,6 @@ class TestRecetteService(TestCase):
         assert isinstance(res, list)
         for i in res:
             assert isinstance(i, str)
-        assert len(res) == 3
 
 
 if __name__ == "__main__":

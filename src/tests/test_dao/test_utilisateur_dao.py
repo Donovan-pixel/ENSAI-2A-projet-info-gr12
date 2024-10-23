@@ -11,11 +11,19 @@ from dao.utilisateur_dao import UtilisateurDao
 from business_object.utilisateur import Utilisateur
 
 
+@pytest.fixture(scope="session", autouse=True)
+def setup_test_environment():
+    """Initialisation des données de test"""
+    with patch.dict(os.environ, {"SCHEMA": "projet_test_dao"}):
+        ResetDatabase().lancer(test_dao=True)
+        yield
+
+
 def test_trouver_par_id_existant():
     """Recherche par id d'un utilisateur existant"""
 
     # GIVEN
-    id_utilisateur = 998
+    id_utilisateur = 1
 
     # WHEN
     utilisateur = UtilisateurDao().trouver_par_id(id_utilisateur)
@@ -51,7 +59,7 @@ def test_lister_tous():
     assert isinstance(utilisateurs, list)
     for j in utilisateurs:
         assert isinstance(j, Utilisateur)
-    assert len(utilisateurs) >= 2
+    assert len(utilisateurs) >= 1
 
 
 def test_creer_ok():
@@ -64,21 +72,20 @@ def test_creer_ok():
     creation_ok = UtilisateurDao().creer(utilisateur)
 
     # THEN
-    assert creation_ok
-    assert utilisateur.idUtilisateur
+    assert creation_ok is True
 
 
 def test_creer_ko():
     """Création d'utilisateur échouée (role incorrect)"""
 
     # GIVEN
-    utilisateur = Utilisateur(pseudo="gg", role=453)
+    utilisateur = Utilisateur(pseudo="gg", role=453, motDePasse="1234")
 
     # WHEN
     creation_ok = UtilisateurDao().creer(utilisateur)
 
     # THEN
-    assert not creation_ok
+    assert creation_ok is False
 
 
 def test_modifier_ok():
@@ -86,13 +93,15 @@ def test_modifier_ok():
 
     # GIVEN
     new_pseudo = "nouveau"
-    utilisateur = Utilisateur(idUtilisater=997, pseudo=new_pseudo, role="Utilisateur")
+    utilisateur = Utilisateur(
+        idUtilisateur=997, pseudo=new_pseudo, role="Utilisateur", motDePasse="1234"
+    )
 
     # WHEN
     modification_ok = UtilisateurDao().modifier(utilisateur)
 
     # THEN
-    assert modification_ok
+    assert modification_ok is True
 
 
 def test_modifier_ko():

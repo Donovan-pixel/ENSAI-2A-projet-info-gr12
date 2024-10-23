@@ -109,6 +109,6 @@ class RecetteService:
         return RecetteDao().obtenirRecettesParCategorie(categorie=categorie)
 
     @log
-    def obtenirToutesLesCategories():
+    def obtenirToutesLesCategories(self):
         """Obtenir la liste de toutes les catégories de recettes disponibles"""
         return RecetteDao().obtenirToutesLesCategories()
