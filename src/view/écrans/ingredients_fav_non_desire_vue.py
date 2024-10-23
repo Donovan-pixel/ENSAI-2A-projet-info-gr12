@@ -27,14 +27,14 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
         print("\n" + "-" * 50 + "\nIngrédients favoris\n" + "-" * 50 + "\n")
         if ingredients_favoris:
             for ingredient in ingredients_favoris:
-                print(f"{ingredient.nom}")
+                print(f"- {ingredient.nom}")
         else:
             print("Vous n'avez pas d'ingrédients favoris.")
 
         print("\n" + "-" * 50 + "\nIngrédients non désirés\n" + "-" * 50 + "\n")
         if ingredients_non_desires:
             for ingredient in ingredients_non_desires:
-                print(f"{ingredient.nom}")
+                print(f"- {ingredient.nom}")
         else:
             print("Vous n'avez pas d'ingrédients non désirés.")
 
