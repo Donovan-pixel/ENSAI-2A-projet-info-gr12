@@ -225,10 +225,11 @@ class UtilisateurDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT *                           "
-                        "  FROM users                      "
-                        " WHERE pseudo = %(pseudo)s         "
-                        "   AND mot_de_passe = %(motDePasse)s;              ",
+                        """
+                        SELECT *  FROM users
+                        WHERE pseudo = %(pseudo)s
+                        AND mot_de_passe = %(motDePasse)s;
+                        """,
                         {"pseudo": pseudo, "motDePasse": motDePasse},
                     )
                     res = cursor.fetchone()
