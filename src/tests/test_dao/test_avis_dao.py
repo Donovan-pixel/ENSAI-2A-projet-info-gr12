@@ -64,7 +64,7 @@ def test_supprimer_ok():
     print(suppression_ok)
 
     # THEN
-    assert suppression_ok is False
+    assert suppression_ok is True
 
 
 def test_supprimer_ko():

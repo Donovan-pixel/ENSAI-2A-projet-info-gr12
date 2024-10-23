@@ -2,13 +2,13 @@ from unittest import TestCase
 
 from unittest.mock import patch, MagicMock
 
-from src.business_object.recette import Recette
+from business_object.recette import Recette
 
-from src.service.recette_service import RecetteService
+from service.recette_service import RecetteService
 
-from src.dao.recette_dao import RecetteDao
+from dao.recette_dao import RecetteDao
 
-from src.business_object.ingredient import Ingredient
+from business_object.ingredient import Ingredient
 
 
 class TestRecetteService(TestCase):
@@ -63,7 +63,6 @@ class TestRecetteService(TestCase):
         """Vérifier l'affichage d'une recette"""
 
         # GIVEN
-        recette_service = RecetteService()
         recette = Recette(
             idRecette=1,
             titre="Recette Test",
@@ -75,7 +74,7 @@ class TestRecetteService(TestCase):
 
         # WHEN
         sortie_attendu = "Recette(1, Recette Test, 2 pommes, Couper et cuire, Dessert, France)"
-        resultat = recette_service.afficherRecette(recette)
+        resultat = RecetteService().afficherRecette(recette)
 
         # THEN
         self.assertEqual(resultat, sortie_attendu)

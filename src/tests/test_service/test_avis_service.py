@@ -65,9 +65,8 @@ def test_obtenirAvisParRecette():
     # GIVEN
     avis_dao_mock = MagicMock()
     avis_service = AvisService()
-    avis_service.AvisDao = avis_dao_mock  # Injection du mock
 
-    avis_dao_mock.obtenirAvisParRecette.return_value = liste_avis  # Simule le retour de la DAO
+    avis_dao_mock.obtenirAvisParRecette().return_value = liste_avis  # Simule le retour de la DAO
 
     # WHEN
     result = avis_service.obtenirAvisParRecette(recette_test)

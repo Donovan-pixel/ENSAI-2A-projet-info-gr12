@@ -16,9 +16,6 @@ class UtilisateurService:
         pseudo,
         motDePasse,
         role,
-        ingredients_favoris,
-        recettes_favorites,
-        ingredients_non_desires,
     ) -> bool:
         """Création d'un utilisateur à partir de ses attributs"""
 
@@ -52,41 +49,12 @@ class UtilisateurService:
         """Modification d'un utilisateur"""
 
         utilisateur.mdp = hash_password(utilisateur.motDePasse, utilisateur.pseudo)
-        return utilisateur if UtilisateurDao().modifier(utilisateur) else None
+        return UtilisateurDao().modifier(utilisateur)
 
     @log
     def supprimerUnCompte(self, utilisateur) -> bool:
         """Supprimer le compte d'un utilisateur"""
         return UtilisateurDao().supprimer(utilisateur)
-
-    @log
-    def afficher_tous(self) -> str:
-        """Afficher tous les utilisateurs
-        Sortie : Une chaine de caractères mise sous forme de tableau
-        """
-        entetes = ["pseudo", "role"]
-
-        utilisateurs = UtilisateurDao().lister_tous()
-
-        for user in utilisateurs:
-            if user.role == "admin":
-                utilisateurs.remove(user)
-
-        utilisateurs_as_list = [user.as_list() for user in utilisateurs]
-
-        str_utilisateurs = "-" * 100
-        str_utilisateurs += "\nListe des utilisateurs \n"
-        str_utilisateurs += "-" * 100
-        str_utilisateurs += "\n"
-        str_utilisateurs += tabulate(
-            tabular_data=utilisateurs_as_list,
-            headers=entetes,
-            tablefmt="psql",
-            floatfmt=".2f",
-        )
-        str_utilisateurs += "\n"
-
-        return str_utilisateurs
 
     @log
     def seConnecter(self, pseudo, motDePasse) -> Utilisateur:

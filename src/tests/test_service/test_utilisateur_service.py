@@ -8,9 +8,9 @@ from business_object.utilisateur import Utilisateur
 
 
 liste_utilisateur = [
-    Utilisateur(pseudo="jp", role="Utilisateur", motDePasse="1234"),
-    Utilisateur(pseudo="lea", role="Utilisateur", motDePasse="0000"),
-    Utilisateur(pseudo="gg", role="Utilisateur", motDePasse="abcd"),
+    Utilisateur(idUtilisateur=1, pseudo="jp", role="Utilisateur", motDePasse="1234"),
+    Utilisateur(idUtilisateur=2, pseudo="lea", role="Utilisateur", motDePasse="0000"),
+    Utilisateur(idUtilisateur=3, pseudo="gg", role="Utilisateur", motDePasse="abcd"),
 ]
 
 
@@ -25,7 +25,7 @@ def test_creer_ok():
     utilisateur = UtilisateurService().creerUnCompte(pseudo, role, motDePasse)
 
     # THEN
-    assert utilisateur.pseudo == pseudo
+    assert utilisateur is True
 
 
 def test_creer_echec():
@@ -40,7 +40,7 @@ def test_creer_echec():
     utilisateur = UtilisateurService().creerUnCompte(pseudo, role, motDePasse)
 
     # THEN
-    assert utilisateur is None
+    assert utilisateur is False
 
 
 def test_lister_tous_inclure_mdp_true():
@@ -65,12 +65,12 @@ def test_lister_tous_inclure_mdp_false():
     UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateur)
 
     # WHEN
-    res = UtilisateurService().lister_tous()
+    res = UtilisateurService().lister_tous(inclure_mdp=False)
 
     # THEN
     assert len(res) == 3
-    for utilisateur in res:
-        assert not utilisateur.motDePasse
+    for user in res:
+        assert user.mot_de_Passe is None
 
 
 def test_pseudo_deja_utilise_oui():
@@ -99,6 +99,102 @@ def test_pseudo_deja_utilise_non():
 
     # THEN
     assert not res
+
+
+def test_trouver_par_id_ok():
+    """l'id existe bien dans la bdd"""
+
+    # GIVEN
+    idUtilisateur = 123
+    utilisateur = Utilisateur(
+        idUtilisateur=123, pseudo="jp", motDePasse="ipzuferf", role="Utilisateur"
+    )
+    UtilisateurDao().trouver_par_id = MagicMock(return_value=utilisateur)
+
+    # WHEN
+    res = UtilisateurService().trouver_par_id(idUtilisateur)
+
+    # THEN
+    assert res == utilisateur
+
+
+def test_modifier_ok():
+    """Modification d'un utilisateur réussie pour le pseudo"""
+
+    # GIVEN
+    utilisateur = Utilisateur(
+        idUtilisateur=1, pseudo="jean-pierre", role="Utilisateur", motDePasse="1234"
+    )
+    UtilisateurDao().modifier = MagicMock(return_value=True)
+
+    # WHEN
+    res = UtilisateurService().modifier(utilisateur=utilisateur)
+
+    # THEN
+    assert res is True
+
+
+def test_modifier_echec():
+    """Modification d'un utilisateur échouée pour un mauvais identifiant"""
+
+    # GIVEN
+    utilisateur = Utilisateur(
+        idUtilisateur=56, pseudo="jean-pierre", role="Utilisateur", motDePasse="1234"
+    )
+    UtilisateurDao().modifier = MagicMock(return_value=False)
+
+    # WHEN
+    res = UtilisateurService().modifier(utilisateur=utilisateur)
+
+    # THEN
+    assert res is False
+
+
+def test_supprimerUnCompte_ok():
+    """Suppression d'un compte réussie"""
+
+    # GIVEN
+    utilisateur = liste_utilisateur[0]
+    UtilisateurDao().supprimer = MagicMock(return_value=True)
+
+    # WHEN
+    res = UtilisateurService().supprimerUnCompte(utilisateur)
+
+    # THEN
+    assert res is True
+
+
+def test_supprimerUnCompte_echec():
+    """Suppression d'un compte échouée pour mauvais identifiant"""
+
+    # GIVEN
+    utilisateur = Utilisateur(
+        idUtilisateur=56, pseudo="jean-pierre", role="Utilisateur", motDePasse="1234"
+    )
+    UtilisateurDao().supprimer = MagicMock(return_value=False)
+
+    # WHEN
+    res = UtilisateurService().supprimerUnCompte(utilisateur)
+
+    # THEN
+    assert res is False
+
+
+def test_afficher_tous():
+    """Affichage de la liste qui renvoie des objets du bon type"""
+
+    # GIVEN
+    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateur)
+
+    # WHEN
+    res = UtilisateurService().afficher_tous()
+
+    # THEN
+    # Vérifie que les personnes listées sont des utilisateurs et non des admins
+    for user in res:
+        assert user.role != "admin"
+    # Vérifie que la sortie est bien de type str
+    assert isinstance(res, str)
 
 
 if __name__ == "__main__":
