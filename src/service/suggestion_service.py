@@ -39,20 +39,8 @@ class SuggestionService:
         # On récupère les ingrédients non désirés de l'Utilisateur
         ingredients_non_desires = IngredientNonDesireDao().obtenirIngredientsNonDesires(utilisateur)
 
-        recettes_suggerees = [
-            recette
-            for recette in recettes
-            if recette not in recettes_favorites
-            and not (set(ingredients_non_desires) & set(recette.ingredientQuantite.keys()))
-            and (set(ingredients_favoris) & set(recette.ingredientQuantite.keys()))
-        ]
-        return recettes_suggerees
-
-
-"""
         # On retire les recettes favorites de la liste des recettes
         recettes_filtrees = [recette for recette in recettes if recette not in recettes_favorites]
-
 
         # On retire les recettes contenant un ingredient non désiré
         recettes_filtrees_bis = []
@@ -83,4 +71,4 @@ class SuggestionService:
 
         print(recettes_suggerees)
 
-        return recettes
+        return recettes_suggerees
