@@ -31,18 +31,18 @@ recette_favorites = [
     Recette(
         idRecette=3,
         titre="Recette Test",
-        ingredientQuantite=[{"pommes": 2}, {"Avocat": 1}],
+        ingredientQuantite={"pommes": 2, "Avocat": 1},
         consignes="Couper et cuire",
         categorie="Dessert",
         origine="France",
     ),
 ]
 
-recette = [
+recettes = [
     Recette(
         idRecette=1,
         titre="Recette Test 1",
-        ingredientQuantite=[{"pomme": 2}, {"Tomate": 2}],
+        ingredientQuantite={"pomme": 2, "Tomate": 2},
         consignes="Couper et cuire",
         categorie="Dessert",
         origine="France",
@@ -58,7 +58,7 @@ recette = [
     Recette(
         idRecette=3,
         titre="Recette Test",
-        ingredientQuantite=[{"pommes": 2}, {"Avocat": 1}],
+        ingredientQuantite={"pommes": 2, "Avocat": 1},
         consignes="Couper et cuire",
         categorie="Dessert",
         origine="France",
@@ -66,7 +66,7 @@ recette = [
     Recette(
         idRecette=4,
         titre="Recette Test 3",
-        ingredientQuantite=[{"bananes": 3}, {"Carotte": 3}],
+        ingredientQuantite={"bananes": 3, "Carotte": 3},
         consignes="Mixer",
         categorie="Boisson",
         origine="Brésil",
@@ -74,7 +74,7 @@ recette = [
     Recette(
         idRecette=5,
         titre="Recette Test 4",
-        ingredientQuantite=[{"Carotte": 2}, {"Tomate": 2}],
+        ingredientQuantite={"Carotte": 2, "Tomate": 2},
         consignes="Couper et cuire",
         categorie="Dessert",
         origine="France",
@@ -85,11 +85,11 @@ Recettes_proposées = [
     Recette(
         idRecette=1,
         titre="Recette Test 1",
-        ingredientQuantite=[{"pomme": 2}, {"Tomate": 2}],
+        ingredientQuantite={"pomme": 2, "Tomate": 2},
         consignes="Couper et cuire",
         categorie="Dessert",
         origine="France",
-    ),
+    )
 ]
 
 
@@ -99,7 +99,7 @@ def test_obtenirSuggestionRecette():
 
     # GIVEN
     utilisateur = liste_utilisateur[0]
-    RecetteDao().obtenirToutesLesRecettes = MagicMock(return_value=recette)
+    RecetteDao().obtenirToutesLesRecettes = MagicMock(return_value=recettes)
     RecettesFavoritesDao().obtenirRecettesFavorites = MagicMock(return_value=recette_favorites)
     IngredientFavoriDao().obtenirIngredientsFavoris = MagicMock(
         return_value=liste_ingredients_favoris
@@ -112,6 +112,9 @@ def test_obtenirSuggestionRecette():
     res = SuggestionService().obtenirSuggestionRecette(utilisateur)
 
     # THEN
+    assert isinstance(res, list)
+    assert isinstance(Recettes_proposées, list)
+    assert len(res) == len(Recettes_proposées)
     assert res == Recettes_proposées
 
 

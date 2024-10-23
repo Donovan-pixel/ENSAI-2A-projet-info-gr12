@@ -34,62 +34,26 @@ class SuggestionService:
         recettes_favorites = RecettesFavoritesDao().obtenirRecettesFavorites(utilisateur)
 
         # On retire les recettes favorites de la liste des recettes
-        for recette in recettes_favorites:
-            if recette in recettes:
+        for recette in recettes:
+            if recette in recettes_favorites:
                 recettes.remove(recette)
 
-        # On récupère les ingrédeitns non désirés de l'Utilisateur
+        # On récupère les ingrédients non désirés de l'Utilisateur
         ingredients_non_desires = IngredientNonDesireDao().obtenirIngredientsNonDesires(utilisateur)
 
         # On retire les recettes contenant un ingredient non désiré
         for recette in recettes:
-            for ingredient in ingredients_non_desires:
-                if ingredient in [
-                    list(ingredient.keys())[0] for ingredient in recette.ingredientQuantite
-                ]:
-                    recettes.remove(recette)
+            intersection = set(ingredients_non_desires) & set(recette.ingredientQuantite.keys())
+            if intersection:
+                recettes.remove(recette)
 
         # On récupère les ingredients favoris de l'Utilisateur
         ingredients_favoris = IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
 
         # On retire les recettes ne contenant aucun ingredient favori
-        i = 0
-        while i != len(recettes) + 1:
-            booleen = False
-            keys_recette = [
-                list(ingredient.keys())[0] for ingredient in recettes[i].ingredientQuantite
-            ]
-            for ingredient in keys_recette:
-                if ingredient in ingredients_favoris:
-                    booleen = True
-                    i += 1
-            if booleen is False:
-                recettes.pop(i)
+        for recette in recettes:
+            intersection = set(ingredients_favoris) & set(recette.ingredientQuantite.keys())
+            if not intersection:
+                recettes.remove(recette)
 
         return recettes
-
-
-"""for i in range(len(recettes)):
-            booleen = None
-            keys_recette = [
-                list(ingredient.keys())[0]
-                for ingredient in recettes[i].ingredientQuantite
-            ]
-            for ingredient in keys_recette:
-                if ingredient in ingredients_favoris:
-                    booleen = True
-            if booleen is False:
-                recettes.remove(recette)"""
-
-"""
-        j = 0
-        while j != len(recettes) + 1:
-            keys_recette = [
-                list(ingredient.keys())[0] for ingredient in recettes[j].ingredientQuantite
-            ]
-            for ingredient in keys_recette:
-                if ingredient in ingredients_favoris:
-                    booleen = True
-                    j += 1
-            if booleen is False:
-                recettes.pop(j)"""
