@@ -30,7 +30,6 @@ class RecetteService:
             origine=recette.origine,
         )
 
-        if 
         return RecetteDao().ajouterRecette(nouvelle_recette)
 
     @log
@@ -108,8 +107,3 @@ class RecetteService:
         list : liste d'objets de type Recette
         """
         return RecetteDao().obtenirRecettesParCategorie(categorie=categorie)
-
-    @log
-    def obtenirToutesLesCategories(self):
-        """Obtenir la liste de toutes les catégories de recettes disponibles"""
-        return RecetteDao().obtenirToutesLesCategories()
