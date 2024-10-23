@@ -6,14 +6,19 @@ class Recette:
     ----------
     idRecette : int
         identifiant
+
     titre : str
         nom de la recette
+
     ingredientQuantite : dict
         dictionnaire des ingrédients et leur quantité associée
+
     consignes : str
         instructions
+
     categorie : str
         catégorie du régime alimentaire
+
     origine : str
         origine géographique de la recette
 

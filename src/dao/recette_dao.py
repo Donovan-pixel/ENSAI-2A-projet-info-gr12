@@ -29,14 +29,15 @@ class RecetteDao(metaclass=Singleton):
         """
 
         res = None
+        created = False
 
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "INSERT INTO recettes(title, category, area, instructions) VALUES        "
-                        "(%(title)s, %(category)s, %(area)s, %(instructions)s)             "
-                        "  RETURNING id_meal;                                                ",
+                        "(%(title)s, %(category)s, %(area)s, %(instructions)s)                   "
+                        "  RETURNING id_meal;                                                    ",
                         {
                             "title": recette.titre,
                             "category": recette.categorie,
@@ -50,7 +51,6 @@ class RecetteDao(metaclass=Singleton):
             logging.info(e)
             raise
 
-        created = False
         if res:
             recette.idRecette = res["id_meal"]
             created = True
