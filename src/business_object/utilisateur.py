@@ -6,10 +6,13 @@ class Utilisateur:
     ----------
     idUtilisateur : int
         identifiant
+
     pseudo : str
         pseudo de l'utilisateur
+
     motDePasse : str
         mot de passe de l'utilisateur
+
     role : str
         rôle de l'utilisateur
     """
