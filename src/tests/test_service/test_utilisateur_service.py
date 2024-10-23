@@ -196,6 +196,49 @@ def test_seConnecter_ok():
     assert res == utilisateur
 
 
+def test_seConnecter_echec():
+    """Connexion à un compte échouée mauvais pseudo"""
+
+    # GIVEN
+    pseudo = "zltjhietf"
+    motDePasse = "1234"
+    UtilisateurDao().se_connecter = MagicMock(return_value=None)
+
+    # WHEN
+    res = UtilisateurService().seConnecter(pseudo, motDePasse)
+
+    # THEN
+    assert res is None
+
+
+def test_pseudoDejaUtilise_oui():
+    """Le pseudo est indisponible"""
+
+    # GIVEN
+    pseudo = "jp"
+    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateur)
+
+    # WHEN
+    res = UtilisateurService().pseudoDejaUtilise(pseudo)
+
+    # THEN
+    assert res is True
+
+
+def test_pseudoDejaUtilise_non():
+    """Le pseudo est disponible"""
+
+    # GIVEN
+    pseudo = "koen"
+    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateur)
+
+    # WHEN
+    res = UtilisateurService().pseudoDejaUtilise(pseudo)
+
+    # THEN
+    assert res is False
+
+
 if __name__ == "__main__":
     import pytest
 
