@@ -81,14 +81,13 @@ class TestRecetteService(TestCase):
     @patch("dao.recette_dao.RecetteDao.ajouterRecette")
     def test_nouvellerecette_echec(self, mock_ajouter_recette_echec):
         """Ajout d'une nouvelle recette échouée
-        car la méthode recetteDAO.ajouter renvoie FAlse"""
+        car la méthode recetteDAO.ajouter renvoie FAlse pour erreur de pas d'ingredient"""
 
         # GIVEN
         recette_service = RecetteService()
         recette = Recette(
-            idRecette=1,
             titre="Recette Test",
-            ingredientQuantite="2 pommes",
+            ingredientQuantite=None,
             consignes="Couper et cuire",
             categorie="Dessert",
             origine="France",
@@ -100,7 +99,7 @@ class TestRecetteService(TestCase):
         result = recette_service.ajouterNouvelleRecette(recette)
 
         # THEN
-        self.assertIsNone(result)
+        self.assertFalse(result)
 
     def test_afficherRecette(self):
         """Vérifier l'affichage d'une recette"""
