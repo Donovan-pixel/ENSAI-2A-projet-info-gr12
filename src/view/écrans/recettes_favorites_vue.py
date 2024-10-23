@@ -12,7 +12,7 @@ class RecettesFavoritesVue(VueAbstraite):
     """Vue qui affiche :
     - La liste des recettes favorites de l'utilisateur
     - La possibilité d'afficher les détails d'une recette
-    - Ajouter et supprimer des recettes aux favoris
+    - Ajouter et supprimer des recettes favorites
     """
 
     def __init__(self, message=""):
