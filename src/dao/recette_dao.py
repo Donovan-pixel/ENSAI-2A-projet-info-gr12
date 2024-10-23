@@ -38,16 +38,17 @@ class RecetteDao(metaclass=Singleton):
                         "(%(title)s, %(category)s, %(area)s, %(instructions)s)             "
                         "  RETURNING id_meal;                                                ",
                         {
-                            "title": recette.title,
-                            "category": recette.category,
-                            "area": recette.area,
-                            "instructions": recette.instructions,
+                            "title": recette.titre,
+                            "category": recette.categorie,
+                            "area": recette.origine,
+                            "instructions": recette.consignes,
                         },
                     )
                     res = cursor.fetchone()
 
         except Exception as e:
             logging.info(e)
+            raise
 
         created = False
         if res:
