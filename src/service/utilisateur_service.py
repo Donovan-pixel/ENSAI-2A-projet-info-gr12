@@ -67,7 +67,3 @@ class UtilisateurService:
         Retourne True si le pseudo existe déjà en BDD"""
         utilisateurs = UtilisateurDao().lister_tous()
         return pseudo in [user.pseudo for user in utilisateurs]
-
-    def seDeconnecter(self) -> None:
-        """Permet à l'utilisateur de se déconnecter et de revenir à l'écran d'acceuil"""
-        return view.ecran_acceuil

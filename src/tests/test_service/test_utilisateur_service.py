@@ -180,21 +180,20 @@ def test_supprimerUnCompte_echec():
     assert res is False
 
 
-def test_afficher_tous():
-    """Affichage de la liste qui renvoie des objets du bon type"""
+def test_seConnecter_ok():
+    """Connexion à un compte ok"""
 
     # GIVEN
-    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateur)
+    pseudo = "jp"
+    motDePasse = "1234"
+    utilisateur = liste_utilisateur[0]
+    UtilisateurDao().se_connecter = MagicMock(return_value=utilisateur)
 
     # WHEN
-    res = UtilisateurService().afficher_tous()
+    res = UtilisateurService().seConnecter(pseudo, motDePasse)
 
     # THEN
-    # Vérifie que les personnes listées sont des utilisateurs et non des admins
-    for user in res:
-        assert user.role != "admin"
-    # Vérifie que la sortie est bien de type str
-    assert isinstance(res, str)
+    assert res == utilisateur
 
 
 if __name__ == "__main__":
