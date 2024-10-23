@@ -14,7 +14,7 @@ class AccueilVue(VueAbstraite):
         ------
         view
             Retourne la vue choisie par l'utilisateur dans le terminal
-        """                
+        """
 
         print(
             r"""
@@ -26,9 +26,8 @@ class AccueilVue(VueAbstraite):
             \_|  |_/\__, | \_| \_/_|\__\___|_| |_|\___|_| |_|
                      __/ |                                   
                     |___/   
-            """                              
+            """
         )
-
 
         print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
 
@@ -48,8 +47,10 @@ class AccueilVue(VueAbstraite):
 
             case "Se connecter":
                 from view.accueil.connexion_vue import ConnexionVue
+
                 return ConnexionVue("Connexion à l'application")
 
             case "Créer un compte":
                 from view.accueil.inscription_vue import InscriptionVue
+
                 return InscriptionVue("Création de compte utilisateur")
