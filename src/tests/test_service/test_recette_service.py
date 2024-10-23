@@ -10,6 +10,49 @@ from dao.recette_dao import RecetteDao
 
 from business_object.ingredient import Ingredient
 
+recettes_exemples = [
+    Recette(
+        idRecette=1,
+        titre="Recette Test 1",
+        ingredientQuantite={"pomme": 2, "Tomate": 2},
+        consignes="Couper et cuire",
+        categorie="Entrée",
+        origine="France",
+    ),
+    Recette(
+        idRecette=2,
+        titre="Recette Test 2",
+        ingredientQuantite={"bananes": 3},
+        consignes="Mixer",
+        categorie="Boisson",
+        origine="Brésil",
+    ),
+    Recette(
+        idRecette=3,
+        titre="Recette Test",
+        ingredientQuantite={"pommes": 2, "Avocat": 1},
+        consignes="Couper et cuire",
+        categorie="Dessert",
+        origine="France",
+    ),
+    Recette(
+        idRecette=4,
+        titre="Recette Test 3",
+        ingredientQuantite={"bananes": 3, "Carotte": 3},
+        consignes="Mixer",
+        categorie="Boisson",
+        origine="Brésil",
+    ),
+    Recette(
+        idRecette=5,
+        titre="Recette Test 4",
+        ingredientQuantite={"Carotte": 2, "Tomate": 2},
+        consignes="Couper et cuire",
+        categorie="Dessert",
+        origine="France",
+    ),
+]
+
 
 class TestRecetteService(TestCase):
 
@@ -74,7 +117,7 @@ class TestRecetteService(TestCase):
 
         # WHEN
         sortie_attendu = "Recette(1, Recette Test, 2 pommes, Couper et cuire, Dessert, France)"
-        resultat = recette_service.afficherRecette(recette)
+        resultat = RecetteService().afficherRecette(recette)
 
         # THEN
         self.assertEqual(resultat, sortie_attendu)
@@ -203,6 +246,23 @@ class TestRecetteService(TestCase):
 
         # THEN
         self.assertEqual(result, [recette])
+
+    @patch("dao.recette_dao.RecetteDao.obtenirToutesLesCategories")
+    def test_obtenirToutesLesCategories():
+        """Teste que la fonction renvoie bien les catégories de repas"""
+
+        # GIVEN
+        categories = ["Dessert", "Boisson", "Entrée"]
+        RecetteDao().obtenirToutesLesCategories = MagicMock(return_value=categories)
+
+        # WHEN
+        res = RecetteService().obtenirToutesLesCategories()
+
+        # THEN
+        assert isinstance(res, list)
+        for i in res:
+            assert isinstance(i, str)
+        assert len(res) == 3
 
 
 if __name__ == "__main__":

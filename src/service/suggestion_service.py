@@ -33,13 +33,28 @@ class SuggestionService:
         # On récupère les recettes favorites de l'Utilisateur
         recettes_favorites = RecettesFavoritesDao().obtenirRecettesFavorites(utilisateur)
 
+        # On récupère les ingredients favoris de l'Utilisateur
+        ingredients_favoris = IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
+
+        # On récupère les ingrédients non désirés de l'Utilisateur
+        ingredients_non_desires = IngredientNonDesireDao().obtenirIngredientsNonDesires(utilisateur)
+
+        recettes_suggerees = [
+            recette
+            for recette in recettes
+            if recette not in recettes_favorites
+            and not (set(ingredients_non_desires) & set(recette.ingredientQuantite.keys()))
+            and (set(ingredients_favoris) & set(recette.ingredientQuantite.keys()))
+        ]
+        return recettes_suggerees
+
+
+"""
         # On retire les recettes favorites de la liste des recettes
         for recette in recettes:
             if recette in recettes_favorites:
                 recettes.remove(recette)
 
-        # On récupère les ingrédients non désirés de l'Utilisateur
-        ingredients_non_desires = IngredientNonDesireDao().obtenirIngredientsNonDesires(utilisateur)
 
         # On retire les recettes contenant un ingredient non désiré
         for recette in recettes:
@@ -47,8 +62,7 @@ class SuggestionService:
             if intersection:
                 recettes.remove(recette)
 
-        # On récupère les ingredients favoris de l'Utilisateur
-        ingredients_favoris = IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
+
 
         # On retire les recettes ne contenant aucun ingredient favori
         for recette in recettes:
@@ -56,4 +70,4 @@ class SuggestionService:
             if not intersection:
                 recettes.remove(recette)
 
-        return recettes
+"""
