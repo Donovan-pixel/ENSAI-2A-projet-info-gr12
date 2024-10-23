@@ -33,7 +33,7 @@ class RecetteClient:
                                 ingredient = t.get(f"strIngredient{i}")
                                 measure = t.get(f"strMeasure{i}")
 
-                                if ingredient:  # Vérifie que l'ingrédient n'est pas vide
+                                if ingredient:
                                     ingredients[ingredient] = (
                                         measure or ""
                                     )  # Utilise '' si la mesure est None
