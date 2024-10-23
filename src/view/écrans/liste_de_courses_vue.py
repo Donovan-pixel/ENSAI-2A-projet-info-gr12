@@ -9,7 +9,11 @@ from service.ingredient_service import IngredientService
 class ListeDeCoursesVue(VueAbstraite):
     """Vue qui affiche :
     - La liste de courses de l'utilisateur
+    - La possibilité d'ajouter ou de supprimer des ingrédients de la liste
     """
+
+    def __init__(self, message=""):
+        self.message = message
 
     def choisir_menu(self):
         utilisateur = Session().utilisateur
@@ -60,6 +64,7 @@ class ListeDeCoursesVue(VueAbstraite):
             float_allowed=True,  
             min_allowed=1 
         ).execute()
+        # Il va falloir faire quelque chose avec les unités
 
         ingredient = next(ing for ing in ingredients if ing.nom == ingredient_choisi)
         service_liste_courses.ajouterUnIngredient(idUtilisateur, ingredient.idIngredient, quantite)
@@ -68,7 +73,7 @@ class ListeDeCoursesVue(VueAbstraite):
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à retirer :",
             choices=[ing.nom for ing in liste_de_courses]
-        ).execute()
+        ).execute() 
 
         ingredient = next(ing for ing in liste_de_courses if ing.nom == ingredient_choisi)
         service_liste_courses.retirerUnIngredient(idUtilisateur, ingredient.idIngredient)
