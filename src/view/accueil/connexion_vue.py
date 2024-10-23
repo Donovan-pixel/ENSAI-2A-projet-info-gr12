@@ -12,6 +12,9 @@ from service.utilisateur_service import UtilisateurService
 class ConnexionVue(VueAbstraite):
     """Vue de Connexion (saisie de pseudo et mdp)"""
 
+    def __init__(self, message=""):
+        self.message = message
+
     def choisir_menu(self):
         # Demande à l'utilisateur de saisir pseudo et mot de passe
         pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()
@@ -24,12 +27,16 @@ class ConnexionVue(VueAbstraite):
         if user:
             message = f"Vous êtes connecté sous le pseudo {user.pseudo}"
             Session().connexion(user)
+            return MenuUtilisateurVue(message)
 
 #            if user.role == "Administrateur":
 #                return MenuAdministrateurVue(message)
 
 #            return MenuUtilisateurVue(message)
 
-        message = "Erreur de connexion (pseudo ou mot de passe invalide)"
+        else:
+            message = "Erreur de connexion (pseudo ou mot de passe invalide)"
+            return ConnexionVue(message)
 
-        return MenuUtilisateurVue(message)
+
+        
