@@ -18,10 +18,10 @@ class FiltrageParIngredientsVue(VueAbstraite):
         # Affichage des ingrédients disponibles pour le filtrage
         choix_ingredients = inquirer.checkbox(
             message="Sélectionnez les ingrédients que vous souhaitez utiliser pour filtrer les recettes :",
-            choices=[ingredient.nom for ingredient in ingredients] + ["Retourner au menu principal"],
+            choices=[ingredient.nom for ingredient in ingredients] + ["Retourner au menu des recettes"],
         ).execute()
 
-        if "Retourner au menu principal" in choix_ingredients:
+        if "Retourner au menu des recettes" in choix_ingredients:
             from view.menu_utilisateur_vue import MenuUtilisateurVue
             return MenuUtilisateurVue()
 
@@ -32,13 +32,13 @@ class FiltrageParIngredientsVue(VueAbstraite):
             choices=[
                 "Confirmer et afficher les recettes filtrées",
                 "Modifier la sélection",
-                "Retourner au menu principal",
+                "Retourner au menu des recettes",
             ],
         ).execute()
 
-        if confirmation == "Retourner au menu principal":
-            from view.menu_utilisateur_vue import MenuUtilisateurVue
-            return MenuUtilisateurVue()
+        if confirmation == "Retourner au menu des recettes":
+            from view.écrans.liste_des_recettes_vue import ListeRecettesVue
+            return ListeRecettesVue()
         elif confirmation == "Modifier la sélection":
             return self.choisir_menu()
 

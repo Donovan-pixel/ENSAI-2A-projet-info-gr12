@@ -21,7 +21,6 @@ class ListeRecettesVue(VueAbstraite):
         service_recette = RecetteService()
         service_recette_favorites = RecetteFavoritesService()
 
-        # Step 1: Ask user for filter preference
         filtre_choix = inquirer.select(
             message="Comment souhaitez-vous filtrer les recettes ?",
             choices=[
@@ -29,45 +28,42 @@ class ListeRecettesVue(VueAbstraite):
                 "Par catégorie",
                 "Par lettre",
                 "Afficher toutes les recettes",
-                "Retourner au menu principal",
+                "Retourner au tableau de bord",
             ],
         ).execute()
 
         if filtre_choix == "Par ingrédient":
             from filtrage_ingredients_vue import FiltrageParIngredientsVue
             return FiltrageParIngredientsVue()
-            
+
         elif filtre_choix == "Par catégorie":
-            categorie = inquirer.text(message="Entrez une catégorie de recette :").execute()
-            recettes = service_recette.obtenirRecettesParCategorie(categorie)
+            from filtrage_categorie_vue import FiltrageParCategorieVue
+            return FiltrageParCategorieVue()
 
         elif filtre_choix == "Par lettre":
-            lettre = inquirer.text(message="Entrez la première lettre de la recette :").execute()
-            recettes = service_recette.obtenirRecettesparLettre(lettre)
+            from filtrage_lettre_vue import FiltrageParLettreVue
+            return FiltrageParLettreVue
 
         elif filtre_choix == "Afficher toutes les recettes":
             recettes = service_recette.obtenirToutesLesRecettes()
 
-        elif filtre_choix == "Retourner au menu principal":
+        elif filtre_choix == "Retourner au tableau de bord":
             from view.menu_utilisateur_vue import MenuUtilisateurVue
             return MenuUtilisateurVue()
 
-        # If no recipes found after filtering
         if not recettes:
             print("Aucune recette trouvée pour ce filtre.")
             return self.choisir_menu()
 
-        # Step 2: Display recipes and allow the user to interact with them
         recette_choisie = inquirer.select(
             message="Sélectionnez une recette ou retournez au menu principal :",
-            choices=[recette.titre for recette in recettes] + ["Retourner au menu principal"],
+            choices=[recette.titre for recette in recettes] + ["Retourner au tableau de bord"],
         ).execute()
 
-        if recette_choisie == "Retourner au menu principal":
+        if recette_choisie == "Retourner au tableau de bord":
             from view.menu_utilisateur_vue import MenuUtilisateurVue
             return MenuUtilisateurVue()
 
-        # Step 3: After choosing a recipe, offer to view details or add to favorites
         recette = next(rec for rec in recettes if rec.titre == recette_choisie)
 
         action_choix = inquirer.select(
