@@ -34,26 +34,38 @@ class SuggestionService:
         recettes_favorites = RecettesFavoritesDao().obtenirRecettesFavorites(utilisateur)
 
         # On retire les recettes favorites de la liste des recettes
-        for recette in recettes:
-            if recette in recettes_favorites:
-                recettes.remove(recette)
+        recettes_filtrees = [recette for recette in recettes if recette not in recettes_favorites]
 
         # On récupère les ingrédients non désirés de l'Utilisateur
         ingredients_non_desires = IngredientNonDesireDao().obtenirIngredientsNonDesires(utilisateur)
 
         # On retire les recettes contenant un ingredient non désiré
-        for recette in recettes:
-            intersection = set(ingredients_non_desires) & set(recette.ingredientQuantite.keys())
-            if intersection:
-                recettes.remove(recette)
+        recettes_filtrees_bis = []
+        for ingredient_non_desire in ingredients_non_desires:
+            nom_ingredient = ingredient_non_desire.nom
+            for recette in recettes_filtrees:
+                if (
+                    nom_ingredient not in set(recette.ingredientQuantite.keys())
+                    and recette not in recettes_filtrees_bis
+                ):
+                    recettes_filtrees_bis.append(recette)
 
         # On récupère les ingredients favoris de l'Utilisateur
         ingredients_favoris = IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
+        print(ingredients_favoris[0].nom)
+        print(set(recettes_filtrees[0].ingredientQuantite.keys()))
 
         # On retire les recettes ne contenant aucun ingredient favori
-        for recette in recettes:
-            intersection = set(ingredients_favoris) & set(recette.ingredientQuantite.keys())
-            if not intersection:
-                recettes.remove(recette)
+        recettes_suggerees = []
+        for ingredient_favori in ingredients_favoris:
+            nom_ingredient = ingredient_favori.nom
+            for recette in recettes_filtrees_bis:
+                if (
+                    nom_ingredient in set(recette.ingredientQuantite.keys())
+                    and recette not in recettes_suggerees
+                ):
+                    recettes_suggerees.append(recette)
 
-        return recettes
+        print(recettes_suggerees)
+
+        return recettes_suggerees

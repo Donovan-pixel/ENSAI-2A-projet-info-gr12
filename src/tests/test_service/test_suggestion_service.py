@@ -31,7 +31,7 @@ recette_favorites = [
     Recette(
         idRecette=3,
         titre="Recette Test",
-        ingredientQuantite={"pommes": 2, "Avocat": 1},
+        ingredientQuantite={"pomme": 2, "Avocat": 1},
         consignes="Couper et cuire",
         categorie="Dessert",
         origine="France",
@@ -50,7 +50,7 @@ recettes = [
     Recette(
         idRecette=2,
         titre="Recette Test 2",
-        ingredientQuantite={"bananes": 3},
+        ingredientQuantite={"banane": 3},
         consignes="Mixer",
         categorie="Boisson",
         origine="Brésil",
@@ -58,7 +58,7 @@ recettes = [
     Recette(
         idRecette=3,
         titre="Recette Test",
-        ingredientQuantite={"pommes": 2, "Avocat": 1},
+        ingredientQuantite={"pomme": 2, "Avocat": 1},
         consignes="Couper et cuire",
         categorie="Dessert",
         origine="France",
@@ -66,7 +66,7 @@ recettes = [
     Recette(
         idRecette=4,
         titre="Recette Test 3",
-        ingredientQuantite={"bananes": 3, "Carotte": 3},
+        ingredientQuantite={"banane": 3, "Carotte": 3},
         consignes="Mixer",
         categorie="Boisson",
         origine="Brésil",
@@ -81,7 +81,7 @@ recettes = [
     ),
 ]
 
-Recettes_proposées = [
+recettes_proposees = [
     Recette(
         idRecette=1,
         titre="Recette Test 1",
@@ -109,13 +109,14 @@ def test_obtenirSuggestionRecette():
     )
 
     # WHEN
-    res = SuggestionService().obtenirSuggestionRecette(utilisateur)
+    resultat = SuggestionService().obtenirSuggestionRecette(utilisateur)
 
     # THEN
-    assert isinstance(res, list)
-    assert isinstance(Recettes_proposées, list)
-    assert len(res) == len(Recettes_proposées)
-    assert res == Recettes_proposées
+    assert isinstance(resultat, list)  # vérifier que le résultat est bien une liste
+    assert resultat  # vérifier que la liste de recettes suggérées n'est pas vide
+    assert isinstance(recettes_proposees, list)
+    assert len(resultat) == len(recettes_proposees)
+    assert resultat == recettes_proposees
 
 
 if __name__ == "__main__":

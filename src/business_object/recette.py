@@ -42,3 +42,6 @@ class Recette:
             f"Recette({self.titre}, {self.ingredientQuantite}, {self.consignes}, {self.categorie},"
             "{self.origine}"
         )
+
+    def __eq__(self, other):
+        return self.idRecette == other.idRecette

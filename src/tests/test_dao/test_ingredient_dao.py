@@ -5,16 +5,16 @@ from unittest.mock import MagicMock
 
 from dao.ingredient_dao import IngredientDao
 from business_object.ingredient import Ingredient
+from mock_db_connection import MockDBConnection
 
 
-@patch("dao.db_connection.DBConnection")
+@patch("src.dao.db_connection.DBConnection")
 def test_ajouterIngredient_succes(mock_db):
 
     # GIVEN un ingrédient à ajouter et un base de données
+    mock_cursor = mock_db().cursor()
 
-    mock_cursor = MagicMock()
     mock_cursor.fetchone.return_value = (1,)  # L'ingrédient est ajouté avec succès
-    mock_db().connection.__enter__().cursor.return_value = mock_cursor
 
     ingredient = Ingredient(nom="Tomate")
 
