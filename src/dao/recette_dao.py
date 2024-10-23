@@ -45,6 +45,7 @@ class RecetteDao(metaclass=Singleton):
                         },
                     )
                     res = cursor.fetchone()
+
         except Exception as e:
             logging.info(e)
 
@@ -64,6 +65,7 @@ class RecetteDao(metaclass=Singleton):
         list[Recette]:
             Liste des recettes
         """
+
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:

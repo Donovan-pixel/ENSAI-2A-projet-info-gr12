@@ -10,6 +10,18 @@ class RecetteService:
     @log
     def ajouterNouvelleRecette(self, recette: Recette) -> bool:
         """Ajout d'une nouvelle recette à partir de ses attributs"""
+
+        # Vérifier si 'recette' est un dictionnaire et le convertir en objet Recette si nécessaire
+        if isinstance(recette, dict):
+            recette = Recette(
+                titre=recette.get("titre"),
+                ingredientQuantite=recette.get("ingredientQuantite"),
+                consignes=recette.get("consignes"),
+                categorie=recette.get("categorie"),
+                origine=recette.get("origine"),
+            )
+
+        # Maintenant que nous avons un objet Recette, nous pouvons l'utiliser
         nouvelle_recette = Recette(
             titre=recette.titre,
             ingredientQuantite=recette.ingredientQuantite,
@@ -18,8 +30,10 @@ class RecetteService:
             origine=recette.origine,
         )
 
+        # Appel à RecetteDao pour ajouter la recette à la base de données
         if RecetteDao().ajouterRecette(nouvelle_recette):
             return True
+
         else:
             return None
 
