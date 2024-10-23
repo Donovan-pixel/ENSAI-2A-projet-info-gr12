@@ -2,7 +2,7 @@ from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
-from view.menu_administrateur_vue import MenuAdministrateurVue
+#from view.menu_administrateur_vue import MenuAdministrateurVue
 from view.menu_utilisateur_vue import MenuUtilisateurVue
 from view.accueil.accueil_vue import AccueilVue
 
