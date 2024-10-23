@@ -21,7 +21,7 @@ class UtilisateurService:
 
         nouvel_utilisateur = Utilisateur(
             pseudo=pseudo,
-            motDePasse=utils.securite.hash_password(motDePasse, pseudo),
+            motDePasse=hash_password(motDePasse, pseudo),
             role=role,
         )
 

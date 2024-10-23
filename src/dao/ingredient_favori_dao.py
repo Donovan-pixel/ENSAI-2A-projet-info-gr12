@@ -21,6 +21,7 @@ class IngredientFavoriDao(metaclass=Singleton):
         ----------
         ingredient : Ingredient
             L'ingrédient à ajouter
+
         utilisateur : Utilisateur
             L'utilisateur pour qui c'est un ingrédient favori
 
