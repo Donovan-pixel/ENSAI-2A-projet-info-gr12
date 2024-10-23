@@ -1,99 +1,118 @@
-import pytest
+from unittest.mock import MagicMock
 
-from unittest import TestCase
+from service.ingredient_service import IngredientService
 
-from unittest.mock import patch, MagicMock
+from dao.ingredient_dao import IngredientDao
 
-from src.service.ingredient_service import IngredientService
-
-from src.dao.ingredient_dao import IngredientDao
-
-from src.business_object.ingredient import Ingredient
+from business_object.ingredient import Ingredient
 
 
-class TestIngredientService(TestCase):
-    """Classe pour tester les ingrédients service"""
+liste_ingredients = [
+    Ingredient(nom="Tomate", idIngredient=12),
+    Ingredient(nom="Carotte", idIngredient=13),
+    Ingredient(nom="Avocat", idIngredient=34),
+]
 
-    @patch("dao.ingredient_dao.IngredientDao.ajouterIngredient")
-    def test_ajouterNouvelIngredient_succes(self):
-        """Teste le succès de l'ajout d'un nouvel ingrédient"""
-        ingredient_service = IngredientService()
 
-        # GIVEN
-        nom_ingredient = "Tomate"
-        IngredientDao().ajouterIngredient = MagicMock(return_value=True)
+def test_ajouterNouvelIngredient_succes():
 
-        # WHEN
-        resultat = ingredient_service.ajouterNouvelIngredient(nom_ingredient)
+    # GIVEN
 
-        # THEN
-        assert resultat is True
+    nom = "Pomme"
+    IngredientDao().ajouterIngredient = MagicMock(return_value=True)
 
-    @patch("dao.ingredient_dao.IngredientDao.ajouterIngredient")
-    def test_ajouterNouvelIngredient_echec(self):
-        """Teste l'échec de l'ajout d'un nouvel ingrédient"""
-        ingredient_service = IngredientService()
+    # WHEN
 
-        # GIVEN
-        nom_ingredient = "Tomate"
-        IngredientDao().ajouterIngredient = MagicMock(return_value=False)
+    res = IngredientService().ajouterNouvelIngredient(nom)
 
-        # WHEN
-        resultat = ingredient_service.ajouterNouvelIngredient(nom_ingredient)
+    # THEN
 
-        # THEN
-        assert resultat is False
+    assert res is True
 
-    @patch("dao.ingredient_dao.IngredientDao.obtenirTousLesIngredients")
-    def test_obtenirTousLesIngredients(self):
-        """Teste l'obtention de tous les ingrédients"""
-        # GIVEN
-        ingredient_service = IngredientService()
-        ingredient1 = Ingredient(id=1, nom="Tomate")
-        ingredient2 = Ingredient(id=2, nom="Pomme")
-        IngredientDao().obtenirTousLesIngredients = MagicMock(
-            return_value=[ingredient1, ingredient2]
-        )
 
-        # WHEN
-        result = ingredient_service.obtenirTousLesIngredients()
+def test_ajouterNouvelIngredient_echec():
 
-        # THEN
-        assert isinstance(result, list)
-        assert len(result) == 2
-        assert result[0].nom == "Tomate"
-        assert result[1].nom == "Pomme"
+    # GIVEN
 
-    @patch("dao.ingredient_dao.IngredientDao.supprimerIngredient")
-    def test_supprimer(self):
-        """Teste la suppression d'un ingrédient"""
+    nom = "Pomme"
+    IngredientDao().ajouterIngredient = MagicMock(return_value=None)
 
-        # GIVEN
-        ingredient_service = IngredientService()
-        ingredient = Ingredient(id=1, nom="Tomate")
-        IngredientDao().supprimerIngredient = MagicMock(return_value=True)
+    # WHEN
 
-        # WHEN
-        result = ingredient_service.supprimer(ingredient)
+    res = IngredientService().ajouterNouvelIngredient(nom)
 
-        # THEN
-        assert result is True
+    # THEN
 
-    @patch("dao.ingredient_dao.IngredientDao.obtenirIdParNom")
-    def test_obtenirIdPArNom(self):
-        """Teste l'obtention de l'id d'un ingrédient par son nom"""
-        # GIVEN
-        ingredient_service = IngredientService()
-        nom_ingredient = "Tomate"
-        IngredientDao().obtenirIdParNom = MagicMock(return_value=1)
+    assert res is None
 
-        # WHEN
-        result = ingredient_service.obtenirIdPArNom(nom_ingredient)
 
-        # THEN
-        assert result == 1
+def test_obtenirTousLesIngredients_succes():
+
+    # GIVEN
+
+    IngredientDao().obtenirTousLesIngredients = MagicMock(return_value=liste_ingredients)
+
+    # WHEN
+
+    res = IngredientService().obtenirTousLesIngredients()
+
+    # THEN
+
+    assert len(res) == 3
+    assert res[0].nom == "Tomate"
+    assert res[1].nom == "Carotte"
+    assert res[2].nom == "Avocat"
+
+
+def test_supprimer_succes():
+
+    # GIVEN
+
+    ingredient = "Tomate"
+    IngredientDao().supprimerIngredient = MagicMock(return_value=True)
+
+    # WHEN
+
+    res = IngredientService().supprimer(ingredient)
+
+    # THEN
+
+    assert res is True
+
+
+def test_supprimer_echec():
+
+    # GIVEN
+
+    ingredient = "Tomate"
+    IngredientDao().supprimerIngredient = MagicMock(return_value=False)
+
+    # WHEN
+
+    res = IngredientService().supprimer(ingredient)
+
+    # THEN
+
+    assert res is False
+
+
+def test_obtenirIdParNom():
+
+    # GIVEN
+
+    ingredient = "Tomate"
+    IngredientDao().obtenirIdParNom = MagicMock(return_value=12)
+
+    # WHEN
+
+    res = IngredientService().obtenirIdPArNom(ingredient)
+
+    # THEN
+
+    assert res == 12
 
 
 if __name__ == "__main__":
-    # Lancer les tests
+    import pytest
+
     pytest.main([__file__])

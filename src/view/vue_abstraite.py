@@ -8,7 +8,7 @@ class VueAbstraite(ABC):
 
     def __init__(self, message=""):
         self.message = message
-        logging.info(type(self).__name__)
+        #logging.info(type(self).__name__)
 
     def nettoyer_console(self):
         """Insérer des lignes vides pour simuler un nettoyage"""

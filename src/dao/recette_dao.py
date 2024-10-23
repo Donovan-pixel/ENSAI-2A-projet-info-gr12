@@ -189,7 +189,7 @@ class RecetteDao(metaclass=Singleton):
         return recettes
 
     @log
-    def obtenirRecettesParIngrédients(self, ingredients: list[Ingredient]) -> list[Recette]:
+    def obtenirRecettesParIngredients(self, ingredients: list[Ingredient]) -> list[Recette]:
         """Obtention de recettes contenant certains ingrédients
 
         Parameters:

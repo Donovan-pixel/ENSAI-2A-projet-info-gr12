@@ -5,7 +5,7 @@ from prompt_toolkit.validation import ValidationError, Validator
 
 
 from view.vue_abstraite import VueAbstraite
-from src.service.utilisateur_service import UtilisateurService
+from service.utilisateur_service import UtilisateurService
 
 
 class InscriptionVue(VueAbstraite):
