@@ -54,6 +54,30 @@ class RecetteDao(metaclass=Singleton):
         if res:
             recette.idRecette = res["id_meal"]
             created = True
+        
+        if created:
+
+            res2 = []
+
+            for i in range(len(res)):
+
+                id_ingredient = IngredientDao().obtenirIdParNom(ingredientQuantite.keys()[0])
+                id_meal = res[0]
+                qte = ingredientQuantite.values()[i]
+
+                try:
+                    with DBConnection().connection as connection:
+                        with connection.cursor() as cursor:
+                            cursor.execute(
+                                "INSERT INTO meals_ingredients(id_meal, id_ingredient, quantite) VALUES        "
+                                "(%(id_meal)s, %(id_ingredient)s, %(qte)s)                   "
+                                {
+                                    "id_meal": recette.idRecette,
+                                    "id_ingredient": ingredient.idIngredient,
+                                    "qte": recette.ingredientQuantite.values()[i],
+                                },
+                            )
+                            res = cursor.fetchone()
 
         return created
 
