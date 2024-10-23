@@ -35,9 +35,9 @@ class RecetteService:
         une chaîne de caractères
         """
         return (
-            f"Recette({self.titre}, {self.ingredientQuantite}, {self.consignes},"
-            "{self.categorie},"
-            "{self.origine}"
+            f"Recette({recette.titre}, {recette.ingredientQuantite}, {recette.consignes}, "
+            f"{recette.categorie}, "
+            f"{recette.origine})"
         )
 
     @log
@@ -76,7 +76,7 @@ class RecetteService:
         return RecetteDao().obtenirRecettesParIngredient(ingredient)
 
     @log
-    def obtenirRecettesParIngrédients(self, ingredients: list[Ingredient]) -> list[Recette]:
+    def obtenirRecettesParIngredients(self, ingredients: list[Ingredient]) -> list[Recette]:
         """obtenir la liste des recettes contenant deux ou plusieurs ingrédients
         Parameters
         ----------
@@ -85,7 +85,7 @@ class RecetteService:
         ------
         liste d'objets de type Recette
         """
-        return RecetteDao().obtenirRecettesParIngrédients()
+        return RecetteDao().obtenirRecettesParIngredients()
 
     @log
     def obtenirRecettesParCategorie(self, categorie: str) -> list[Recette]:

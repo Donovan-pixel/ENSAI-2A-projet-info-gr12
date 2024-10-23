@@ -11,20 +11,24 @@ class IngredientFavorisService:
     @log
     def ajouterIngredientFavori(self, nom_ingredient, utilisateur: Utilisateur) -> bool:
         """Ajout d'un ingrédient favori d'un utilisateur"""
+
         nouvel_ingredient_favori = Ingredient(
             nom=nom_ingredient,
         )
+
         return IngredientFavoriDao().ajouterIngredientFavori(nouvel_ingredient_favori, utilisateur)
 
     @log
     def obtenirIngredientsFavoris(self, utilisateur: Utilisateur) -> list[Ingredient]:
         """Lister tous les ingrédients favoris d'un utilisateur"""
+
         return IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
 
     @log
     def supprimerIngredientFavori(self, nom_ingredient, utilisateur: Utilisateur) -> bool:
         """Supprimer un ingredient favori"""
-        ingred = Ingredient(
+
+        ingredient = Ingredient(
             nom=nom_ingredient,
         )
-        return IngredientFavoriDao().supprimerIngredientFavori(ingred, utilisateur)
+        return IngredientFavoriDao().supprimerIngredientFavori(ingredient, utilisateur)
