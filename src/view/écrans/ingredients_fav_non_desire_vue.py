@@ -9,6 +9,7 @@ from service.ingredient_non_desire_service import IngredientNonDesireService
 class IngredientsFavorisNonDesiresVue(VueAbstraite):
     """Vue qui affiche :
     - La liste des ingrédients favoris et non désirés
+    - La possibilité d'ajouter/supprimer des ingrédients de la liste
     """
 
     def __init__(self, message=""):
@@ -25,14 +26,14 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
 
         print("\n" + "-" * 50 + "\nIngrédients favoris\n" + "-" * 50 + "\n")
         if ingredients_favoris:
-            for _, ingredient in enumerate(ingredients_favoris):
+            for ingredient in ingredients_favoris:
                 print(f"{ingredient.nom}")
         else:
             print("Vous n'avez pas d'ingrédients favoris.")
 
         print("\n" + "-" * 50 + "\nIngrédients non désirés\n" + "-" * 50 + "\n")
         if ingredients_non_desires:
-            for _, ingredient in enumerate(ingredients_non_desires):
+            for ingredient in ingredients_non_desires:
                 print(f"{ingredient.nom}")
         else:
             print("Vous n'avez pas d'ingrédients non désirés.")

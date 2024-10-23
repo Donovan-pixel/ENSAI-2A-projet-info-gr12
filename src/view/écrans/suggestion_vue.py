@@ -10,6 +10,7 @@ from service.recette_service import RecetteService
 class SuggestionVue(VueAbstraite):
     """Vue qui affiche :
     - La liste des recettes suggérées à l'utilisateur
+    - La possibilité d'accéder aux details d'une recette
     """
 
     def __init__(self, message=""):
@@ -19,7 +20,6 @@ class SuggestionVue(VueAbstraite):
         utilisateur = Session().utilisateur
         service_suggestions = SuggestionService()
 
-        # Obtenir les suggestions de recettes
         suggestions = service_suggestions.obtenirSuggestionRecette(utilisateur)
 
         print("\n" + "-" * 50 + "\nVoici les recettes recommandées\n" + "-" * 50 + "\n")
@@ -27,14 +27,13 @@ class SuggestionVue(VueAbstraite):
         if suggestions:
             recette_choisie = inquirer.select(
                 message="Sélectionnez une recette pour voir les détails ou revenir au tableau de bord :",
-                choices=[recette.titre for recette in suggestions] + ["Retourner au tableau de bors"],
+                choices=[recette.titre for recette in suggestions] + ["Retourner au tableau de bord"],
             ).execute()
 
             if recette_choisie == "Retourner au menu principal":
                 from view.menu_utilisateur_vue import MenuUtilisateurVue
                 return MenuUtilisateurVue()
             else:
-                # Afficher les détails de la recette sélectionnée
                 recette = next(rec for rec in suggestions if rec.titre == recette_choisie)
                 self.afficher_details_recette(recette)
                 return SuggestionVue()
@@ -46,6 +45,7 @@ class SuggestionVue(VueAbstraite):
 
     def afficher_details_recette(self, recette):
         """Afficher les détails d'une recette"""
+
         print(f"\nDétails de la recette : {recette.titre}")
         print(f"Catégorie: {recette.categorie}")
         print(f"Origine: {recette.origine}")

@@ -11,9 +11,6 @@ class ListeDeCoursesVue(VueAbstraite):
     - La liste de courses de l'utilisateur
     """
 
-    def __init__(self, message=""):
-        self.message = message
-
     def choisir_menu(self):
         utilisateur = Session().utilisateur
         service_liste_courses = ListeDeCoursesService()
