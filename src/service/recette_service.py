@@ -30,6 +30,7 @@ class RecetteService:
             origine=recette.origine,
         )
 
+        if 
         return RecetteDao().ajouterRecette(nouvelle_recette)
 
     @log
