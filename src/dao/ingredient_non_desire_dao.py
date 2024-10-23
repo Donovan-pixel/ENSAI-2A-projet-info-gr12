@@ -9,7 +9,7 @@ from business_object.ingredient import Ingredient
 from business_object.utilisateur import Utilisateur
 
 
-class IngredientNonDesireDAO(metaclass=Singleton):
+class IngredientNonDesireDao(metaclass=Singleton):
     "Classe contenant les méthodes pour gérer les ingrédients non désirés de la base de données"
 
     @log
