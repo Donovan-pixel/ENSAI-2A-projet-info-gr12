@@ -117,7 +117,7 @@ class UtilisateurDao(metaclass=Singleton):
                     )
                     res = cursor.fetchall()
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
             raise
 
         liste_utilisateur = []
