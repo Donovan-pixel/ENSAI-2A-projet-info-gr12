@@ -110,3 +110,8 @@ class RecetteService:
         list : liste d'objets de type Recette
         """
         return RecetteDao().obtenirRecettesParCategorie(categorie=categorie)
+
+    @log
+    def obtenirToutesLesCategories():
+        """Obtention de toutes les catégories de recettes de la base de données"""
+        return RecetteDao().obtenirToutesLesCategories()
