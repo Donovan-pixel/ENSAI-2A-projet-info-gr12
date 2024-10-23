@@ -62,14 +62,14 @@ class TestRecetteService(TestCase):
 
         # GIVEN
         recette_service = RecetteService()
-        recette = Recette(
-            idRecette=1,
-            titre="Recette Test",
-            ingredientQuantite="2 pommes",
-            consignes="Couper et cuire",
-            categorie="Dessert",
-            origine="France",
-        )
+        recette = {
+            "idRecette": 1,
+            "titre": "Recette Test",
+            "ingredientQuantite": "2 pommes",
+            "consignes": "Couper et cuire",
+            "categorie": "Dessert",
+            "origine": "France",
+        }
         RecetteDao().ajouterRecette = MagicMock(return_value=True)
 
         # WHEN
@@ -85,13 +85,13 @@ class TestRecetteService(TestCase):
 
         # GIVEN
         recette_service = RecetteService()
-        recette = Recette(
-            titre="Recette Test",
-            ingredientQuantite=None,
-            consignes="Couper et cuire",
-            categorie="Dessert",
-            origine="France",
-        )
+        recette = {
+            "titre": 5452,
+            "ingredientQuantite": None,
+            "consignes": "Couper et cuire",
+            "categorie": "Dessert",
+            "origine": "France",
+        }
         mock_ajouter_recette_echec.return_value = False
 
         # WHEN
@@ -106,7 +106,6 @@ class TestRecetteService(TestCase):
 
         # GIVEN
         recette = Recette(
-            idRecette=1,
             titre="Recette Test",
             ingredientQuantite="2 pommes",
             consignes="Couper et cuire",
@@ -115,7 +114,7 @@ class TestRecetteService(TestCase):
         )
 
         # WHEN
-        sortie_attendu = "Recette(1, Recette Test, 2 pommes, Couper et cuire, Dessert, France)"
+        sortie_attendu = "Recette(Recette Test, 2 pommes, Couper et cuire, Dessert, France)"
         resultat = RecetteService().afficherRecette(recette)
 
         # THEN

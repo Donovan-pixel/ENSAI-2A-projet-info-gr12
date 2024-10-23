@@ -8,11 +8,12 @@ class RecetteService:
     """Classe contenant les méthodes de service des Recettes"""
 
     @log
-    def ajouterNouvelleRecette(self, recette: Recette) -> bool:
+    def ajouterNouvelleRecette(self, recette: dict) -> bool:
         """Ajout d'une nouvelle recette à partir de ses attributs"""
 
         # Vérifier si 'recette' est un dictionnaire et le convertir en objet Recette si nécessaire
-        if isinstance(recette, dict):
+        titre_is_str = isinstance(recette.get("titre"), str)
+        if isinstance(recette, dict) and titre_is_str:
             recette = Recette(
                 titre=recette.get("titre"),
                 ingredientQuantite=recette.get("ingredientQuantite"),
@@ -20,7 +21,9 @@ class RecetteService:
                 categorie=recette.get("categorie"),
                 origine=recette.get("origine"),
             )
-
+        else:
+            # Les types ne sont pas bons
+            return False
         # Maintenant que nous avons un objet Recette, nous pouvons l'utiliser
         nouvelle_recette = Recette(
             titre=recette.titre,
