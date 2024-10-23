@@ -9,7 +9,7 @@ from business_object.ingredient import Ingredient
 from business_object.utilisateur import Utilisateur
 
 
-class IngredientFavoriDao(metaclasse=Singleton):
+class IngredientFavoriDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux Ingrédients Favoris de la base de données"""
 
     @log
@@ -46,6 +46,7 @@ class IngredientFavoriDao(metaclasse=Singleton):
                         },
                     )
                     res = cursor.fetchone()
+
         except Exception as e:
             logging.exception(e)
             raise
@@ -80,6 +81,7 @@ class IngredientFavoriDao(metaclasse=Singleton):
                         },
                     )
                     res = cursor.fetchall()
+
         except Exception as e:
             logging.exeption(e)
             raise

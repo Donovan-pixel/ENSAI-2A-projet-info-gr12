@@ -5,7 +5,7 @@ from dao.ingredient_favori_dao import IngredientFavoriDao
 from business_object.utilisateur import Utilisateur
 
 
-class IngredientFavorisService:
+class IngredientFavoriService:
     """Classe contenant les méthodes de service des Ingrédients favoris"""
 
     @log
