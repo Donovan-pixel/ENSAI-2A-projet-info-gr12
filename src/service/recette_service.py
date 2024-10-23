@@ -30,12 +30,7 @@ class RecetteService:
             origine=recette.origine,
         )
 
-        # Appel à RecetteDao pour ajouter la recette à la base de données
-        if RecetteDao().ajouterRecette(nouvelle_recette):
-            return True
-
-        else:
-            return None
+        return RecetteDao().ajouterRecette(nouvelle_recette)
 
     @log
     def afficherRecette(self, recette: Recette) -> str:

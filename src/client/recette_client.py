@@ -22,7 +22,10 @@ class RecetteClient:
             req = requests.get(f"{self.__host}/search.php?f={letter}")
 
             if req.status_code == 200:
-                raw_recettes = req.json()["meals"]
+                raw_recettes = req.json().get("meals")
+
+                if raw_recettes is None:
+                    continue
 
                 if raw_recettes:
                     for t in raw_recettes:
@@ -48,6 +51,7 @@ class RecetteClient:
                                     "ingredientQuantite": ingredients,
                                 }
                             )
+
                         except KeyError as e:
                             print(f"Erreur : clé manquante dans {t} - {e}")
 
@@ -56,5 +60,3 @@ class RecetteClient:
 
 if __name__ == "__main__":
     recettes = RecetteClient().get_recette()
-    for recette in recettes:
-        print(recette)  # Affiche les recettes pour vérification
