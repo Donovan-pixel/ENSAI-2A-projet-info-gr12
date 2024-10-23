@@ -1,68 +1,68 @@
 from unittest.mock import MagicMock
 
-from service.ingredient_favori_service import IngredientFavoriService
+from service.ingredient_non_desire_service import IngredientNonDesireService
 
-from dao.ingredient_favori_dao import IngredientFavoriDao
+from dao.ingredient_non_desire_dao import IngredientNonDesireDao
 
 from business_object.ingredient import Ingredient
 from business_object.utilisateur import Utilisateur
 
-liste_ingredients_favoris = [
+liste_ingredients_non_desires = [
     Ingredient(nom="Tomate", idIngredient=12),
     Ingredient(nom="Carotte", idIngredient=13),
     Ingredient(nom="Avocat", idIngredient=34),
 ]
 
 
-def test_ajouterIngredientFavori_succes():
+def test_ajouterIngredientNonDesire_succes():
 
     # GIVEN
 
     nom = "Pomme"
     utilisateur = Utilisateur(pseudo="jp", motDePasse="1234", role="Utilisateur", idUtilisateur=1)
 
-    IngredientFavoriDao().ajouterIngredientFavori = MagicMock(return_value=True)
+    IngredientNonDesireDao().ajouterIngredientNonDesire = MagicMock(return_value=True)
 
     # WHEN
 
-    res = IngredientFavoriService().ajouterIngredientFavori(nom, utilisateur)
+    res = IngredientNonDesireService().ajouterIngredientNonDesire(nom, utilisateur)
 
     # THEN
 
     assert res is True
 
 
-def test_ajouterIngredientFavori_echec():
+def test_ajouterIngredientNonDesire_echec():
 
     # GIVEN
 
     nom = "Pomme"
     utilisateur = Utilisateur(pseudo="jp", motDePasse="1234", role="Utilisateur", idUtilisateur=1)
 
-    IngredientFavoriDao().ajouterIngredientFavori = MagicMock(return_value=None)
+    IngredientNonDesireDao().ajouterIngredientNonDesire = MagicMock(return_value=None)
 
     # WHEN
 
-    res = IngredientFavoriService().ajouterIngredientFavori(nom, utilisateur)
+    res = IngredientNonDesireService().ajouterIngredientNonDesire(nom, utilisateur)
 
     # THEN
 
     assert res is None
 
 
-def test_obtenirIngredientsFavoris_succes():
+def test_obtenirIngredientsNonDesires_succes():
 
     # GIVEN
 
     utilisateur = Utilisateur(pseudo="jp", motDePasse="1234", role="Utilisateur", idUtilisateur=1)
 
-    IngredientFavoriDao().obtenirIngredientsFavoris = MagicMock(
-        return_value=liste_ingredients_favoris
+    IngredientNonDesireDao().obtenirIngredientsNonDesires = MagicMock(
+        return_value=liste_ingredients_non_desires
     )
 
     # WHEN
 
-    res = IngredientFavoriService().obtenirIngredientsFavoris(utilisateur)
+    res = IngredientNonDesireService().obtenirIngredientsNonDesires(utilisateur)
 
     # THEN
 
@@ -72,36 +72,36 @@ def test_obtenirIngredientsFavoris_succes():
     assert res[2].nom == "Avocat"
 
 
-def test_supprimerIngredientFavori_succes():
+def test_supprimerIngredientNonDesire_succes():
 
     # GIVEN
 
     nom = "Tomate"
     utilisateur = Utilisateur(pseudo="jp", motDePasse="1234", role="Utilisateur", idUtilisateur=1)
 
-    IngredientFavoriDao().supprimerIngredientFavori = MagicMock(return_value=True)
+    IngredientNonDesireDao().supprimerIngredientNonDesire = MagicMock(return_value=True)
 
     # WHEN
 
-    res = IngredientFavoriService().supprimerIngredientFavori(nom, utilisateur)
+    res = IngredientNonDesireService().supprimerIngredientNonDesire(nom, utilisateur)
 
     # THEN
 
     assert res is True
 
 
-def test_supprimerIngredientFavori_echec():
+def test_supprimerIngredientNonDesire_echec():
 
     # GIVEN
 
     nom = "Tomate"
     utilisateur = Utilisateur(pseudo="jp", motDePasse="1234", role="Utilisateur", idUtilisateur=1)
 
-    IngredientFavoriDao().supprimerIngredientFavori = MagicMock(return_value=False)
+    IngredientNonDesireDao().supprimerIngredientNonDesire = MagicMock(return_value=False)
 
     # WHEN
 
-    res = IngredientFavoriService().supprimerIngredientFavori(nom, utilisateur)
+    res = IngredientNonDesireService().supprimerIngredientNonDesire(nom, utilisateur)
 
     # THEN
 

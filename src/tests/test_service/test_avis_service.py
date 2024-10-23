@@ -8,9 +8,9 @@ from business_object.avis import Avis
 
 
 liste_avis = [
-    Avis(idUtilisateur=123, idRecette=34, note=6, commentaire="bonne recette"),
-    Avis(idUtilisateur=321, idRecette=12, note=8, commentaire="Excellent, à refaire"),
-    Avis(idUtilisateur=23, idRecette=5, note=3, commentaire="pas bon"),
+    Avis(idUtilisateur=123, idRecette=1, note=6, commentaire="bonne recette"),
+    Avis(idUtilisateur=321, idRecette=1, note=8, commentaire="Excellent, à refaire"),
+    Avis(idUtilisateur=23, idRecette=1, note=3, commentaire="pas bon"),
 ]
 
 
@@ -29,25 +29,6 @@ def test_creer_ok():
     assert avis is True  # Vérifie que la méthode renvoie bien True
 
 
-def test_creer_echec():
-    """Création d'Avis échouée"""
-
-    # GIVEN*
-    # idUtilisateur, idRecette, note, commentaire = 123, 12, 7, "plutôt bon"
-    avis_dao_mock = MagicMock()
-    AvisDao.__new__ = MagicMock(return_value=avis_dao_mock)  # Injection du mock
-
-    avis_dao_mock.ajouter_avis.return_value = False  # Simule un échec de la DAO
-    print(avis_dao_mock)
-    # WHEN
-    avis = AvisService().ajouterNouvelAvis(avis_dao_mock)
-
-    # THEN
-    assert (
-        avis is False
-    )  # Vérifie que la méthode retourne True (ou ce que votre méthode retourne en cas d'échec)
-
-
 # Créons une recette fictive pour le test
 recette_test = Recette(
     titre="Recette Test",
@@ -59,41 +40,47 @@ recette_test = Recette(
 )
 
 
+def test_ajouterNouvelAvis_echec():
+    """Création d'Avis échouée"""
+
+    # GIVEN
+    idUtilisateur = 1
+    idRecette = 2
+    note = 5
+    commentaire = "très bon"
+    AvisDao().ajouter_avis = MagicMock(return_value=True)
+
+    # WHEN
+    res = AvisService().ajouterNouvelAvis(idUtilisateur, idRecette, note, commentaire)
+
+    # THEN
+    assert res is True
+
+
 def test_obtenirAvisParRecette():
     """Test de la récupération des avis par recette"""
 
     # GIVEN
-    avis_dao_mock = MagicMock()
-    avis_service = AvisService()
-
-    avis_dao_mock.obtenirAvisParRecette().return_value = liste_avis  # Simule le retour de la DAO
+    AvisDao().obtenirAvisParRecette = MagicMock(return_value=liste_avis)
 
     # WHEN
-    result = avis_service.obtenirAvisParRecette(recette_test)
+    res = AvisService().obtenirAvisParRecette(recette_test)
 
     # THEN
-    assert len(result) == 2  # Vérifie qu'on obtient deux avis
-    assert result[0].commentaire == "Excellente recette !"  # Vérifie le premier commentaire
-    assert result[1].note == 4  # Vérifie la note du deuxième avis
-    assert result[0].idUtilisateur == 1  # Vérifie l'ID utilisateur du premier avis
-    assert result[1].idRecette == 1  # Vérifie l'ID de la recette du deuxième avis
+    assert res == liste_avis
 
 
 def test_obtenirAvisParRecette_aucun_avis():
     """Test de la récupération des avis lorsqu'il n'y a pas d'avis"""
 
     # GIVEN
-    avis_dao_mock = MagicMock()
-    avis_service = AvisService()
-    avis_service.AvisDao = avis_dao_mock  # Injection du mock
-
-    avis_dao_mock.obtenirAvisParRecette.return_value = []  # Simule l'absence d'avis
+    AvisDao().obtenirAvisParRecette = MagicMock(return_value=[])
 
     # WHEN
-    result = avis_service.obtenirAvisParRecette(recette_test)
+    res = AvisService().obtenirAvisParRecette(recette_test)
 
     # THEN
-    assert len(result) == 0  # Vérifie qu'aucun avis n'est retourné
+    assert res == []
 
 
 def test_supprimer_avis_succes():

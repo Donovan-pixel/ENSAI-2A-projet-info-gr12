@@ -15,7 +15,7 @@ from src.business_object.utilisateur import Utilisateur
 class TestRecetteFavoriteService(TestCase):
 
     @patch("dao.recette_favorite_dao.RecettesFavoritesDao.ajouter_recette_favorite")
-    def test_ajouter_recette_favorite(self):
+    def test_ajouter_recette_favorite(self, mock_ajouterrecettefavorite):
         """teste l'ajout d'une recette favorite"""
 
         rec_fav_service = RecetteFavoritesService()
@@ -29,18 +29,16 @@ class TestRecetteFavoriteService(TestCase):
         )
 
         utilisateur = Utilisateur(pseudo="Jean", motDePasse="0000", role="utilisateur")
-        RecettesFavoritesDao().ajouter_recette_favorite = MagicMock(recette, utilisateur)
+        mock_ajouterrecettefavorite.return_value = True
         # WHEN
         resultat = rec_fav_service.ajouter_recette_favorite(recette, utilisateur)
 
         # THEN
-        RecettesFavoritesDao().ajouter_recette_favorite.assert_called_once_with(
-            recette, utilisateur
-        )
+        mock_ajouterrecettefavorite.assert_called_once_with(recette, utilisateur)
         assert resultat is True
 
     @patch("dao.recette_favorite_dao.RecettesFavoritesDao.supprimer_recette_favorite")
-    def test_supprimer_recette_favorite(self):
+    def test_supprimer_recette_favorite(self, mock_supprimerrecettefavorite):
         """teste la suppression d'une recette favorite"""
 
         rec_fav_service = RecetteFavoritesService()
@@ -54,18 +52,16 @@ class TestRecetteFavoriteService(TestCase):
         )
 
         utilisateur = Utilisateur(pseudo="Jean", motDePasse="0000", role="utilisateur")
-        RecettesFavoritesDao().supprimer_recette_favorite = MagicMock(recette, utilisateur)
+        mock_supprimerrecettefavorite.return_value = True
         # WHEN
         resultat = rec_fav_service.supprimer_recette_favorite(recette, utilisateur)
 
         # THEN
-        RecettesFavoritesDao().supprimer_recette_favorite.assert_called_once_with(
-            recette, utilisateur
-        )
+        mock_supprimerrecettefavorite.assert_called_once_with(recette, utilisateur)
         assert resultat is True
 
-    @patch("dao.recette_favorite_dao.RecettesFavoritesDao.obtenirRecettesFavorite")
-    def test_obtenirRecettesFavorites(self):
+    @patch("dao.recette_favorite_dao.RecettesFavoritesDao.obtenirRecettesFavorites")
+    def test_obtenirRecettesFavorites(self, mock_obtenirrecettesfavorites):
         """teste l'obtention de la liste des recette favorites"""
 
         rec_fav_service = RecetteFavoritesService()
@@ -79,15 +75,15 @@ class TestRecetteFavoriteService(TestCase):
         )
 
         utilisateur = Utilisateur(pseudo="Jean", motDePasse="0000", role="utilisateur")
-        RecettesFavoritesDao().obtenirRecettesFavorites = MagicMock(recette, utilisateur)
+        mock_obtenirrecettesfavorites.return_value = [recette]
         # WHEN
-        resultat = rec_fav_service.obtenirRecettesFavorites(recette, utilisateur)
+        resultat = rec_fav_service.obtenirRecettesFavorites(utilisateur)
 
         # THEN
-        RecettesFavoritesDao().obtenirRecettesFavorites.assert_called_once_with(utilisateur)
+        mock_obtenirrecettesfavorites.assert_called_once_with(utilisateur)
         assert isinstance(resultat, list)
         assert len(resultat) == 1
-        assert resultat[0].nom == "Tarte aux pommes"
+        assert resultat[0].titre == "Recette Test"
 
 
 if __name__ == "__main__":
