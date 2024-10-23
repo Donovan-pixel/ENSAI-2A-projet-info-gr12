@@ -5,7 +5,7 @@ from business_object.liste_de_course import ListeDeCourses
 from business_object.ingredient import Ingredient
 
 
-def test_creer_liste_de_courses_succes():
+def test_reerListeDeCourses_succes():
     """Test pour la création d'une nouvelle liste de courses qui réussit."""
 
     # GIVEN
@@ -13,13 +13,13 @@ def test_creer_liste_de_courses_succes():
     ListeDeCourseDAO().creerListeDeCourses = MagicMock(return_value=True)
 
     # WHEN
-    resultat = ListeDeCoursesService().creer(id_utilisateur)
+    resultat = ListeDeCoursesService().creerListeDeCourses(id_utilisateur)
 
     # THEN
     assert resultat is not None
 
 
-def test_creer_liste_de_courses_echec():
+def test_reerListeDeCourses_echec():
     """Test pour la création d'une nouvelle liste de courses qui échoue."""
 
     # GIVEN
@@ -27,13 +27,13 @@ def test_creer_liste_de_courses_echec():
     ListeDeCourseDAO().creerListeDeCourses = MagicMock(return_value=False)
 
     # WHEN
-    resultat = ListeDeCoursesService().creer(id_utilisateur)
+    resultat = ListeDeCoursesService().creerListeDeCourses(id_utilisateur)
 
     # THEN
     assert resultat is None
 
 
-def test_ajouter_ingredient_succes():
+def test_ajouterUnIngredient_succes():
     """Test pour ajouter un ingrédient à une liste de courses qui réussit."""
 
     # GIVEN
@@ -42,13 +42,13 @@ def test_ajouter_ingredient_succes():
     ListeDeCourseDAO().ajouterUnIngredient = MagicMock(return_value=True)
 
     # WHEN
-    resultat = ListeDeCoursesService().ajouter_ingredient(id_utilisateur, ingredient_quantite)
+    resultat = ListeDeCoursesService().ajouterUnIngredient(id_utilisateur, ingredient_quantite)
 
     # THEN
     assert resultat is True
 
 
-def test_ajouter_ingredient_echec():
+def test_ajouterUnIngredient_echec():
     """Test pour ajouter un ingrédient à une liste de courses qui échoue."""
 
     # GIVEN
@@ -57,13 +57,13 @@ def test_ajouter_ingredient_echec():
     ListeDeCourseDAO().ajouterUnIngredient = MagicMock(return_value=False)
 
     # WHEN
-    resultat = ListeDeCoursesService().ajouter_ingredient(id_utilisateur, ingredient_quantite)
+    resultat = ListeDeCoursesService().ajouterUnIngredient(id_utilisateur, ingredient_quantite)
 
     # THEN
     assert resultat is False
 
 
-def test_retirer_ingredient_succes():
+def test_retirerUnIngredient_succes():
     """Test pour retirer un ingrédient d'une liste de courses qui réussit."""
 
     # GIVEN
@@ -72,13 +72,13 @@ def test_retirer_ingredient_succes():
     ListeDeCourseDAO().retirerUnIngredient = MagicMock(return_value=True)
 
     # WHEN
-    resultat = ListeDeCoursesService().retirer_ingredient(id_utilisateur, ingredient)
+    resultat = ListeDeCoursesService().retirerUnIngredient(id_utilisateur, ingredient)
 
     # THEN
     assert resultat is True
 
 
-def test_retirer_ingredient_echec():
+def test_retirerUnIngredient_echec():
     """Test pour retirer un ingrédient d'une liste de courses qui échoue."""
 
     # GIVEN
@@ -87,13 +87,13 @@ def test_retirer_ingredient_echec():
     ListeDeCourseDAO().retirerUnIngredient = MagicMock(return_value=False)
 
     # WHEN
-    resultat = ListeDeCoursesService().retirer_ingredient(id_utilisateur, ingredient)
+    resultat = ListeDeCoursesService().retirerUnIngredient(id_utilisateur, ingredient)
 
     # THEN
     assert resultat is False
 
 
-def test_afficher_tous_vide():
+def test_listerTous_vide():
     """Test pour afficher aucune liste de courses d'un utilisateur."""
 
     # GIVEN
@@ -101,13 +101,13 @@ def test_afficher_tous_vide():
     ListeDeCourseDAO().listerTous = MagicMock(return_value=[])
 
     # WHEN
-    resultat = ListeDeCoursesService().afficher_tous(id_utilisateur)
+    resultat = ListeDeCoursesService().listerTous(id_utilisateur)
 
     # THEN
     assert resultat == "Aucune liste de courses disponible pour cet utilisateur."
 
 
-def test_afficher_tous_succes():
+def test_listerTous_succes():
     """Test pour afficher les listes de courses d'un utilisateur qui réussit."""
 
     # GIVEN
@@ -118,14 +118,14 @@ def test_afficher_tous_succes():
     ListeDeCourseDAO().listerTous = MagicMock(return_value=[liste_de_courses])
 
     # WHEN
-    resultat = ListeDeCoursesService().afficher_tous(id_utilisateur)
+    resultat = ListeDeCoursesService().listerTous(id_utilisateur)
 
     # THEN
     assert "Tomate" in resultat
     assert "Oignon" in resultat
 
 
-def test_obtenir_id_liste_succes():
+def test_obtenirIdListeDeCourses_succes():
     """Test pour obtenir l'ID de la liste de courses d'un utilisateur qui réussit."""
 
     # GIVEN
@@ -133,7 +133,7 @@ def test_obtenir_id_liste_succes():
     ListeDeCourseDAO().obtenirIdListeDeCourses = MagicMock(return_value=101)
 
     # WHEN
-    id_liste = ListeDeCoursesService().obtenir_id_liste(id_utilisateur)
+    id_liste = ListeDeCoursesService().obtenirIdListeDeCourses(id_utilisateur)
 
     # THEN
     assert id_liste == 101

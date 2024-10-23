@@ -7,7 +7,7 @@ class ListeDeCoursesService:
     """Classe contenant les méthodes de service des Listes de Courses"""
 
     @log
-    def creer(self, id_utilisateur) -> ListeDeCourses:
+    def creerListeDeCourses(self, id_utilisateur) -> ListeDeCourses:
         """
         Création d'une nouvelle liste de courses pour un utilisateur.
 
@@ -25,24 +25,7 @@ class ListeDeCoursesService:
         return nouvelle_liste if ListeDeCourseDAO().creerListeDeCourses(nouvelle_liste) else None
 
     @log
-    def lister_tous(self, id_utilisateur) -> list[ListeDeCourses]:
-        """
-        Lister toutes les listes de courses d'un utilisateur.
-
-        Parameters
-        ----------
-        id_utilisateur : int
-            L'identifiant de l'utilisateur.
-
-        Returns
-        -------
-        list : list[ListeDeCourses]
-            Retourne une liste d'objets ListeDeCourses appartenant à l'utilisateur.
-        """
-        return ListeDeCourseDAO().listerTous(id_utilisateur)
-
-    @log
-    def ajouter_ingredient(self, id_utilisateur, ingredient_quantite) -> bool:
+    def ajouterUnIngredient(self, id_utilisateur, ingredient_quantite) -> bool:
         """
         Ajoute des ingrédients à la liste de courses d'un utilisateur.
 
@@ -61,7 +44,7 @@ class ListeDeCoursesService:
         return ListeDeCourseDAO().ajouterUnIngredient(id_utilisateur, ingredient_quantite)
 
     @log
-    def retirer_ingredient(self, id_utilisateur, ingredient) -> bool:
+    def retirerUnIngredient(self, id_utilisateur, ingredient) -> bool:
         """
         Retire un ingrédient de la liste de courses d'un utilisateur.
 
@@ -80,7 +63,7 @@ class ListeDeCoursesService:
         return ListeDeCourseDAO().retirerUnIngredient(id_utilisateur, ingredient)
 
     @log
-    def afficher_tous(self, id_utilisateur) -> str:
+    def listerTous(self, id_utilisateur) -> str:
         """
         Afficher toutes les listes de courses d'un utilisateur sous forme de tableau.
 
@@ -117,7 +100,7 @@ class ListeDeCoursesService:
         return str_listes
 
     @log
-    def obtenir_id_liste(self, id_utilisateur) -> int:
+    def obtenirIdListeDeCourses(self, id_utilisateur) -> int:
         """
         Obtenir l'ID de la liste de courses d'un utilisateur.
 
