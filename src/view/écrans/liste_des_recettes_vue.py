@@ -9,7 +9,8 @@ from service.recette_favorites_service import RecetteFavoritesService
 
 class ListeRecettesVue(VueAbstraite):
     """Vue qui affiche :
-    - La liste des recettes disponibles avec filtres
+    - La liste des recettes
+    - La possibilité de filtrer les recettes par ingrédients/catégorie/lettre
     """
 
     def __init__(self, message=""):
@@ -33,9 +34,9 @@ class ListeRecettesVue(VueAbstraite):
         ).execute()
 
         if filtre_choix == "Par ingrédient":
-            ingredient_nom = inquirer.text(message="Entrez un ingrédient :").execute()
-            recettes = service_recette.obtenirRecettesParIngredient(ingredient_nom)
-
+            from filtrage_ingredients_vue import FiltrageParIngredientsVue
+            return FiltrageParIngredientsVue()
+            
         elif filtre_choix == "Par catégorie":
             categorie = inquirer.text(message="Entrez une catégorie de recette :").execute()
             recettes = service_recette.obtenirRecettesParCategorie(categorie)
