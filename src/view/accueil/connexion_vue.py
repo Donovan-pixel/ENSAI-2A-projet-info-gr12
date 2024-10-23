@@ -25,11 +25,11 @@ class ConnexionVue(VueAbstraite):
             message = f"Vous êtes connecté sous le pseudo {user.pseudo}"
             Session().connexion(user)
 
-            if user.role == "Administrateur":
-                return MenuAdministrateurVue(message)
+#            if user.role == "Administrateur":
+#                return MenuAdministrateurVue(message)
 
-            return MenuUtilisateurVue(message)
+#            return MenuUtilisateurVue(message)
 
         message = "Erreur de connexion (pseudo ou mot de passe invalide)"
 
-        return AccueilVue(message)
+        return MenuUtilisateurVue(message)

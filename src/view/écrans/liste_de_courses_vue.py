@@ -21,8 +21,8 @@ class ListeDeCoursesVue(VueAbstraite):
         print("\n" + "-" * 50 + "\nVotre liste de courses\n" + "-" * 50 + "\n")
 
         if liste_de_courses:
-            for i, ingredient in enumerate(liste_de_courses):
-                print(f"{i + 1} -- {ingredient.nom} (quantité: {ingredient.quantite})")
+            for ingredient, quantite in liste_de_courses.ingredientQuantite.items():
+                print(f"- {ingredient} (quantité: {quantite})")
         else:
             print("Votre liste de courses est vide.")
 
