@@ -30,7 +30,7 @@ if __name__ == "__main__":
             nb_erreurs += 1
             vue_courante = AccueilVue("Une erreur est survenue, retour au menu principal")
 
-    # Lorsque l on quitte l application
+    # Lorsque l on quitte l'application
     print("----------------------------------")
     print("Au revoir")
 
