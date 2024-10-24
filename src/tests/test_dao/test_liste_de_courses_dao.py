@@ -26,7 +26,7 @@ def test_creer_liste_de_courses():
     creation_ok = ListeDeCourseDAO().creerListeDeCourses(liste_course)
 
     # THEN
-    assert creation_ok
+    assert creation_ok == 1
     assert liste_course.idListeDecourses is not None
 
 
