@@ -15,8 +15,7 @@ class InscriptionVue(VueAbstraite):
 
         if UtilisateurService().pseudoDejaUtilise(pseudo):
             from view.accueil.accueil_vue import AccueilVue
-
-            return AccueilVue(f"Le pseudo {pseudo} est déjà utilisé.")
+            return InscriptionVue(f"Le pseudo {pseudo} est déjà utilisé.")
 
         mdp = inquirer.secret(
             message="Entrez votre mot de passe : ",

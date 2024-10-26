@@ -32,7 +32,11 @@ class AccueilVue(VueAbstraite):
             """
         )
 
-        print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
+        print("\n" + "═" * 70)
+        print("🏠 ACCUEIL 🏠".center(70))
+        print("═" * 70 + "\n")
+
+
 
         choix = inquirer.select(
             message="Faites votre choix : ",
@@ -50,10 +54,8 @@ class AccueilVue(VueAbstraite):
 
             case "Se connecter":
                 from view.accueil.connexion_vue import ConnexionVue
-
                 return ConnexionVue("Connexion à l'application")
 
             case "Créer un compte":
                 from view.accueil.inscription_vue import InscriptionVue
-
                 return InscriptionVue("Création de compte utilisateur")
