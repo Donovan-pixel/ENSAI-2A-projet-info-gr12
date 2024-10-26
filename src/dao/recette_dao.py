@@ -14,19 +14,7 @@ class RecetteDao(metaclass=Singleton):
 
     @log
     def ajouterRecette(self, recette: Recette) -> bool:
-        """Ajout d'une recette de la base de données
-
-        Parameters
-        ---------
-        recette : Recette
-            Recette qu'il faut ajouter
-
-        Returns
-        ------
-        bool :
-            True si la recette a bien été ajoutée
-            False sinon
-        """
+        """Ajout d'une recette dans la base de données"""
 
         res = None
         created = False
@@ -35,9 +23,11 @@ class RecetteDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO recettes(title, category, area, instructions) VALUES        "
-                        "(%(title)s, %(category)s, %(area)s, %(instructions)s)                   "
-                        "  RETURNING id_meal;                                                    ",
+                        """
+                        INSERT INTO recettes(title, category, area, instructions)
+                        VALUES (%(title)s, %(category)s, %(area)s, %(instructions)s)
+                        RETURNING id_recette;
+                        """,
                         {
                             "title": recette.titre,
                             "category": recette.categorie,
@@ -48,36 +38,33 @@ class RecetteDao(metaclass=Singleton):
                     res = cursor.fetchone()
 
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
             raise
 
         if res:
-            recette.idRecette = res["id_meal"]
+            recette.idRecette = res["id_recette"]
             created = True
-        
+
         if created:
-
-            res2 = []
-
-            for i in range(len(res)):
-
-                id_ingredient = IngredientDao().obtenirIdParNom(ingredientQuantite.keys()[0])
-                id_meal = res[0]
-                qte = ingredientQuantite.values()[i]
-
+            for ingredient, quantite in recette.ingredientQuantite.items():
+                id_ingredient = IngredientDao().obtenirIdParNom(ingredient)
                 try:
                     with DBConnection().connection as connection:
                         with connection.cursor() as cursor:
                             cursor.execute(
-                                "INSERT INTO meals_ingredients(id_meal, id_ingredient, quantite) VALUES        "
-                                "(%(id_meal)s, %(id_ingredient)s, %(qte)s)                   "
+                                """
+                                INSERT INTO meals_ingredients(id_meal, id_ingredient, quantite)
+                                VALUES (%(id_meal)s, %(id_ingredient)s, %(quantite)s);
+                                """,
                                 {
                                     "id_meal": recette.idRecette,
-                                    "id_ingredient": ingredient.idIngredient,
-                                    "qte": recette.ingredientQuantite.values()[i],
+                                    "id_ingredient": id_ingredient,
+                                    "quantite": quantite,
                                 },
                             )
-                            res = cursor.fetchone()
+                except Exception as e:
+                    logging.exception(e)
+                    raise
 
         return created
 
