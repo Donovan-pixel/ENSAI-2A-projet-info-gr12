@@ -7,7 +7,7 @@ from dao.db_connection import DBConnection
 
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
-
+from business_object
 
 class RecetteDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux recettes de la base de données"""
@@ -26,7 +26,7 @@ class RecetteDao(metaclass=Singleton):
                         """
                         INSERT INTO recettes(title, category, area, instructions)
                         VALUES (%(title)s, %(category)s, %(area)s, %(instructions)s)
-                        RETURNING id_recette;
+                        RETURNING id_meal;
                         """,
                         {
                             "title": recette.titre,
@@ -42,7 +42,7 @@ class RecetteDao(metaclass=Singleton):
             raise
 
         if res:
-            recette.idRecette = res["id_recette"]
+            recette.idRecette = res["id_meal"]
             created = True
 
         if created:
@@ -97,7 +97,7 @@ class RecetteDao(metaclass=Singleton):
         if res:
             for row in res:
                 recette = Recette(
-                    idRecette=row["id_recette"],
+                    idRecette=row["id_meal"],
                     titre=row["title"],
                     categorie=row["category"],
                     origine=row["area"],
@@ -145,7 +145,7 @@ class RecetteDao(metaclass=Singleton):
         if res:
             for row in res:
                 recette = Recette(
-                    idRecette=row["id_recette"],
+                    idRecette=row["id_meal"],
                     titre=row["title"],
                     categorie=row["category"],
                     origine=row["area"],
@@ -192,7 +192,7 @@ class RecetteDao(metaclass=Singleton):
         if res:
             for row in res:
                 recette = Recette(
-                    idRecette=row["id_recette"],
+                    idRecette=row["id_meal"],
                     titre=row["nom"],
                     categorie=row["categorie"],
                     origine=row["origine"],
