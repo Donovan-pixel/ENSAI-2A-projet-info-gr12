@@ -7,7 +7,8 @@ from dao.db_connection import DBConnection
 
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
-from business_object
+from dao.ingredient_dao import IngredientDao
+
 
 class RecetteDao(metaclass=Singleton):
     """Classe contenant les méthodes pour accéder aux recettes de la base de données"""
@@ -176,7 +177,7 @@ class RecetteDao(metaclass=Singleton):
                     cursor.execute(
                         """
                         SELECT * FROM recettes
-                        JOIN recettes_ingredients ri ON r.id_recette = ri.id_recette
+                        JOIN recettes_ingredients ri ON r.id_meal = ri.id_meal
                         WHERE ri.id_ingredient = %(id_ingredient)s;
                         """,
                         {"id_ingredient": ingredient.id_ingredient},
@@ -246,7 +247,7 @@ class RecetteDao(metaclass=Singleton):
         if res:
             for row in res:
                 recette = Recette(
-                    idRecette=row["id_recette"],
+                    idRecette=row["id_meal"],
                     titre=row["title"],
                     categorie=row["category"],
                     origine=row["area"],
@@ -292,7 +293,7 @@ class RecetteDao(metaclass=Singleton):
         if res:
             for row in res:
                 recette = Recette(
-                    idRecette=row["id_recette"],
+                    idRecette=row["id_meal"],
                     titre=row["nom"],
                     categorie=row["categorie"],
                     origine=row["origine"],
