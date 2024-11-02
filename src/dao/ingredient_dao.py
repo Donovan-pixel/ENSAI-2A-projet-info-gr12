@@ -144,7 +144,7 @@ class IngredientDao(metaclass=Singleton):
                     cursor.execute(
                         "SELECT id_ingredient           "
                         "FROM ingredients               "
-                        "WHERE nom = %(nom)s;           ",
+                        "WHERE UPPER(nom) = UPPER(%(nom)s);           ",
                         {"nom": nom},
                     )
                     res = cursor.fetchone()

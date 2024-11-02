@@ -178,7 +178,7 @@ class RecetteDao(metaclass=Singleton):
                         """
                         SELECT * FROM recettes
                         JOIN recettes_ingredients ri ON r.id_meal = ri.id_meal
-                        WHERE ri.id_ingredient = %(id_ingredient)s;
+                        WHERE ri.id_ingredient = %(id_ingredient)s ;
                         """,
                         {"id_ingredient": ingredient.id_ingredient},
                     )
