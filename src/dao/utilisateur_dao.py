@@ -49,7 +49,7 @@ class UtilisateurDao(metaclass=Singleton):
         created = False
 
         if res:
-            utilisateur.idUtilisateur = res["idUtilisateur"]
+            utilisateur.idUtilisateur = res["id_user"]
             created = True
 
         return created
