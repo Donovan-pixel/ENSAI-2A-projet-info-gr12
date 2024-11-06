@@ -5,7 +5,7 @@ CREATE TYPE user_role AS ENUM ('Utilisateur', 'Administrateur');
 CREATE TABLE users(
     id_user SERIAL PRIMARY KEY,
     pseudo VARCHAR(30) UNIQUE,
-    mot_de_passe TEXT
+    mot_de_passe TEXT,
     role user_role
 );
 DROP TABLE IF EXISTS recettes CASCADE;
