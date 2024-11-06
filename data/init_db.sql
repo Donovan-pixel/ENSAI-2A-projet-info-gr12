@@ -7,7 +7,7 @@ CREATE TABLE users(
     id_user SERIAL PRIMARY KEY,
     pseudo VARCHAR(30) UNIQUE,
     mot_de_passe TEXT,
-    roles user_role
+    role user_role
 );
 DROP TABLE IF EXISTS recettes CASCADE;
 CREATE TABLE recettes(
