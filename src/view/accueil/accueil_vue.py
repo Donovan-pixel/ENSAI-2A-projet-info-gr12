@@ -33,10 +33,8 @@ class AccueilVue(VueAbstraite):
         )
 
         print("\n" + "═" * 70)
-        print("🏠 ACCUEIL 🏠".center(70))
+        print(" ACCUEIL ".center(70))  # Removed the emojis for better compatibility
         print("═" * 70 + "\n")
-
-
 
         choix = inquirer.select(
             message="Faites votre choix : ",
