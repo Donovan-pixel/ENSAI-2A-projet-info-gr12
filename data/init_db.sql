@@ -1,10 +1,12 @@
 
 ---create table
 DROP TABLE IF EXISTS users CASCADE;
+CREATE TYPE user_role AS ENUM ('Utilisateur', 'Administrateur');
 CREATE TABLE users(
     id_user SERIAL PRIMARY KEY,
     pseudo VARCHAR(30) UNIQUE,
     mot_de_passe TEXT
+    role user_role
 );
 DROP TABLE IF EXISTS recettes CASCADE;
 CREATE TABLE recettes(
@@ -69,7 +71,7 @@ DROP TABLE IF EXISTS liste_de_courses CASCADE;
 CREATE TABLE liste_de_courses(
     id_liste_de_courses SERIAL PRIMARY KEY,
     id_user INTEGER
-); 
+);
 DROP TABLE IF EXISTS ingredients_courses CASCADE;
 CREATE TABLE ingredient_courses(
     id_ingredient_courses SERIAL PRIMARY KEY,
