@@ -1,13 +1,13 @@
 
 ---create table
 DROP TABLE IF EXISTS users CASCADE;
-DROP TYPE IF EXISTS user_role;
-CREATE TYPE user_role AS ENUM ('Utilisateur', 'Administrateur');
+--DROP TYPE IF EXISTS user_role;
+--CREATE TYPE user_role AS ENUM ('Utilisateur', 'Administrateur');
 CREATE TABLE users(
     id_user SERIAL PRIMARY KEY,
     pseudo VARCHAR(30) UNIQUE,
     mot_de_passe TEXT,
-    role user_role
+    role VARCHAR(255)
 );
 DROP TABLE IF EXISTS recettes CASCADE;
 CREATE TABLE recettes(
