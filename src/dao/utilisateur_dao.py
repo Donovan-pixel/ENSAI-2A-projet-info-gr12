@@ -242,7 +242,7 @@ class UtilisateurDao(metaclass=Singleton):
             utilisateur = Utilisateur(
                 idUtilisateur=res["id_user"],
                 pseudo=res["pseudo"],
-                motDePasse=res["motDePasse"],
+                motDePasse=res["mot_de_passe"],
                 role=res["role"],
             )
 
