@@ -80,17 +80,17 @@ class ListeDeCourseDAO(metaclass=Singleton):
 
     @log
     def listerTous(self, idUtilisateur) -> list[ListeDeCourses]:
-        """lister les listes de courses de l'utilisateur grâce à son id
+        """Lister les listes de courses de l'utilisateur grâce à son id
 
         Parameters
         ----------
         idUtilisateur : int
-              L'identifiant de l'utilisateur
+            L'identifiant de l'utilisateur
 
         Returns
         -------
-        ListeDeCourses : list[ListeDecourses]
-            renvoie la liste de courses de l'utilisateur
+        ListeDeCourses : list[ListeDeCourses]
+            Renvoie la liste de courses de l'utilisateur
             dans la base de données.
         """
 
@@ -98,12 +98,15 @@ class ListeDeCourseDAO(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT ing.nom , ingc.quantite           "
-                        "FROM ingredient_courses ingc                 "
-                        "JOIN liste_de_courses lc using (id_ingredient_courses)  "
-                        "JOIN users u using (id_user) "
-                        "JOIN ingredients ing using (id_ingredient)"
-                        "WHERE id_user=%(idUtilisateur)s;  ",
+                        """
+                        SELECT ing.nom, ingc.quantite
+                        FROM ingredient_courses ingc
+                        JOIN liste_de_courses lc
+                        ON ingc.id_liste_de_courses = lc.id_liste_de_courses
+                        JOIN users u ON lc.id_user = u.id_user
+                        JOIN ingredients ing ON ingc.id_ingredient = ing.id_ingredient
+                        WHERE u.id_user = %(idUtilisateur)s;
+                        """,
                         {"idUtilisateur": idUtilisateur},
                     )
                     res = cursor.fetchall()
@@ -111,16 +114,16 @@ class ListeDeCourseDAO(metaclass=Singleton):
             logging.info(e)
             raise
 
-        Listecourses = []
+        liste_courses = []
 
         if res:
             for row in res:
-                liste_courses = Listecourses(idUtilisateur)
+                liste_course = ListeDeCourses(idUtilisateur)
                 ingredient = Ingredient(row["nom"])
-                liste_courses.ajouterIngredient(ingredient, row["quantite"])
-                Listecourses.append(liste_courses)
+                liste_course.ajouterIngredient(ingredient, row["quantite"])
+                liste_courses.append(liste_course)
 
-        return Listecourses
+        return liste_courses
 
     @log
     def ajouterUnIngredient(self, idUtilisateur, IngredientQuantite) -> bool:
