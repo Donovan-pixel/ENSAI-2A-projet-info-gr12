@@ -1,6 +1,7 @@
 
 ---create table
 DROP TABLE IF EXISTS users CASCADE;
+DROP TYPE IF EXISTS user_role;
 CREATE TYPE user_role AS ENUM ('Utilisateur', 'Administrateur');
 CREATE TABLE users(
     id_user SERIAL PRIMARY KEY,
