@@ -1,6 +1,7 @@
 import os
 import requests
 import string
+import logging
 from utils.log_decorator import log
 from typing import List, Dict
 from dotenv import load_dotenv
@@ -11,49 +12,48 @@ class RecetteClient:
 
     def __init__(self) -> None:
         load_dotenv()
-        self.__host = os.environ["WEBSERVICE_HOST"]
+        self.__host = os.getenv("WEBSERVICE_HOST")
 
     @log
     def get_recette(self) -> List[Dict]:
         """Retourne la liste des recettes"""
-
         recettes = []
-        for letter in list(string.ascii_lowercase):
-            req = requests.get(f"{self.__host}/search.php?f={letter}")
 
-            if req.status_code == 200:
-                raw_recettes = req.json().get("meals")
+        for letter in string.ascii_lowercase:
+            try:
+                response = requests.get(f"{self.__host}/search.php?f={letter}")
+                response.raise_for_status()
+            except requests.RequestException as e:
+                logging.error(
+                    f"Échec de la récupération des recettes" f"pour la lettre '{letter}': {e}"
+                )
 
-                if raw_recettes is None:
-                    continue
+            raw_recettes = response.json().get("meals")
 
-                if raw_recettes:
-                    for t in raw_recettes:
-                        try:
-                            # Création d'un dictionnaire pour les ingrédients
-                            ingredients = {}
-                            for i in range(1, 21):
-                                ingredient = t.get(f"strIngredient{i}")
-                                measure = t.get(f"strMeasure{i}")
+            if not raw_recettes:
+                logging.info(f"Aucune recette trouvée pour la lettre '{letter}'.")
+                continue
 
-                                if ingredient:
-                                    ingredients[ingredient] = (
-                                        measure or ""
-                                    )  # Utilise '' si la mesure est None
+            for t in raw_recettes:
+                try:
+                    ingredients = {
+                        t.get(f"strIngredient{i}"): t.get(f"strMeasure{i}", "")
+                        for i in range(1, 21)
+                        if t.get(f"strIngredient{i}")
+                    }
 
-                            # Ajoute la recette au format souhaité
-                            recettes.append(
-                                {
-                                    "titre": t["strMeal"],
-                                    "categorie": t["strCategory"],
-                                    "origine": t["strArea"],
-                                    "consignes": t["strInstructions"],
-                                    "ingredientQuantite": ingredients,
-                                }
-                            )
+                    recettes.append(
+                        {
+                            "titre": t.get("strMeal", "Unknown Title"),
+                            "categorie": t.get("strCategory", "Uncategorized"),
+                            "origine": t.get("strArea", "Unknown Area"),
+                            "consignes": t.get("strInstructions", ""),
+                            "ingredientQuantite": ingredients,
+                        }
+                    )
 
-                        except KeyError as e:
-                            print(f"Erreur : clé manquante dans {t} - {e}")
+                except KeyError as e:
+                    logging.error(f"Erreur : clé manquante dans {t} - {e}")
 
         return recettes
 

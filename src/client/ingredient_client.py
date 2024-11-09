@@ -1,6 +1,7 @@
 import os
 import requests
 import dotenv
+import logging
 from typing import List
 from utils.log_decorator import log
 
@@ -10,26 +11,28 @@ class IngredientClient:
 
     def __init__(self) -> None:
         dotenv.load_dotenv()
-        self.__host = os.environ["WEBSERVICE_HOST"]
+        self.__host = os.getenv("WEBSERVICE_HOST")
 
     @log
     def get_ingredient(self) -> List[str]:
-        """
-        Retourne la liste des ingrédients
-        """
+        """Retourne la liste des ingrédients"""
 
-        # Appel du Web service
-        req = requests.get(f"{self.__host}/list.php?i=list")
-
-        # Création d'une liste puis parcours du json pour ajouter tous les ingrédients à la liste
         ingredients = []
-        if req.status_code == 200:
-            raw_ingredients = req.json()["meals"]
-            for t in raw_ingredients:
-                ingredients.append(t["strIngredient"])
+        try:
+            response = requests.get(f"{self.__host}/list.php?i=list")
+            response.raise_for_status()
+
+            raw_ingredients = response.json().get("meals")
+            if raw_ingredients:
+                ingredients = [t["strIngredient"] for t in raw_ingredients]
+            else:
+                logging.info("Acun ingrédient trouvé")
+
+        except requests.RequestException as e:
+            logging.error(f"Échec de la récupération des ingrédients: {e}")
 
         return sorted(ingredients)
 
 
 if __name__ == "__main__":
-    IngredientClient().get_ingredient()
+    ingredients = IngredientClient().get_ingredient()

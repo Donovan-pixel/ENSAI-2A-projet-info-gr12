@@ -1,3 +1,5 @@
+import logging
+
 from utils.log_decorator import log
 from business_object.recette import Recette
 from dao.recette_dao import RecetteDao
@@ -11,29 +13,45 @@ class RecetteService:
     def ajouterNouvelleRecette(self, recette: dict) -> bool:
         """Ajout d'une nouvelle recette à partir de ses attributs"""
 
-        # Vérifier si 'recette' est un dictionnaire et le convertir en objet Recette si nécessaire
-        titre_is_str = isinstance(recette.get("titre"), str)
-        if isinstance(recette, dict) and titre_is_str:
-            recette = Recette(
-                titre=recette.get("titre"),
-                ingredientQuantite=recette.get("ingredientQuantite"),
-                consignes=recette.get("consignes"),
-                categorie=recette.get("categorie"),
-                origine=recette.get("origine"),
+        if isinstance(recette, dict) and isinstance(recette.get("titre"), str):
+            titre = recette.get("titre")
+            ingredientQuantite = recette.get("ingredientQuantite")
+            consignes = recette.get("consignes")
+            categorie = recette.get("categorie")
+            origine = recette.get("origine")
+
+            if not all([titre, ingredientQuantite, consignes, categorie, origine]):
+                logging.error("Recette invalide: certains champs sont manquants ou vides")
+                return False
+
+            nouvelle_recette = Recette(
+                titre=titre,
+                ingredientQuantite=ingredientQuantite,
+                consignes=consignes,
+                categorie=categorie,
+                origine=origine,
             )
         else:
-            # Les types ne sont pas bons
+            logging.error(
+                """
+                Format de recette invalide: le format attendu est un
+                dictionnaire avec un titre non vide.
+                """
+            )
             return False
-        # Maintenant que nous avons un objet Recette, nous pouvons l'utiliser
-        nouvelle_recette = Recette(
-            titre=recette.titre,
-            ingredientQuantite=recette.ingredientQuantite,
-            consignes=recette.consignes,
-            categorie=recette.categorie,
-            origine=recette.origine,
-        )
 
-        return RecetteDao().ajouterRecette(nouvelle_recette)
+        try:
+            success = RecetteDao().ajouterRecette(nouvelle_recette)
+            if success:
+                logging.info(f"Recette '{nouvelle_recette.titre}' ajoutée avec succès.")
+            else:
+                logging.warning(
+                    f"L'ajout de la recette '{nouvelle_recette.titre}' a échoué sans exception."
+                )
+            return success
+        except Exception as e:
+            logging.error(f"Erreur lors de l'ajout de la recette '{nouvelle_recette.titre}': {e}")
+            return False
 
     @log
     def afficherRecette(self, recette: Recette) -> str:

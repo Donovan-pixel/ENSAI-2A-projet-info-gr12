@@ -135,31 +135,27 @@ class IngredientDao(metaclass=Singleton):
 
         Returns
         -------
-        int : id de l'ingrédient
+        int or None : id de l'ingrédient, ou None si non trouvé
         """
-
+        nom = nom.upper()
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT id_ingredient           "
-                        "FROM ingredients               "
-                        "WHERE UPPER(nom) = UPPER(%(nom)s);           ",
+                        """
+                        SELECT id_ingredient FROM ingredients
+                        WHERE UPPER(nom) = %(nom)s;
+                        """,
                         {"nom": nom},
                     )
                     res = cursor.fetchone()
 
+            if res is None:
+                logging.warning(f"L'ingrédient '{nom}' est introuvable dans la base de données.")
+                return None
+
+            return res["id_ingredient"]
+
         except Exception as e:
-            logging.info(e)
+            logging.error(f"Erreur lors de l'obtention de l'ID pour l'ingrédient '{nom}': {e}")
             return None
-
-        # Vérification si 'res' est un tuple et contient au moins un élément
-        if res is None:
-            return None  # Si aucun résultat n'est trouvé, retourner None
-
-        if isinstance(res, tuple) and len(res) > 0:
-            return res[0]
-
-        # Si 'res' n'est pas au format attendu
-        logging.warning("Le résultat retourné n'est pas dans le format attendu")
-        return None

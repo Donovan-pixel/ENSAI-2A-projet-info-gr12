@@ -6,6 +6,7 @@ from view.session import Session
 from service.liste_de_courses_service import ListeDeCoursesService
 from service.ingredient_service import IngredientService
 
+
 class ListeDeCoursesVue(VueAbstraite):
     """Vue qui affiche :
     - La liste de courses de l'utilisateur
@@ -61,8 +62,8 @@ class ListeDeCoursesVue(VueAbstraite):
 
         quantite = inquirer.number(
             message="Entrez la quantité :",
-            float_allowed=True,  
-            min_allowed=1 
+            float_allowed=True,
+            min_allowed=1
         ).execute()
         # Il va falloir faire quelque chose avec les unités
 
@@ -73,7 +74,7 @@ class ListeDeCoursesVue(VueAbstraite):
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à retirer :",
             choices=[ing.nom for ing in liste_de_courses]
-        ).execute() 
+        ).execute()
 
         ingredient = next(ing for ing in liste_de_courses if ing.nom == ingredient_choisi)
         service_liste_courses.retirerUnIngredient(idUtilisateur, ingredient.idIngredient)

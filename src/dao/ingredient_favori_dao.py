@@ -75,7 +75,8 @@ class IngredientFavoriDao(metaclass=Singleton):
                     cursor.execute(
                         "SELECT ingredient.id_ingredient, ingredient.nom"
                         "FROM ingredients_favoris"
-                        "JOIN ingredient ON ingredient.id_ingredient = ingredients_favoris.id_ingredient"
+                        "JOIN ingredient"
+                        "ON ingredient.id_ingredient = ingredients_favoris.id_ingredient"
                         "WHERE id_user = %(id_user)s;",
                         {
                             "id_user": utilisateur.idUtilisateur,
