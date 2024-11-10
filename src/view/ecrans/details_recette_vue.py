@@ -8,6 +8,7 @@ from service.ingredient_non_desire_service import IngredientNonDesireService
 from service.liste_courses_service import ListeCoursesService
 from service.avis_service import AvisService
 
+
 class DetailsRecetteVue(VueAbstraite):
     """Vue pour afficher les détails d'une recette"""
 
@@ -41,6 +42,7 @@ class DetailsRecetteVue(VueAbstraite):
         match choix:
             case "Ajouter cette recette aux favoris":
                 from service.recette_favorites_service import RecetteFavoritesService
+
                 RecetteFavoritesService().ajouter_recette_favorite(self.recette, utilisateur)
                 print(f"La recette {self.recette.titre} a été ajoutée à vos favoris.")
                 return self.choisir_menu()
@@ -55,6 +57,7 @@ class DetailsRecetteVue(VueAbstraite):
 
             case "Retourner à la liste des recettes":
                 from view.liste_recettes_vue import ListeRecettesVue
+
                 return ListeRecettesVue()
 
     def gerer_ingredients(self):
@@ -70,7 +73,10 @@ class DetailsRecetteVue(VueAbstraite):
         liste_courses_service = ListeCoursesService()
         for ingredient in choix_ingredients:
             liste_courses_service.ajouterIngredientAListe(ingredient)
-        print(f"Les ingrédients {', '.join(choix_ingredients)} ont été ajoutés à votre liste de courses.")
+        print(
+            f"Les ingrédients {', '.join(choix_ingredients)}"
+            f"ont été ajoutés à votre liste de courses."
+        )
 
         # Gestion des favoris et non désirés pour les ingrédients
         for ingredient in ingredients:
@@ -85,10 +91,14 @@ class DetailsRecetteVue(VueAbstraite):
 
             match choix_ingredient:
                 case "Ajouter aux favoris":
-                    IngredientFavorisService().ajouterIngredientFavori(ingredient, Session().utilisateur)
+                    IngredientFavorisService().ajouterIngredientFavori(
+                        ingredient, Session().utilisateur
+                    )
                     print(f"L'ingrédient {ingredient} a été ajouté aux favoris.")
                 case "Ajouter aux non désirés":
-                    IngredientNonDesireService().ajouterIngredientNonDesire(ingredient, Session().utilisateur)
+                    IngredientNonDesireService().ajouterIngredientNonDesire(
+                        ingredient, Session().utilisateur
+                    )
                     print(f"L'ingrédient {ingredient} a été ajouté aux non désirés.")
                 case "Ne rien faire":
                     pass
