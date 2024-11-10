@@ -4,7 +4,7 @@ from InquirerPy.base.control import Choice
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-from service.recette_favorites_service import RecetteFavoritesService
+from service.recette_favorite_service import RecetteFavoritesService
 from service.recette_service import RecetteService
 
 
@@ -31,12 +31,16 @@ class RecettesFavoritesVue(VueAbstraite):
 
         choix_recettes = [
             Choice(recette.titre, extra_data=recette) for recette in recettes_favorites
-        ] + [Choice("Ajouter une recette aux favoris"), Choice("Supprimer une recette des favoris"), Choice("Retourner au menu principal")]
+        ] + [
+            Choice("Ajouter une recette aux favoris"),
+            Choice("Supprimer une recette des favoris"),
+            Choice("Retourner au menu principal"),
+        ]
 
         choix = inquirer.select(
             message="Sélectionnez une recette pour afficher les détails ou une action :",
             choices=choix_recettes,
-            vi_mode=True
+            vi_mode=True,
         ).execute()
 
         if choix == "Retourner au menu principal":
@@ -48,13 +52,13 @@ class RecettesFavoritesVue(VueAbstraite):
 
         # Si l'utilisateur choisit "Supprimer une recette des favoris"
         if choix == "Supprimer une recette des favoris":
-            self.supprimer_recette_favorite(service_recettes_favorites, recettes_favorites, utilisateur)
+            self.supprimer_recette_favorite(
+                service_recettes_favorites, recettes_favorites, utilisateur
+            )
             return RecettesFavoritesVue("Recette retirée des favoris.")
 
         # Trouver la recette sélectionnée et afficher ses détails
-        recette_choisie = next(
-            (rec for rec in recettes_favorites if rec.titre == choix), None
-        )
+        recette_choisie = next((rec for rec in recettes_favorites if rec.titre == choix), None)
 
         if recette_choisie:
             self.afficher_details_recette(recette_choisie)
@@ -77,17 +81,19 @@ class RecettesFavoritesVue(VueAbstraite):
         recettes = RecetteService().obtenirToutesLesRecettes()
         recette_choisie = inquirer.select(
             message="Choisissez une recette à ajouter aux favoris :",
-            choices=[recette.titre for recette in recettes]
+            choices=[recette.titre for recette in recettes],
         ).execute()
 
         recette = next(rec for rec in recettes if rec.titre == recette_choisie)
         service_recettes_favorites.ajouter_recette_favorite(recette, utilisateur)
 
-    def supprimer_recette_favorite(self, service_recettes_favorites, recettes_favorites, utilisateur):
+    def supprimer_recette_favorite(
+        self, service_recettes_favorites, recettes_favorites, utilisateur
+    ):
         """Supprimer une recette des favoris."""
         recette_choisie = inquirer.select(
             message="Choisissez une recette à retirer des favoris :",
-            choices=[recette.titre for recette in recettes_favorites]
+            choices=[recette.titre for recette in recettes_favorites],
         ).execute()
 
         recette = next(rec for rec in recettes_favorites if rec.titre == recette_choisie)
@@ -96,4 +102,5 @@ class RecettesFavoritesVue(VueAbstraite):
     def retourner_menu_principal(self):
         """Retourner au menu principal."""
         from view.menu_utilisateur_vue import MenuUtilisateurVue
+
         return MenuUtilisateurVue()

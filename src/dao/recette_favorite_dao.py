@@ -105,17 +105,19 @@ class RecettesFavoritesDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT recette.id_meal, recette.title"
-                        "FROM recettes_favorites"
-                        "JOIN recettes ON recettes.id_meal = recettes_favorites.id_meal"
-                        "WHERE id_user = %(id_user)s;",
+                        """
+                        SELECT recette.id_meal, recette.title
+                        FROM recettes_favorites
+                        JOIN recettes ON recettes.id_meal = recettes_favorites.id_meal
+                        WHERE id_user = %(id_user)s;
+                        """,
                         {
                             "id_user": utilisateur.idUtilisateur,
                         },
                     )
                     res = cursor.fetchall()
         except Exception as e:
-            logging.exeption(e)
+            logging.exception(e)
             raise
 
         liste_recettes_favorites = []

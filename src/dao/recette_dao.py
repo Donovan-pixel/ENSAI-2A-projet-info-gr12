@@ -78,13 +78,15 @@ class RecetteDao(metaclass=Singleton):
         list[Recette]:
             Liste des recettes
         """
-
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
                         """
-                        SELECT * FROM recettes;
+                        SELECT r.id_meal, r.title, r.category, r.area, r.instructions,
+                        mi.id_ingredient, i.nom, mi.quantite FROM recettes r
+                        LEFT JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
+                        LEFT JOIN ingredients i ON mi.id_ingredient = i.id_ingredient;
                         """
                     )
                     res = cursor.fetchall()
@@ -94,15 +96,34 @@ class RecetteDao(metaclass=Singleton):
             raise
 
         recettes = []
+        recettes_dict = {}
 
         if res:
             for row in res:
+                id_meal = row["id_meal"]
+
+                if id_meal not in recettes_dict:
+                    recettes_dict[id_meal] = {
+                        "idRecette": id_meal,
+                        "titre": row["title"],
+                        "categorie": row["category"],
+                        "origine": row["area"],
+                        "consignes": row["instructions"],
+                        "ingredientQuantite": {},
+                    }
+
+                ingredient_name = row["nom"]
+                quantite = row["quantite"]
+                recettes_dict[id_meal]["ingredientQuantite"][ingredient_name] = quantite
+
+            for recette_data in recettes_dict.values():
                 recette = Recette(
-                    idRecette=row["id_meal"],
-                    titre=row["title"],
-                    categorie=row["category"],
-                    origine=row["area"],
-                    consignes=row["instructions"],
+                    idRecette=recette_data["idRecette"],
+                    titre=recette_data["titre"],
+                    categorie=recette_data["categorie"],
+                    origine=recette_data["origine"],
+                    consignes=recette_data["consignes"],
+                    ingredientQuantite=recette_data["ingredientQuantite"],
                 )
                 recettes.append(recette)
 

@@ -85,7 +85,7 @@ class IngredientFavoriDao(metaclass=Singleton):
                     res = cursor.fetchall()
 
         except Exception as e:
-            logging.exeption(e)
+            logging.exception(e)
             raise
 
         liste_ingredients_favoris = []

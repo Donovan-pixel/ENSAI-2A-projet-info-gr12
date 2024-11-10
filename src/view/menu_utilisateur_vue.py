@@ -49,7 +49,7 @@ class MenuUtilisateurVue(VueAbstraite):
                 return AccueilVue()
 
             case "Voir mes recettes favorites":
-                from view.ecranscrans.recettes_favorites_vue import RecettesFavoritesVue
+                from view.ecrans.recettes_favorites_vue import RecettesFavoritesVue
 
                 return RecettesFavoritesVue()
 
