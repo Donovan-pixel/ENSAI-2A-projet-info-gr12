@@ -27,7 +27,9 @@ class RecettesFavoritesVue(VueAbstraite):
         if not recettes_favorites:
             print("Vous n'avez aucune recette favorite.")
 
-        print("\n" + "-" * 50 + "\nVos recettes favorites\n" + "-" * 50 + "\n")
+        print("\n" + "═" * 70)
+        print(" Vos recettes favorites ".center(70))
+        print("═" * 70 + "\n")
 
         choix_recettes = [
             Choice(recette.titre, extra_data=recette) for recette in recettes_favorites

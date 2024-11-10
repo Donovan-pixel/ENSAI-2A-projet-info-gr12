@@ -37,8 +37,8 @@ class RecettesFavoritesDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         """
-                        INSERT INTO recettes_favorite(id_meal, id_user)
-                        VALUES (%(idRecette)s, %(idUtilisateur)s
+                        INSERT INTO recettes_favorites(id_meal, id_user)
+                        VALUES (%(idRecette)s, %(idUtilisateur)s)
                         RETURNING id_meal;
                         """,
                         {
@@ -127,8 +127,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
         if res:
             for row in res:
                 recette_favorite = Recette(
-                    idRecette=res["id_meal"],
-                    titre=res["title"],
+                    idRecette=row["id_meal"], titre=row["title"], ingredientQuantite={}
                 )
 
                 liste_recettes_favorites.append(recette_favorite)

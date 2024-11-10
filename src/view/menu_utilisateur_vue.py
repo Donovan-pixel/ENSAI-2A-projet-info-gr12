@@ -27,7 +27,9 @@ class MenuUtilisateurVue(VueAbstraite):
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
 
-        print("\n" + "-" * 50 + "\nTableau de bord\n" + "-" * 50 + "\n")
+        print("\n" + "═" * 70)
+        print(" Tableau de bord ".center(70))
+        print("═" * 70 + "\n")
 
         choix = inquirer.select(
             message="Faites votre choix : ",
