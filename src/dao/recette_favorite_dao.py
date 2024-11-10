@@ -36,9 +36,11 @@ class RecettesFavoritesDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO recettes_favorite(id_meal, id_user)"
-                        "VALUES (%(idRecette)s, %(idUtilisateur)s       "
-                        "RETURNING id_meal;                             ",
+                        """
+                        INSERT INTO recettes_favorite(id_meal, id_user)
+                        VALUES (%(idRecette)s, %(idUtilisateur)s
+                        RETURNING id_meal;
+                        """,
                         {
                             "idRecette": recette.idRecette,
                             "idUtilisateur": utilisateur.idUtilisateur,
@@ -106,7 +108,7 @@ class RecettesFavoritesDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         """
-                        SELECT recette.id_meal, recette.title
+                        SELECT recettes.id_meal, recettes.title
                         FROM recettes_favorites
                         JOIN recettes ON recettes.id_meal = recettes_favorites.id_meal
                         WHERE id_user = %(id_user)s;
