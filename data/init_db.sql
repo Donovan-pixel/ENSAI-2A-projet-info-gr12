@@ -69,7 +69,8 @@ CREATE TABLE ingredients_non_desires(
 DROP TABLE IF EXISTS liste_de_courses CASCADE;
 CREATE TABLE liste_de_courses(
     id_liste_de_courses SERIAL PRIMARY KEY,
-    id_user INTEGER
+    id_user INTEGER,
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
 DROP TABLE IF EXISTS ingredients_courses CASCADE;
 CREATE TABLE ingredients_courses(
