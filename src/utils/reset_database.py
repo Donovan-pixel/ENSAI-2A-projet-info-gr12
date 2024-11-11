@@ -51,9 +51,8 @@ class ResetDatabase(metaclass=Singleton):
 
         liste_recettes = RecetteClient().get_recette()
 
-        for i in liste_recettes:
-            RecetteService().ajouterNouvelleRecette(i)
-
+        for recette in liste_recettes:
+            RecetteService().ajouterNouvelleRecette(recette)
         return True
 
 
