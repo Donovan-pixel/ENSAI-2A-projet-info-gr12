@@ -26,7 +26,7 @@ class IngredientClient:
             if raw_ingredients:
                 ingredients = [t["strIngredient"] for t in raw_ingredients]
             else:
-                logging.info("Acun ingrédient trouvé")
+                logging.info("Aucun ingrédient trouvé")
 
         except requests.RequestException as e:
             logging.error(f"Échec de la récupération des ingrédients: {e}")

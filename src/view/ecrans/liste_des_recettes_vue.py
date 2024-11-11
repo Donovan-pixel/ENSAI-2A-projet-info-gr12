@@ -4,10 +4,10 @@ from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
 from service.recette_service import RecetteService
-from service.recette_favorites_service import RecetteFavoritesService
+from service.recette_favorite_service import RecetteFavoritesService
 
 
-class ListeRecettesVue(VueAbstraite):
+class ListeDesRecettesVue(VueAbstraite):
     """Vue qui affiche :
     - La liste des recettes
     - La possibilité de filtrer les recettes par ingrédients/catégorie/lettre
@@ -34,14 +34,17 @@ class ListeRecettesVue(VueAbstraite):
 
         if filtre_choix == "Par ingrédient":
             from filtrage_ingredients_vue import FiltrageParIngredientsVue
+
             return FiltrageParIngredientsVue()
 
         elif filtre_choix == "Par catégorie":
             from filtrage_categorie_vue import FiltrageParCategorieVue
+
             return FiltrageParCategorieVue()
 
         elif filtre_choix == "Par lettre":
             from filtrage_lettre_vue import FiltrageParLettreVue
+
             return FiltrageParLettreVue
 
         elif filtre_choix == "Afficher toutes les recettes":
@@ -49,6 +52,7 @@ class ListeRecettesVue(VueAbstraite):
 
         elif filtre_choix == "Retourner au tableau de bord":
             from view.menu_utilisateur_vue import MenuUtilisateurVue
+
             return MenuUtilisateurVue()
 
         if not recettes:
@@ -62,6 +66,7 @@ class ListeRecettesVue(VueAbstraite):
 
         if recette_choisie == "Retourner au tableau de bord":
             from view.menu_utilisateur_vue import MenuUtilisateurVue
+
             return MenuUtilisateurVue()
 
         recette = next(rec for rec in recettes if rec.titre == recette_choisie)

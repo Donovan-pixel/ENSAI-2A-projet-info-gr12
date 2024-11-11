@@ -3,8 +3,9 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-from service.ingredient_favoris_service import IngredientFavorisService
+from service.ingredient_favori_service import IngredientFavoriService
 from service.ingredient_non_desire_service import IngredientNonDesireService
+
 
 class IngredientsFavorisNonDesiresVue(VueAbstraite):
     """Vue qui affiche :
@@ -18,7 +19,7 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
     def choisir_menu(self):
         utilisateur = Session().utilisateur
 
-        favoris_service = IngredientFavorisService()
+        favoris_service = IngredientFavoriService()
         non_desires_service = IngredientNonDesireService()
 
         ingredients_favoris = favoris_service.obtenirIngredientsFavoris(utilisateur)
@@ -63,11 +64,14 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
                 return IngredientsFavorisNonDesiresVue("Ingrédient non désiré ajouté.")
 
             case "Retirer un ingrédient non désiré":
-                self.retirer_ingredient_non_desire(non_desires_service, ingredients_non_desires, utilisateur)
+                self.retirer_ingredient_non_desire(
+                    non_desires_service, ingredients_non_desires, utilisateur
+                )
                 return IngredientsFavorisNonDesiresVue("Ingrédient non désiré retiré.")
 
             case "Retourner au menu principal":
                 from view.menu_utilisateur_vue import MenuUtilisateurVue
+
                 return MenuUtilisateurVue()
 
     def ajouter_ingredient_favori(self, favoris_service, utilisateur):
@@ -78,18 +82,22 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
         if ingredients_favoris:
             ingredient_choisi = inquirer.select(
                 message="Choisissez un ingrédient favori à retirer :",
-                choices=[ing.nom for ing in ingredients_favoris]
+                choices=[ing.nom for ing in ingredients_favoris],
             ).execute()
             favoris_service.supprimerIngredientFavori(ingredient_choisi, utilisateur)
 
     def ajouter_ingredient_non_desire(self, non_desires_service, utilisateur):
-        nom_ingredient = inquirer.text(message="Entrez le nom de l'ingrédient non désiré :").execute()
+        nom_ingredient = inquirer.text(
+            message="Entrez le nom de l'ingrédient non désiré :"
+        ).execute()
         non_desires_service.ajouterIngredientNonDesire(nom_ingredient, utilisateur)
 
-    def retirer_ingredient_non_desire(self, non_desires_service, ingredients_non_desires, utilisateur):
+    def retirer_ingredient_non_desire(
+        self, non_desires_service, ingredients_non_desires, utilisateur
+    ):
         if ingredients_non_desires:
             ingredient_choisi = inquirer.select(
                 message="Choisissez un ingrédient non désiré à retirer :",
-                choices=[ing.nom for ing in ingredients_non_desires]
+                choices=[ing.nom for ing in ingredients_non_desires],
             ).execute()
             non_desires_service.supprimerIngredientNonDesire(ingredient_choisi, utilisateur)

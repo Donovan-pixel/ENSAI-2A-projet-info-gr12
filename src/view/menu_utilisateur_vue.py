@@ -27,7 +27,9 @@ class MenuUtilisateurVue(VueAbstraite):
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
 
-        print("\n" + "-" * 50 + "\nTableau de bord\n" + "-" * 50 + "\n")
+        print("\n" + "═" * 70)
+        print(" Tableau de bord ".center(70))
+        print("═" * 70 + "\n")
 
         choix = inquirer.select(
             message="Faites votre choix : ",
@@ -49,28 +51,28 @@ class MenuUtilisateurVue(VueAbstraite):
                 return AccueilVue()
 
             case "Voir mes recettes favorites":
-                from view.écrans.recettes_favorites_vue import RecettesFavoritesVue
+                from view.ecrans.recettes_favorites_vue import RecettesFavoritesVue
 
                 return RecettesFavoritesVue()
 
             case "Afficher la liste des recettes":
-                from view.écrans.liste_des_recettes_vue import ListeDesRecettesVue
+                from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
 
                 return ListeDesRecettesVue()
 
             case "Gérer mes ingrédients favoris/non désirés":
-                from view.écrans.ingredients_fav_non_desire_vue import (
+                from view.ecrans.ingredients_fav_non_desire_vue import (
                     IngredientsFavorisNonDesiresVue,
                 )
 
                 return IngredientsFavorisNonDesiresVue()
 
             case "Obtenir des suggestions de recettes":
-                from view.écrans.suggestion_vue import SuggestionVue
+                from view.ecrans.suggestion_vue import SuggestionVue
 
                 return SuggestionVue()
 
             case "Accéder à ma liste de courses":
-                from view.écrans.liste_de_courses_vue import ListeDeCoursesVue
+                from view.ecrans.liste_de_courses_vue import ListeDeCoursesVue
 
                 return ListeDeCoursesVue()
