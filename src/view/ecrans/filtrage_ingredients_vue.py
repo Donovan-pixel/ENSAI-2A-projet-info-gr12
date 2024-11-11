@@ -5,6 +5,7 @@ from view.session import Session
 from service.ingredient_service import IngredientService
 from service.recette_service import RecetteService
 
+
 class FiltrageParIngredientsVue(VueAbstraite):
     """Vue pour filtrer les recettes par ingrédients"""
 
@@ -18,11 +19,13 @@ class FiltrageParIngredientsVue(VueAbstraite):
         # Affichage des ingrédients disponibles pour le filtrage
         choix_ingredients = inquirer.checkbox(
             message="Sélectionnez les ingrédients que vous souhaitez utiliser pour filtrer les recettes :",
-            choices=[ingredient.nom for ingredient in ingredients] + ["Retourner au menu des recettes"],
+            choices=[ingredient.nom for ingredient in ingredients]
+            + ["Retourner au menu des recettes"],
         ).execute()
 
         if "Retourner au menu des recettes" in choix_ingredients:
             from view.menu_utilisateur_vue import MenuUtilisateurVue
+
             return MenuUtilisateurVue()
 
         # Confirmation des ingrédients choisis
@@ -37,13 +40,16 @@ class FiltrageParIngredientsVue(VueAbstraite):
         ).execute()
 
         if confirmation == "Retourner au menu des recettes":
-            from view.écrans.liste_des_recettes_vue import ListeRecettesVue
+            from view.ecrans.liste_des_recettes_vue import ListeRecettesVue
+
             return ListeRecettesVue()
         elif confirmation == "Modifier la sélection":
             return self.choisir_menu()
 
         # Filtrer les recettes par ingrédients
-        ingredients_objets = [ingredient for ingredient in ingredients if ingredient.nom in choix_ingredients]
+        ingredients_objets = [
+            ingredient for ingredient in ingredients if ingredient.nom in choix_ingredients
+        ]
         service_recette = RecetteService()
         recettes = service_recette.obtenirRecettesParIngredients(ingredients_objets)
 
@@ -61,6 +67,7 @@ class FiltrageParIngredientsVue(VueAbstraite):
 
             if choix_recettes == "Retourner au menu principal":
                 from view.menu_utilisateur_vue import MenuUtilisateurVue
+
                 return MenuUtilisateurVue()
 
             # Affichage des détails ou ajout aux favoris
@@ -76,10 +83,12 @@ class FiltrageParIngredientsVue(VueAbstraite):
 
             match choix_action:
                 case "Voir les détails de la recette":
-                    details = service_recette.afficherRecette(recette)
-                    print(details)
+                    from view.ecrans.details_recette_vue import DetailsRecetteVue
+
+                    return DetailsRecetteVue(recette)
                 case "Ajouter cette recette aux favoris":
                     from service.recette_favorites_service import RecetteFavoritesService
+
                     utilisateur = Session().utilisateur
                     RecetteFavoritesService().ajouter_recette_favorite(recette, utilisateur)
                     print(f"{recette.titre} a été ajoutée aux favoris.")

@@ -33,17 +33,17 @@ class ListeDesRecettesVue(VueAbstraite):
         ).execute()
 
         if filtre_choix == "Par ingrédient":
-            from filtrage_ingredients_vue import FiltrageParIngredientsVue
+            from view.ecrans.filtrage_ingredients_vue import FiltrageParIngredientsVue
 
             return FiltrageParIngredientsVue()
 
         elif filtre_choix == "Par catégorie":
-            from filtrage_categorie_vue import FiltrageParCategorieVue
+            from view.ecrans.filtrage_categorie_vue import FiltrageParCategorieVue
 
             return FiltrageParCategorieVue()
 
         elif filtre_choix == "Par lettre":
-            from filtrage_lettre_vue import FiltrageParLettreVue
+            from view.ecrans.filtrage_lettre_vue import FiltrageParLettreVue
 
             return FiltrageParLettreVue
 
@@ -81,8 +81,9 @@ class ListeDesRecettesVue(VueAbstraite):
         ).execute()
 
         if action_choix == "Voir les détails de la recette":
-            self.afficher_details_recette(recette)
-            return self.choisir_menu()
+            from view.ecrans.details_recette_vue import DetailsRecetteVue
+
+            return DetailsRecetteVue(recette)
 
         elif action_choix == "Ajouter cette recette aux favoris":
             service_recette_favorites.ajouter_recette_favorite(recette, utilisateur)
@@ -91,16 +92,3 @@ class ListeDesRecettesVue(VueAbstraite):
 
         elif action_choix == "Retourner à la liste des recettes":
             return self.choisir_menu()
-
-    def afficher_details_recette(self, recette):
-        """Afficher les détails d'une recette"""
-        print(f"\nDétails de la recette : {recette.titre}")
-        print(f"Catégorie: {recette.categorie}")
-        print(f"Origine: {recette.origine}")
-        print("Ingrédients:")
-        for ingredient, quantite in recette.ingredients.items():
-            print(f"- {ingredient}: {quantite}")
-        print("Instructions:")
-        for i, instruction in enumerate(recette.instructions, 1):
-            print(f"{i}. {instruction}")
-        input("\nAppuyez sur Entrée pour retourner à la liste des recettes...")

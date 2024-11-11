@@ -115,7 +115,7 @@ class RecetteService:
         ------
         liste d'objets de type Recette
         """
-        return RecetteDao().obtenirRecettesParIngredients()
+        return RecetteDao().obtenirRecettesParIngredients(ingredients)
 
     @log
     def obtenirRecettesParCategorie(self, categorie: str) -> list[Recette]:

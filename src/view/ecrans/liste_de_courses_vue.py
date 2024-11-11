@@ -20,7 +20,6 @@ class ListeDeCoursesVue(VueAbstraite):
         utilisateur = Session().utilisateur
         service_liste_courses = ListeDeCoursesService()
 
-        # Obtenir la liste de courses de l'utilisateur
         liste_de_courses = service_liste_courses.listerTous(utilisateur.idUtilisateur)
 
         print("\n" + "-" * 50 + "\nVotre liste de courses\n" + "-" * 50 + "\n")
@@ -46,24 +45,24 @@ class ListeDeCoursesVue(VueAbstraite):
                 return ListeDeCoursesVue("Ingrédient ajouté à la liste de courses.")
 
             case "Retirer un ingrédient de la liste":
-                self.retirer_ingredient(service_liste_courses, liste_de_courses, utilisateur.idUtilisateur)
+                self.retirer_ingredient(
+                    service_liste_courses, liste_de_courses, utilisateur.idUtilisateur
+                )
                 return ListeDeCoursesVue("Ingrédient retiré de la liste de courses.")
 
             case "Retourner au tableau de bord":
                 from view.menu_utilisateur_vue import MenuUtilisateurVue
+
                 return MenuUtilisateurVue()
 
     def ajouter_ingredient(self, service_liste_courses, idUtilisateur):
         ingredients = IngredientService().obtenirTousLesIngredients()
         ingredient_choisi = inquirer.select(
-            message="Choisissez un ingrédient à ajouter :",
-            choices=[ing.nom for ing in ingredients]
+            message="Choisissez un ingrédient à ajouter :", choices=[ing.nom for ing in ingredients]
         ).execute()
 
         quantite = inquirer.number(
-            message="Entrez la quantité :",
-            float_allowed=True,
-            min_allowed=1
+            message="Entrez la quantité :", float_allowed=True, min_allowed=1
         ).execute()
         # Il va falloir faire quelque chose avec les unités
 
@@ -73,7 +72,7 @@ class ListeDeCoursesVue(VueAbstraite):
     def retirer_ingredient(self, service_liste_courses, liste_de_courses, idUtilisateur):
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à retirer :",
-            choices=[ing.nom for ing in liste_de_courses]
+            choices=[ing.nom for ing in liste_de_courses],
         ).execute()
 
         ingredient = next(ing for ing in liste_de_courses if ing.nom == ingredient_choisi)

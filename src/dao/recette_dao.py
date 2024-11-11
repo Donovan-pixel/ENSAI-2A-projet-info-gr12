@@ -198,8 +198,8 @@ class RecetteDao(metaclass=Singleton):
                     cursor.execute(
                         """
                         SELECT * FROM recettes
-                        JOIN recettes_ingredients ri ON r.id_meal = ri.id_meal
-                        WHERE ri.id_ingredient = %(id_ingredient)s ;
+                        JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
+                        WHERE mi.id_ingredient = %(id_ingredient)s ;
                         """,
                         {"id_ingredient": ingredient.id_ingredient},
                     )
