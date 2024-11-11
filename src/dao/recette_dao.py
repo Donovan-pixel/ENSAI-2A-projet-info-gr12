@@ -8,6 +8,7 @@ from dao.db_connection import DBConnection
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
 from dao.ingredient_dao import IngredientDao
+from service.ingredient_service import IngredientService
 
 
 class RecetteDao(metaclass=Singleton):
@@ -49,20 +50,39 @@ class RecetteDao(metaclass=Singleton):
         if created:
             for ingredient, quantite in recette.ingredientQuantite.items():
                 id_ingredient = IngredientDao().obtenirIdParNom(ingredient)
+                if id_ingredient is None:
+                    IngredientService().ajouterNouvelIngredient(ingredient)
+                    id_ingredient = IngredientDao().obtenirIdParNom(ingredient)
+
                 try:
                     with DBConnection().connection as connection:
                         with connection.cursor() as cursor:
+                            # Vérifier si la relation existe déjà
                             cursor.execute(
-                                """
-                                INSERT INTO meals_ingredients(id_meal, id_ingredient, quantite)
-                                VALUES (%(id_meal)s, %(id_ingredient)s, %(quantite)s);
-                                """,
-                                {
-                                    "id_meal": recette.idRecette,
-                                    "id_ingredient": id_ingredient,
-                                    "quantite": quantite,
-                                },
+                                "SELECT 1 FROM meals_ingredients "
+                                "WHERE id_meal = %(id_meal)s"
+                                " AND id_ingredient = %(id_ingredient)s; ",
+                                {"id_meal": recette.idRecette, "id_ingredient": id_ingredient},
                             )
+                            # Si la relation n'existe pas, insérer la ligne
+                            if cursor.fetchone() is None:
+                                cursor.execute(
+                                    "INSERT INTO "
+                                    "meals_ingredients(id_meal, id_ingredient, quantite)  "
+                                    "VALUES (%(id_meal)s, %(id_ingredient)s, %(quantite)s); ",
+                                    {
+                                        "id_meal": recette.idRecette,
+                                        "id_ingredient": id_ingredient,
+                                        "quantite": quantite,
+                                    },
+                                )
+                                logging.info(
+                                    f"Ingrédient {ingredient} ajouté à la recette {recette.titre}."
+                                )
+                            else:
+                                logging.info(
+                                    f"La relation pour l'ingrédient {ingredient} existe déjà."
+                                )
                 except Exception as e:
                     logging.exception(e)
                     raise

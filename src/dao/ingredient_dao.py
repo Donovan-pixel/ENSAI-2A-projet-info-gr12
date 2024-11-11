@@ -33,6 +33,17 @@ class IngredientDao(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
+                    # Vérifier si l'ingrédient existe déjà
+                    cursor.execute(
+                        "SELECT id_ingredient FROM ingredients " "WHERE nom = %(nom)s; ",
+                        {"nom": ingredient.nom},
+                    )
+                    existing_ingredient = cursor.fetchone()
+
+                    if existing_ingredient:
+                        logging.info(f"L'ingrédient '{ingredient.nom}' existe déjà dans la base.")
+                        return False
+                    # Si l'ingrédient n'existe pas, on l'ajoute
                     cursor.execute(
                         "INSERT INTO ingredients(nom) VALUES    "
                         "(%(nom)s)                             "
