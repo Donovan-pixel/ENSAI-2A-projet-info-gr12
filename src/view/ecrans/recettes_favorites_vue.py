@@ -24,16 +24,14 @@ class RecettesFavoritesVue(VueAbstraite):
 
         recettes_favorites = service_recettes_favorites.obtenirRecettesFavorites(utilisateur)
 
-        if not recettes_favorites:
-            print("Vous n'avez aucune recette favorite.")
-
         print("\n" + "═" * 70)
         print(" Vos recettes favorites ".center(70))
         print("═" * 70 + "\n")
 
-        choix_recettes = [
-            Choice(recette.titre, extra_data=recette) for recette in recettes_favorites
-        ] + [
+        if not recettes_favorites:
+            print("Vous n'avez aucune recette favorite.\n")
+
+        choix_recettes = [Choice(recette.titre) for recette in recettes_favorites] + [
             Choice("Ajouter une recette aux favoris"),
             Choice("Supprimer une recette des favoris"),
             Choice("Retourner au menu principal"),
@@ -46,7 +44,9 @@ class RecettesFavoritesVue(VueAbstraite):
         ).execute()
 
         if choix == "Retourner au menu principal":
-            return self.retourner_menu_principal()
+            from view.menu_utilisateur_vue import MenuUtilisateurVue
+
+            return MenuUtilisateurVue()
 
         if choix == "Ajouter une recette aux favoris":
             self.ajouter_recette_favorite(service_recettes_favorites, utilisateur)
@@ -63,20 +63,11 @@ class RecettesFavoritesVue(VueAbstraite):
         recette_choisie = next((rec for rec in recettes_favorites if rec.titre == choix), None)
 
         if recette_choisie:
-            self.afficher_details_recette(recette_choisie)
+            from view.ecrans.details_recette_vue import DetailsRecetteVue
 
-        # Revenir à la vue des recettes favorites après avoir affiché les détails
+            return DetailsRecetteVue(recette_choisie).choisir_menu()
+
         return RecettesFavoritesVue()
-
-    def afficher_details_recette(self, recette):
-        """Afficher les détails complets d'une recette."""
-        print(f"\n{'-' * 50}\nDétails de la recette : {recette.titre}\n{'-' * 50}")
-        print(f"Catégorie : {recette.categorie}")
-        print(f"Origine : {recette.origine}")
-        print(f"Ingrédients : {', '.join([ingredient.nom for ingredient in recette.ingredients])}")
-        print(f"Instructions : {recette.instructions}\n")
-
-        inquirer.confirm(message="Appuyez sur Entrée pour revenir au menu", default=True).execute()
 
     def ajouter_recette_favorite(self, service_recettes_favorites, utilisateur):
         """Ajouter une recette aux favoris."""
@@ -100,9 +91,3 @@ class RecettesFavoritesVue(VueAbstraite):
 
         recette = next(rec for rec in recettes_favorites if rec.titre == recette_choisie)
         service_recettes_favorites.supprimer_recette_favorite(recette, utilisateur)
-
-    def retourner_menu_principal(self):
-        """Retourner au menu principal."""
-        from view.menu_utilisateur_vue import MenuUtilisateurVue
-
-        return MenuUtilisateurVue()

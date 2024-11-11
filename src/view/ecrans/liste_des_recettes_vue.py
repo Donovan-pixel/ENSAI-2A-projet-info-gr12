@@ -45,7 +45,7 @@ class ListeDesRecettesVue(VueAbstraite):
         elif filtre_choix == "Par lettre":
             from view.ecrans.filtrage_lettre_vue import FiltrageParLettreVue
 
-            return FiltrageParLettreVue
+            return FiltrageParLettreVue()
 
         elif filtre_choix == "Afficher toutes les recettes":
             recettes = service_recette.obtenirToutesLesRecettes()

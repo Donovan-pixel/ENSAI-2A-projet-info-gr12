@@ -116,12 +116,14 @@ class IngredientNonDesireDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT (id_ingredient, nom) FROM ingredient"
-                        "JOIN ingredients_non_desires"
-                        "ON ingredients_non_desires.id_ingredient = ingredient.id_ingredient"
-                        "WHERE id_user = %(id_user)s;",
+                        """
+                        SELECT i.id_ingredient, i.nom FROM ingredients i
+                        JOIN ingredients_non_desires ind
+                        ON ind.id_ingredient = i.id_ingredient
+                        WHERE ind.id_user = %(id_user)s;
+                        """,
                         {
-                            "id_user": utilisateur.id_user,
+                            "id_user": utilisateur.idUtilisateur,
                         },
                     )
                     res = cursor.fetchall()

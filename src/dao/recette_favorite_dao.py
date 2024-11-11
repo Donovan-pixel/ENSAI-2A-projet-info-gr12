@@ -99,19 +99,21 @@ class RecettesFavoritesDao(metaclass=Singleton):
 
         Returns
         -------
-        liste_recette_favorites : list[Recettes]
+        liste_recettes_favorites : list[Recette]
             renvoie la liste de toutes les recettes favorites de l'utilisateur
         """
-
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
                         """
-                        SELECT recettes.id_meal, recettes.title
-                        FROM recettes_favorites
-                        JOIN recettes ON recettes.id_meal = recettes_favorites.id_meal
-                        WHERE id_user = %(id_user)s;
+                        SELECT r.id_meal, r.title, r.category, r.area, r.instructions,
+                        mi.id_ingredient, i.nom, mi.quantite
+                        FROM recettes_favorites rf
+                        JOIN recettes r ON r.id_meal = rf.id_meal
+                        LEFT JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
+                        LEFT JOIN ingredients i ON mi.id_ingredient = i.id_ingredient
+                        WHERE rf.id_user = %(id_user)s;
                         """,
                         {
                             "id_user": utilisateur.idUtilisateur,
@@ -122,14 +124,35 @@ class RecettesFavoritesDao(metaclass=Singleton):
             logging.exception(e)
             raise
 
-        liste_recettes_favorites = []
-
+        recettes_favorites_dict = {}
         if res:
             for row in res:
-                recette_favorite = Recette(
-                    idRecette=row["id_meal"], titre=row["title"], ingredientQuantite={}
-                )
+                id_meal = row["id_meal"]
+                if id_meal not in recettes_favorites_dict:
+                    recettes_favorites_dict[id_meal] = {
+                        "idRecette": id_meal,
+                        "titre": row["title"],
+                        "categorie": row["category"],
+                        "origine": row["area"],
+                        "consignes": row["instructions"],
+                        "ingredientQuantite": {},
+                    }
 
-                liste_recettes_favorites.append(recette_favorite)
+                ingredient = row["nom"]
+                quantite = row["quantite"]
+                if ingredient:
+                    recettes_favorites_dict[id_meal]["ingredientQuantite"][ingredient] = quantite
+
+        liste_recettes_favorites = []
+        for recette_data in recettes_favorites_dict.values():
+            recette_favorite = Recette(
+                idRecette=recette_data["idRecette"],
+                titre=recette_data["titre"],
+                categorie=recette_data["categorie"],
+                origine=recette_data["origine"],
+                consignes=recette_data["consignes"],
+                ingredientQuantite=recette_data["ingredientQuantite"],
+            )
+            liste_recettes_favorites.append(recette_favorite)
 
         return liste_recettes_favorites

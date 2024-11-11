@@ -25,14 +25,18 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
         ingredients_favoris = favoris_service.obtenirIngredientsFavoris(utilisateur)
         ingredients_non_desires = non_desires_service.obtenirIngredientsNonDesires(utilisateur)
 
-        print("\n" + "-" * 50 + "\nIngrédients favoris\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 70)
+        print("\nIngrédients favoris\n".center(70))
+        print("-" * 70 + "\n")
         if ingredients_favoris:
             for ingredient in ingredients_favoris:
                 print(f"- {ingredient.nom}")
         else:
             print("Vous n'avez pas d'ingrédients favoris.")
 
-        print("\n" + "-" * 50 + "\nIngrédients non désirés\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 70)
+        print("\nIngrédients non désirés\n".center(70))
+        print("-" * 70 + "\n")
         if ingredients_non_desires:
             for ingredient in ingredients_non_desires:
                 print(f"- {ingredient.nom}")

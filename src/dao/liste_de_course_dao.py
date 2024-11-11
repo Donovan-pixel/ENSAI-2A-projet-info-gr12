@@ -100,7 +100,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
                     cursor.execute(
                         """
                         SELECT ing.nom, ingc.quantite
-                        FROM ingredient_courses ingc
+                        FROM ingredients_courses ingc
                         JOIN liste_de_courses lc
                         ON ingc.id_liste_de_courses = lc.id_liste_de_courses
                         JOIN users u ON lc.id_user = u.id_user

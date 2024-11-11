@@ -15,6 +15,7 @@ class InscriptionVue(VueAbstraite):
 
         if UtilisateurService().pseudoDejaUtilise(pseudo):
             from view.accueil.accueil_vue import AccueilVue
+
             return InscriptionVue(f"Le pseudo {pseudo} est déjà utilisé.")
 
         mdp = inquirer.secret(
@@ -34,12 +35,8 @@ class InscriptionVue(VueAbstraite):
 
         # Si l'utilisateur a été créé
         if user:
-            message = (
-                f"Votre compte {user.pseudo} a été créé. Vous pouvez maintenant vous connecter."
-            )
+            message = f"Votre compte {pseudo} a été créé. Vous pouvez maintenant vous connecter."
         else:
             message = "Erreur de connexion (pseudo ou mot de passe invalide)"
-
-        from view.accueil.accueil_vue import AccueilVue
 
         return AccueilVue(message)

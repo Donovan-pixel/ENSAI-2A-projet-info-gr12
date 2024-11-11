@@ -85,9 +85,9 @@ class FiltrageParIngredientsVue(VueAbstraite):
                 case "Voir les détails de la recette":
                     from view.ecrans.details_recette_vue import DetailsRecetteVue
 
-                    return DetailsRecetteVue(recette)
+                    return DetailsRecetteVue(recette).choisir_menu()
                 case "Ajouter cette recette aux favoris":
-                    from service.recette_favorites_service import RecetteFavoritesService
+                    from service.recette_favorite_service import RecetteFavoritesService
 
                     utilisateur = Session().utilisateur
                     RecetteFavoritesService().ajouter_recette_favorite(recette, utilisateur)

@@ -3,9 +3,9 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 from service.recette_service import RecetteService
-from service.ingredient_favoris_service import IngredientFavorisService
+from service.ingredient_favori_service import IngredientFavoriService
 from service.ingredient_non_desire_service import IngredientNonDesireService
-from service.liste_courses_service import ListeCoursesService
+from service.liste_de_courses_service import ListeDeCoursesService
 from service.avis_service import AvisService
 
 
@@ -18,17 +18,24 @@ class DetailsRecetteVue(VueAbstraite):
     def choisir_menu(self):
         utilisateur = Session().utilisateur
 
-        # Affichage des détails de la recette
-        print(f"\nTitre : {self.recette.titre}")
-        print(f"Catégorie : {self.recette.categorie}")
-        print(f"Origine : {self.recette.origine}")
-        print("Ingrédients :")
+        print("\n" + "=" * 70)
+        print(f"  🍝 Titre : {self.recette.titre}")
+        print(f"  📂 Catégorie : {self.recette.categorie}")
+        print(f"  🌍 Origine : {self.recette.origine}")
+        print("\n  📋 Ingrédients :")
         for ingredient, quantite in self.recette.ingredientQuantite.items():
-            print(f" - {ingredient} : {quantite}")
-        print(f"Consignes : {self.recette.consignes}")
-        print(f"Avis : {self.recette.avis}\n")
+            print(f"    - {ingredient} : {quantite}")
 
-        # Options disponibles avec un curseur
+        print("\n  📝 Consignes :")
+        for step in self.recette.consignes.split("STEP"):
+            if step.strip():
+                print(f"    - STEP {step.strip()}")
+
+        print("\nAvis :")
+        avis_text = getattr(self.recette, "avis", "Aucun avis disponible")
+        print(f"  {avis_text}\n")
+        print("=" * 70)
+
         choix = inquirer.select(
             message="Que voulez-vous faire ?",
             choices=[
@@ -56,9 +63,9 @@ class DetailsRecetteVue(VueAbstraite):
                 return self.choisir_menu()
 
             case "Retourner à la liste des recettes":
-                from view.liste_recettes_vue import ListeRecettesVue
+                from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
 
-                return ListeRecettesVue()
+                return ListeDesRecettesVue()
 
     def gerer_ingredients(self):
         """Permet de gérer les ingrédients d'une recette"""
@@ -69,16 +76,14 @@ class DetailsRecetteVue(VueAbstraite):
             choices=ingredients,
         ).execute()
 
-        # Ajouter les ingrédients sélectionnés à la liste de courses
-        liste_courses_service = ListeCoursesService()
+        liste_courses_service = ListeDeCoursesService()
         for ingredient in choix_ingredients:
             liste_courses_service.ajouterIngredientAListe(ingredient)
         print(
-            f"Les ingrédients {', '.join(choix_ingredients)}"
-            f"ont été ajoutés à votre liste de courses."
+            f"Les ingrédients {', '.join(choix_ingredients)} ont"
+            f"été ajoutés à votre liste de courses."
         )
 
-        # Gestion des favoris et non désirés pour les ingrédients
         for ingredient in ingredients:
             choix_ingredient = inquirer.select(
                 message=f"Que voulez-vous faire avec l'ingrédient {ingredient} ?",
@@ -91,7 +96,7 @@ class DetailsRecetteVue(VueAbstraite):
 
             match choix_ingredient:
                 case "Ajouter aux favoris":
-                    IngredientFavorisService().ajouterIngredientFavori(
+                    IngredientFavoriService().ajouterIngredientFavori(
                         ingredient, Session().utilisateur
                     )
                     print(f"L'ingrédient {ingredient} a été ajouté aux favoris.")
@@ -109,5 +114,7 @@ class DetailsRecetteVue(VueAbstraite):
         note = inquirer.number(message="Entrez une note (sur 5) :").execute()
 
         avis_service = AvisService()
-        avis_service.ajouterAvis(self.recette, Session().utilisateur, avis, note)
+        avis_service.ajouterNouvelAvis(
+            Session().utilisateur.idUtilisateur, self.recette.idRecette, note, avis
+        )
         print(f"Votre avis a été ajouté à la recette {self.recette.titre}.")
