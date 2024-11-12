@@ -16,7 +16,7 @@ class SuggestionService:
     def obtenirSuggestionRecette(self, utilisateur: Utilisateur) -> list[Recette]:
         """
         Suggerer à l'utilisateur des recettes n'étant pas dans ses recettes favorites,
-        sans ingredient non désiré et avec au moins un ingredient favori
+        sans ingredient non désiré et avec au moins un ingredient favori.
 
         Parameters
         ----------
@@ -24,51 +24,36 @@ class SuggestionService:
 
         Returns
         -------
-        recette : Recettes
-            renvoie une recettes à l'utilisateur
+        recettes_suggerees : list[Recette]
+            La liste des recettes suggérées pour l'utilisateur.
         """
-        # On récupère toutes les recettes de la bdd
         recettes = RecetteDao().obtenirToutesLesRecettes()
 
-        # On récupère les recettes favorites de l'Utilisateur
         recettes_favorites = RecettesFavoritesDao().obtenirRecettesFavorites(utilisateur)
 
-        # On récupère les ingredients favoris de l'Utilisateur
         ingredients_favoris = IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
-
-        # On récupère les ingrédients non désirés de l'Utilisateur
         ingredients_non_desires = IngredientNonDesireDao().obtenirIngredientsNonDesires(utilisateur)
 
-        # On retire les recettes favorites de la liste des recettes
+        if not (ingredients_favoris and ingredients_non_desires):
+            print("Aucun ingrédient favori et non désirés trouvés pour suggérer des recettes.")
+            return []
+
         recettes_filtrees = [recette for recette in recettes if recette not in recettes_favorites]
 
-        # On retire les recettes contenant un ingredient non désiré
         recettes_filtrees_bis = []
-        for ingredient_non_desire in ingredients_non_desires:
-            nom_ingredient = ingredient_non_desire.nom
-            for recette in recettes_filtrees:
-                if (
-                    nom_ingredient not in set(recette.ingredientQuantite.keys())
-                    and recette not in recettes_filtrees_bis
-                ):
-                    recettes_filtrees_bis.append(recette)
+        for recette in recettes_filtrees:
+            if not any(
+                ingredient_non_desire.nom in recette.ingredientQuantite
+                for ingredient_non_desire in ingredients_non_desires
+            ):
+                recettes_filtrees_bis.append(recette)
 
-        # On récupère les ingredients favoris de l'Utilisateur
-        ingredients_favoris = IngredientFavoriDao().obtenirIngredientsFavoris(utilisateur)
-        print(ingredients_favoris[0].nom)
-        print(set(recettes_filtrees[0].ingredientQuantite.keys()))
-
-        # On retire les recettes ne contenant aucun ingredient favori
         recettes_suggerees = []
-        for ingredient_favori in ingredients_favoris:
-            nom_ingredient = ingredient_favori.nom
-            for recette in recettes_filtrees_bis:
-                if (
-                    nom_ingredient in set(recette.ingredientQuantite.keys())
-                    and recette not in recettes_suggerees
-                ):
-                    recettes_suggerees.append(recette)
-
-        print(recettes_suggerees)
+        for recette in recettes_filtrees_bis:
+            if any(
+                ingredient_favori.nom in recette.ingredientQuantite
+                for ingredient_favori in ingredients_favoris
+            ):
+                recettes_suggerees.append(recette)
 
         return recettes_suggerees

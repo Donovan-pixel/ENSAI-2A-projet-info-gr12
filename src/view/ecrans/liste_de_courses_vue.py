@@ -22,7 +22,9 @@ class ListeDeCoursesVue(VueAbstraite):
 
         liste_de_courses = service_liste_courses.listerTous(utilisateur.idUtilisateur)
 
-        print("\n" + "-" * 50 + "\nVotre liste de courses\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 70)
+        print(" Vos listes de courses ".center(70))
+        print("-" * 70 + "\n")
 
         if liste_de_courses:
             for ingredient, quantite in liste_de_courses.ingredientQuantite.items():
