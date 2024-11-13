@@ -1,5 +1,6 @@
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
+from InquirerPy.separator import Separator
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
@@ -31,15 +32,21 @@ class RecettesFavoritesVue(VueAbstraite):
         if not recettes_favorites:
             print("Vous n'avez aucune recette favorite.\n")
 
-        choix_recettes = [Choice(recette.titre) for recette in recettes_favorites] + [
+        choix_recettes = [Separator("-------------------------------")] + [
+            Choice(recette.titre) for recette in recettes_favorites
+        ]
+
+        choix_options = [
+            Separator("-------------------------------"),
             Choice("Ajouter une recette aux favoris"),
             Choice("Supprimer une recette des favoris"),
+            Separator("-------------------------------"),
             Choice("Retourner au menu principal"),
         ]
 
         choix = inquirer.select(
             message="Sélectionnez une recette pour afficher les détails ou une action :",
-            choices=choix_recettes,
+            choices=choix_recettes + choix_options,
             vi_mode=True,
         ).execute()
 
@@ -52,20 +59,19 @@ class RecettesFavoritesVue(VueAbstraite):
             self.ajouter_recette_favorite(service_recettes_favorites, utilisateur)
             return RecettesFavoritesVue("Recette ajoutée aux favoris.")
 
-        # Si l'utilisateur choisit "Supprimer une recette des favoris"
         if choix == "Supprimer une recette des favoris":
             self.supprimer_recette_favorite(
                 service_recettes_favorites, recettes_favorites, utilisateur
             )
             return RecettesFavoritesVue("Recette retirée des favoris.")
 
-        # Trouver la recette sélectionnée et afficher ses détails
         recette_choisie = next((rec for rec in recettes_favorites if rec.titre == choix), None)
 
         if recette_choisie:
             from view.ecrans.details_recette_vue import DetailsRecetteVue
 
-            return DetailsRecetteVue(recette_choisie).choisir_menu()
+            DetailsRecetteVue(recette_choisie).choisir_menu()
+            return RecettesFavoritesVue()
 
         return RecettesFavoritesVue()
 

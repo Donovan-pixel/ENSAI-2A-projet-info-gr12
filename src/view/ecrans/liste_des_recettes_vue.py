@@ -1,4 +1,5 @@
 from InquirerPy import inquirer
+from InquirerPy.separator import Separator
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
@@ -24,10 +25,13 @@ class ListeDesRecettesVue(VueAbstraite):
         filtre_choix = inquirer.select(
             message="Comment souhaitez-vous filtrer les recettes ?",
             choices=[
+                Separator("-----------------------"),
                 "Par ingrédient",
                 "Par catégorie",
                 "Par lettre",
+                Separator("-----------------------"),
                 "Afficher toutes les recettes",
+                Separator("-----------------------"),
                 "Retourner au tableau de bord",
             ],
         ).execute()

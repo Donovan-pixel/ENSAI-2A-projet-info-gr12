@@ -4,6 +4,7 @@ from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
 # from service.recette_service import RecetteService
+from service.recette_favorite_service import RecetteFavoritesService
 from service.ingredient_favori_service import IngredientFavoriService
 from service.ingredient_non_desire_service import IngredientNonDesireService
 from service.liste_de_courses_service import ListeDeCoursesService
@@ -44,22 +45,35 @@ class DetailsRecetteVue(VueAbstraite):
 
         print("=" * 70)
 
+        choices = [
+            "Gérer les ingrédients",
+            "Ajouter un avis",
+            "Retourner à la liste des recettes",
+        ]
+
+        favorites = RecetteFavoritesService().obtenirRecettesFavorites(utilisateur)
+
+        if self.recette not in favorites:
+            choices.insert(0, "Ajouter cette recette aux favorites")
+        else:
+            choices.insert(0, "Retirer cette recette des favorites")
+
         choix = inquirer.select(
             message="Que voulez-vous faire ?",
-            choices=[
-                "Ajouter cette recette aux favoris",
-                "Gérer les ingrédients",
-                "Ajouter un avis",
-                "Retourner à la liste des recettes",
-            ],
+            choices=choices,
         ).execute()
 
         match choix:
-            case "Ajouter cette recette aux favoris":
+            case "Ajouter cette recette aux favorites":
                 from service.recette_favorite_service import RecetteFavoritesService
 
                 RecetteFavoritesService().ajouter_recette_favorite(self.recette, utilisateur)
-                print(f"La recette {self.recette.titre} a été ajoutée à vos favoris.")
+                print(f"La recette {self.recette.titre} a été ajoutée à vos favorites.")
+                return self.choisir_menu()
+
+            case "Retirer cette recette des favorites":
+                RecetteFavoritesService().supprimer_recette_favorite(self.recette, utilisateur)
+                print(f"La recette {self.recette.titre} a été supprimée des favorites.")
                 return self.choisir_menu()
 
             case "Gérer les ingrédients":
