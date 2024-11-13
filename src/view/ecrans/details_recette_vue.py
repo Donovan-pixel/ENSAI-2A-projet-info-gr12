@@ -2,7 +2,8 @@ from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
-from service.recette_service import RecetteService
+
+# from service.recette_service import RecetteService
 from service.ingredient_favori_service import IngredientFavoriService
 from service.ingredient_non_desire_service import IngredientNonDesireService
 from service.liste_de_courses_service import ListeDeCoursesService
@@ -32,8 +33,15 @@ class DetailsRecetteVue(VueAbstraite):
                 print(f"    - STEP {step.strip()}")
 
         print("\nAvis :")
-        avis_text = getattr(self.recette, "avis", "Aucun avis disponible")
-        print(f"  {avis_text}\n")
+        avis_list = AvisService().obtenirAvisParRecette(self.recette)
+        if avis_list:
+            for avis in avis_list:
+                print(f"  - Note: {avis.note}/5")
+                print(f"    Commentaire: {avis.commentaire}")
+                print(" - " * 50)
+        else:
+            print("  Aucun avis disponible pour cette recette.")
+
         print("=" * 70)
 
         choix = inquirer.select(
@@ -48,7 +56,7 @@ class DetailsRecetteVue(VueAbstraite):
 
         match choix:
             case "Ajouter cette recette aux favoris":
-                from service.recette_favorites_service import RecetteFavoritesService
+                from service.recette_favorite_service import RecetteFavoritesService
 
                 RecetteFavoritesService().ajouter_recette_favorite(self.recette, utilisateur)
                 print(f"La recette {self.recette.titre} a été ajoutée à vos favoris.")
@@ -69,21 +77,30 @@ class DetailsRecetteVue(VueAbstraite):
 
     def gerer_ingredients(self):
         """Permet de gérer les ingrédients d'une recette"""
-        ingredients = list(self.recette.ingredientQuantite.keys())
+        utilisateur = Session().utilisateur
+        ingredients_quantites = self.recette.ingredientQuantite
 
         choix_ingredients = inquirer.checkbox(
             message="Sélectionnez les ingrédients à ajouter à la liste de courses :",
-            choices=ingredients,
+            choices=list(ingredients_quantites.keys()),
         ).execute()
 
+        ingredients_a_ajouter = {
+            ingredient: ingredients_quantites[ingredient] for ingredient in choix_ingredients
+        }
+
         liste_courses_service = ListeDeCoursesService()
-        for ingredient in choix_ingredients:
-            liste_courses_service.ajouterIngredientAListe(ingredient)
-        print(
-            f"Les ingrédients {', '.join(choix_ingredients)} ont"
-            f"été ajoutés à votre liste de courses."
+        success = liste_courses_service.ajouterUnIngredient(
+            utilisateur.idUtilisateur, ingredients_a_ajouter
         )
 
+        if success:
+            print(
+                f"Les ingrédients {', '.join(choix_ingredients)} ont "
+                f"été ajoutés à votre liste de courses."
+            )
+
+        ingredients = list(self.recette.ingredientQuantite.keys())
         for ingredient in ingredients:
             choix_ingredient = inquirer.select(
                 message=f"Que voulez-vous faire avec l'ingrédient {ingredient} ?",
@@ -113,8 +130,7 @@ class DetailsRecetteVue(VueAbstraite):
         avis = inquirer.text(message="Entrez votre avis :").execute()
         note = inquirer.number(message="Entrez une note (sur 5) :").execute()
 
-        avis_service = AvisService()
-        avis_service.ajouterNouvelAvis(
+        AvisService().ajouterNouvelAvis(
             Session().utilisateur.idUtilisateur, self.recette.idRecette, note, avis
         )
         print(f"Votre avis a été ajouté à la recette {self.recette.titre}.")

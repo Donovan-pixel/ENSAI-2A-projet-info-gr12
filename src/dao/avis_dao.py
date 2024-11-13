@@ -51,53 +51,55 @@ class AvisDao(metaclass=Singleton):
 
         return bool(res)
 
-        @log
-        def obtenirAvisParRecette(self, recette: Recette) -> list[Avis]:
-            """Obtention des avis par recette
+    @log
+    def obtenirAvisParRecette(self, recette: Recette) -> list[Avis]:
+        """Obtention des avis par recette
 
-            Parameters
-            ----------
-            recette : Recette
-                La recette à partir de laquelle faire la recherche
+        Parameters
+        ----------
+        recette : Recette
+            La recette à partir de laquelle faire la recherche
 
-            Returns
-            -------
-            list[Avis]
-                Liste contenant les avis correspondant à la recette indiquée
-            """
+        Returns
+        -------
+        list[Avis]
+            Liste contenant les avis correspondant à la recette indiquée
+        """
 
-            res = None
+        res = None
 
-            try:
-                with DBConnection().connection as connection:
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            "SELECT * FROM avis"
-                            "JOIN recettes ON recettes.id_meal = avis.id_meal"
-                            "WHERE id_meals = %(id_recette)s;",
-                            {
-                                "id_recette": recette.id_meal,
-                            },
-                        )
-                        res = cursor.fetchall()
-            except Exception as e:
-                logging.exception(e)
-                return []
-
-            liste = []
-
-            if res:
-                for row in res:
-                    avis = Avis(
-                        id_avis=res["id_avis"],
-                        id_user=res["id_user"],
-                        id_meal=res["id_meal"],
-                        note=res["note"],
-                        commentaire=res["commentaire"],
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT * FROM avis
+                        JOIN recettes ON recettes.id_meal = avis.id_meal
+                        WHERE recettes.id_meal = %(id_recette)s;
+                        """,
+                        {
+                            "id_recette": recette.idRecette,
+                        },
                     )
-                    liste.append(avis)
+                    res = cursor.fetchall()
+        except Exception as e:
+            logging.exception(e)
+            return []
 
-            return liste
+        liste = []
+
+        if res:
+            for row in res:
+                avis = Avis(
+                    idAvis=row["id_avis"],
+                    idUtilisateur=row["id_user"],
+                    idRecette=row["id_meal"],
+                    note=row["note"],
+                    commentaire=row["commentaire"],
+                )
+                liste.append(avis)
+
+        return liste
 
     @log
     def supprimer_avis(self, avis: Avis) -> bool:

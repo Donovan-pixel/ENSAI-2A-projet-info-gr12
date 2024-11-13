@@ -1,5 +1,6 @@
 from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
+
 # from view.session import Session
 from service.recette_service import RecetteService
 
@@ -27,9 +28,9 @@ class FiltrageParCategorieVue(VueAbstraite):
             ).execute()
 
             if recettes_choisies == "Retour au menu principal":
-                from view.menu_principal_vue import MenuPrincipalVue
+                from view.menu_utilisateur_vue import MenuUtilisateurVue
 
-                return MenuPrincipalVue()
+                return MenuUtilisateurVue()
             else:
                 recette_selectionnee = next(
                     recette for recette in recettes if recette.titre == recettes_choisies
