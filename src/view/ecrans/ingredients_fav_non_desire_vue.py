@@ -1,5 +1,4 @@
 from InquirerPy import inquirer
-from InquirerPy.separator import Separator
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
@@ -32,7 +31,7 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
         print("-" * 70 + "\n")
         if ingredients_favoris:
             for ingredient in ingredients_favoris:
-                print(f"- {ingredient.nom}")
+                print(f"- {ingredient.nom}\n")
         else:
             print("Vous n'avez pas d'ingrédients favoris.".center(70))
 
@@ -41,7 +40,7 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
         print("-" * 70 + "\n")
         if ingredients_non_desires:
             for ingredient in ingredients_non_desires:
-                print(f"- {ingredient.nom}")
+                print(f"- {ingredient.nom}\n")
         else:
             print("Vous n'avez pas d'ingrédients non désirés.\n".center(70))
 
@@ -87,7 +86,7 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
             choices=[ing.nom for ing in ingredients],
         ).execute()
 
-        favoris_service.ajouterIngredientFavori(ingredient_choisi.nom, utilisateur)
+        favoris_service.ajouterIngredientFavori(ingredient_choisi, utilisateur)
 
     def retirer_ingredient_favori(self, favoris_service, ingredients_favoris, utilisateur):
         if ingredients_favoris:
@@ -104,7 +103,7 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
             choices=[ing.nom for ing in ingredients],
         ).execute()
 
-        non_desires_service.ajouterIngredientNonDesire(ingredient_choisi.nom, utilisateur)
+        non_desires_service.ajouterIngredientNonDesire(ingredient_choisi, utilisateur)
 
     def retirer_ingredient_non_desire(
         self, non_desires_service, ingredients_non_desires, utilisateur

@@ -95,8 +95,8 @@ class IngredientFavoriDao(metaclass=Singleton):
         if res:
             for row in res:
                 ingredient_favori = Ingredient(
-                    id_ingredient=res["id_ingredient"],
-                    nom=res["nom"],
+                    idIngredient=row["id_ingredient"],
+                    nom=row["nom"],
                 )
 
                 liste_ingredients_favoris.append(ingredient_favori)

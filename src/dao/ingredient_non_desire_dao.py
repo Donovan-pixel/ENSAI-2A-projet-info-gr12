@@ -54,48 +54,48 @@ class IngredientNonDesireDao(metaclass=Singleton):
 
         return bool(res)
 
-        @log
-        def supprimerIngredientNonDesire(
-            self, ingredient: Ingredient, utilisateur: Utilisateur
-        ) -> bool:
-            """Suppression d'un ingrédient non désiré dans la base de données
+    @log
+    def supprimerIngredientNonDesire(
+        self, ingredient: Ingredient, utilisateur: Utilisateur
+    ) -> bool:
+        """Suppression d'un ingrédient non désiré dans la base de données
 
-            Parameters
-            ----------
-            ingredient : Ingredient
-                L'ingrédient à supprimer
+        Parameters
+        ----------
+        ingredient : Ingredient
+            L'ingrédient à supprimer
 
             utilisateur : Utilisateur
                 L'utilisateur qui en a fait la demande
 
-            Returns
-            -------
-            bool:
-                True si la suppression est un succès
-                False sinon
-            """
+        Returns
+        -------
+        bool:
+            True si la suppression est un succès
+            False sinon
+        """
 
-            try:
-                with DBConnection().connection as connection:
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            """
-                            DELETE FROM ingredients_non_desires
-                            WHERE id_ingredient = %(id_ingredient)s AND id_user = %(id_user)s;
-                            """,
-                            {
-                                "id_ingredient": ingredient.idIngredient,
-                                "id_user": utilisateur.idUtilisateur,
-                            },
-                        )
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        DELETE FROM ingredients_non_desires
+                        WHERE id_ingredient = %(id_ingredient)s AND id_user = %(id_user)s;
+                        """,
+                        {
+                            "id_ingredient": ingredient.idIngredient,
+                            "id_user": utilisateur.idUtilisateur,
+                        },
+                    )
 
-                        res = cursor.rowcount
+                    res = cursor.rowcount
 
-            except Exception as e:
-                logging.exception(e)
-                return False
+        except Exception as e:
+            logging.exception(e)
+            return False
 
-            return res > 0
+        return res > 0
 
     @log
     def obtenirIngredientsNonDesires(self, utilisateur: Utilisateur) -> list[Ingredient]:
@@ -136,7 +136,7 @@ class IngredientNonDesireDao(metaclass=Singleton):
         if res:
             for row in res:
                 ingredient_non_desire = Ingredient(
-                    id_ingredient=row["id_ingredient"], nom=row["nom"]
+                    idIngredient=row["id_ingredient"], nom=row["nom"]
                 )
 
                 liste.append(ingredient_non_desire)
