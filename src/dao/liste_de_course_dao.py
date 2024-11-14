@@ -5,7 +5,8 @@ from utils.log_decorator import log
 
 from dao.db_connection import DBConnection
 from business_object.liste_de_course import ListeDeCourses
-from dao.ingredient_dao import IngredientDao
+
+# from dao.ingredient_dao import IngredientDao
 from business_object.ingredient import Ingredient
 
 
@@ -13,13 +14,13 @@ class ListeDeCourseDAO(metaclass=Singleton):
     """Classe contenant les méthodes pour interagir avec la liste de courses de la base"""
 
     @log
-    def creerListeDeCourses(self, ListeDeCourse) -> bool:
+    def creerListeDeCourses(self, idUtilisateur) -> bool:
         """Création d'une nouvelle liste de courses dans la base de données.
 
         Parameters
         ----------
-        listeDeCourse : ListeDeCourse
-             La liste de courses à créer
+        idUtilisateur : int
+             L'identifiant de l'utilisateur
         Returns
         -------
         created : bool
@@ -34,7 +35,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
                         "INSERT INTO liste_de_courses(id_user) "
                         "VALUES %(idUtilisateur)s, "
                         "RETURNING id_liste_de_courses;",
-                        {"idUtilisateur": ListeDeCourse.idUtilisateur},
+                        {"idUtilisateur": idUtilisateur},
                     )
                 res = cursor.fetchone()
         except Exception as e:
@@ -42,7 +43,6 @@ class ListeDeCourseDAO(metaclass=Singleton):
 
         created = False
         if res:
-            ListeDeCourse.idListeDecourses = res["id_liste_de_courses"]
             created = True
 
         return created
@@ -90,8 +90,8 @@ class ListeDeCourseDAO(metaclass=Singleton):
         Returns
         -------
         ListeDeCourses : list[ListeDeCourses]
-            Renvoie la liste de courses de l'utilisateur
-            dans la base de données.
+            Renvoie la liste de courses de l'utilisateur si elle existe
+            Renvoie None sinon.
         """
 
         try:
@@ -114,19 +114,18 @@ class ListeDeCourseDAO(metaclass=Singleton):
             logging.info(e)
             raise
 
-        liste_courses = []
+        liste_courses = None
 
         if res:
+            liste_course = ListeDeCourses(idUtilisateur)
             for row in res:
-                liste_course = ListeDeCourses(idUtilisateur)
                 ingredient = Ingredient(row["nom"])
                 liste_course.ajouterIngredient(ingredient, row["quantite"])
-                liste_courses.append(liste_course)
 
         return liste_courses
 
     @log
-    def ajouterUnIngredient(self, idUtilisateur, IngredientQuantite) -> bool:
+    def ajouterUnIngredient(self, idUtilisateur, idIngredient, quantite) -> bool:
         """Ajoute un ingrédient dans la liste de courses.
 
         Parameters
@@ -146,33 +145,30 @@ class ListeDeCourseDAO(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     id_liste_de_courses = ListeDeCourseDAO().obtenirIdListeDeCourses(idUtilisateur)
-                    res = []
-                    for ingredient, quantite in IngredientQuantite.items():
-                        id_ingredient = IngredientDao().obtenirIdParNom(ingredient)
-                        cursor.execute(
-                            "INSERT INTO  "
-                            "ingredient_courses(id_ingredient,id_liste_de_courses,quantite)"
-                            "VALUES (%(id_ingredient)s, %(id_liste_de_courses)s, %(quantite)s) "
-                            "ON CONFLICT (id_liste_de_courses,id_ingredient) "
-                            "DO UPDATE SET quantite=%(quantite)s "
-                            "RETURNING id_ingredient_courses; ",
-                            {
-                                "id_ingredient": id_ingredient,
-                                "id_liste_de_courses": id_liste_de_courses,
-                                "quantite": quantite,
-                            },
-                        )
-                        res = res.append(cursor.fetchone())
+                    cursor.execute(
+                        "INSERT INTO  "
+                        "ingredient_courses(id_ingredient,id_liste_de_courses,quantite)"
+                        "VALUES (%(id_ingredient)s, %(id_liste_de_courses)s, %(quantite)s) "
+                        "ON CONFLICT (id_liste_de_courses,id_ingredient) "
+                        "DO UPDATE SET quantite=%(quantite)s "
+                        "RETURNING id_ingredient_courses; ",
+                        {
+                            "id_ingredient": idIngredient,
+                            "id_liste_de_courses": id_liste_de_courses,
+                            "quantite": quantite,
+                        },
+                    )
+                    res = cursor.fetchone()
         except Exception as e:
             logging.info(e)
 
         created = False
-        if len(res) == len(IngredientQuantite):
+        if res:
             created = True
         return created
 
     @log
-    def retirerUnIngredient(self, idUtilisateur, Ingredient) -> bool:
+    def retirerUnIngredient(self, idUtilisateur, idIngredient) -> bool:
         """Retire un ingrédient de la liste de courses.
         Parameters
         ----------
@@ -196,7 +192,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
                         " WHERE id_ingredient=%(id_ingredient)s      "
                         "AND id_liste_de_courses=%(id_liste_de_courses)s ",
                         {
-                            "id_ingredient": Ingredient.idIngredient,
+                            "id_ingredient": idIngredient,
                             "id_liste_de_courses": id_liste_de_courses,
                         },
                     )

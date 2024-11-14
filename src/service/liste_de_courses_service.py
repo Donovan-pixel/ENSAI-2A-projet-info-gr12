@@ -25,7 +25,7 @@ class ListeDeCoursesService:
         return nouvelle_liste if ListeDeCourseDAO().creerListeDeCourses(nouvelle_liste) else None
 
     @log
-    def ajouterUnIngredient(self, id_utilisateur, ingredient_quantite) -> bool:
+    def ajouterUnIngredient(self, idUtilisateur, idIngredient, quantite) -> bool:
         """
         Ajoute des ingrédients à la liste de courses d'un utilisateur.
 
@@ -41,10 +41,10 @@ class ListeDeCoursesService:
         bool
             Retourne True si l'ajout est réussi, False sinon.
         """
-        return ListeDeCourseDAO().ajouterUnIngredient(id_utilisateur, ingredient_quantite)
+        return ListeDeCourseDAO().ajouterUnIngredient(idUtilisateur, idIngredient, quantite)
 
     @log
-    def retirerUnIngredient(self, id_utilisateur, ingredient) -> bool:
+    def retirerUnIngredient(self, idUtilisateur, idIngredient) -> bool:
         """
         Retire un ingrédient de la liste de courses d'un utilisateur.
 
@@ -60,7 +60,7 @@ class ListeDeCoursesService:
         bool
             Retourne True si le retrait est réussi, False sinon.
         """
-        return ListeDeCourseDAO().retirerUnIngredient(id_utilisateur, ingredient)
+        return ListeDeCourseDAO().retirerUnIngredient(idUtilisateur, idIngredient)
 
     @log
     def listerTous(self, id_utilisateur) -> str:
@@ -77,27 +77,9 @@ class ListeDeCoursesService:
         str
             Retourne une chaîne de caractères formatée pour afficher les listes de courses.
         """
-        listes = ListeDeCourseDAO().listerTous(id_utilisateur)
-        if not listes:
-            return "Aucune liste de courses disponible pour cet utilisateur."
+        liste_de_course = ListeDeCourseDAO().listerTous(id_utilisateur)
 
-        entetes = ["Ingrédient", "Quantité"]
-        listes_as_list = []
-
-        for liste in listes:
-            for ingredient, quantite in liste.ingredientQuantite.items():
-                listes_as_list.append([ingredient, quantite])
-
-        from tabulate import tabulate
-
-        str_listes = "-" * 50
-        str_listes += f"\nListes de courses de l'utilisateur {id_utilisateur}\n"
-        str_listes += "-" * 50
-        str_listes += "\n"
-        str_listes += tabulate(tabular_data=listes_as_list, headers=entetes, tablefmt="psql")
-        str_listes += "\n"
-
-        return str_listes
+        return liste_de_course
 
     @log
     def obtenirIdListeDeCourses(self, id_utilisateur) -> int:
