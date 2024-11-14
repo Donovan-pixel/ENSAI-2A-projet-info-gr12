@@ -37,7 +37,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
                         "RETURNING id_liste_de_courses;",
                         {"idUtilisateur": idUtilisateur},
                     )
-                res = cursor.fetchone()
+                    res = cursor.fetchone()
         except Exception as e:
             logging.info(e)
 
@@ -145,6 +145,11 @@ class ListeDeCourseDAO(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     id_liste_de_courses = ListeDeCourseDAO().obtenirIdListeDeCourses(idUtilisateur)
+                    # Si la liste de courses n'existe pas, on la crée
+                    if not id_liste_de_courses:
+                        self.creerListeDeCourses(idUtilisateur)
+                        id_liste_de_courses = self.obtenirIdListeDeCourses(idUtilisateur)
+                    # Ajout de l'ingrédient à la liste de courses
                     cursor.execute(
                         "INSERT INTO  "
                         "ingredient_courses(id_ingredient,id_liste_de_courses,quantite)"
