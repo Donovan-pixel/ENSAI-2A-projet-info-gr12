@@ -155,18 +155,38 @@ class ListeDeCourseDAO(metaclass=Singleton):
                             )
                     # Ajout de l'ingrédient à la liste de courses
                     cursor.execute(
-                        "INSERT INTO  "
-                        "ingredient_courses(id_ingredient,id_liste_de_courses,quantite)"
-                        "VALUES (%(id_ingredient)s, %(id_liste_de_courses)s, %(quantite)s) "
-                        "ON CONFLICT (id_liste_de_courses,id_ingredient) "
-                        "DO UPDATE SET quantite=%(quantite)s "
-                        "RETURNING id_ingredient_courses; ",
-                        {
-                            "id_ingredient": idIngredient,
-                            "id_liste_de_courses": id_liste_de_courses,
-                            "quantite": quantite,
-                        },
+                        "SELECT 1 "
+                        "FROM ingredients_courses "
+                        "WHERE id_ingredient = %(id_ingredient)s "
+                        "AND id_liste_de_courses = %(id_liste_de_courses)s ",
+                        {"id_ingredient": idIngredient, "id_liste_de_courses": id_liste_de_courses},
                     )
+                    exists = cursor.fetchone()
+                    if exists:
+                        cursor.execute(
+                            "UPDATE ingredients_courses "
+                            "SET quantite = %(quantite)s "
+                            "WHERE id_ingredient = %(id_ingredient)s"
+                            "AND id_liste_de_courses = %(id_liste_de_courses)s"
+                            "RETURNING id_ingredient_courses;",
+                            {
+                                "id_ingredient": idIngredient,
+                                "id_liste_de_courses": id_liste_de_courses,
+                                "quantite": quantite,
+                            },
+                        )
+                    else:
+                        cursor.execute(
+                            "INSERT INTO "
+                            "ingredients_courses (id_ingredient, id_liste_de_courses, quantite) "
+                            "VALUES (%(id_ingredient)s, %(id_liste_de_courses)s, %(quantite)s"
+                            "RETURNING id_ingredient_courses;",
+                            {
+                                "id_ingredient": idIngredient,
+                                "id_liste_de_courses": id_liste_de_courses,
+                                "quantite": quantite,
+                            },
+                        )
                     res = cursor.fetchone()
         except Exception as e:
             logging.error("Erreur lors de l'ajout d'un ingrédient : %s", e)
