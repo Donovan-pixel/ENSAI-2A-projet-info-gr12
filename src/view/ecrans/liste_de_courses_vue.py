@@ -30,7 +30,7 @@ class ListeDeCoursesVue(VueAbstraite):
             for ingredient, quantite in liste_de_courses.ingredientQuantite.items():
                 print(f"- {ingredient} (quantité: {quantite})")
         else:
-            print("Votre liste de courses est vide.")
+            print("Votre liste de courses est vide.\n".center(70))
 
         choix = inquirer.select(
             message="Que voulez-vous faire ?",
@@ -43,7 +43,9 @@ class ListeDeCoursesVue(VueAbstraite):
 
         match choix:
             case "Ajouter un ingrédient à la liste":
-                self.ajouter_ingredient(service_liste_courses, utilisateur.idUtilisateur)
+                self.ajouter_ingredient(
+                    service_liste_courses, liste_de_courses, utilisateur.idUtilisateur
+                )
                 return ListeDeCoursesVue("Ingrédient ajouté à la liste de courses.")
 
             case "Retirer un ingrédient de la liste":
@@ -57,24 +59,26 @@ class ListeDeCoursesVue(VueAbstraite):
 
                 return MenuUtilisateurVue()
 
-    def ajouter_ingredient(self, service_liste_courses, idUtilisateur):
+    def ajouter_ingredient(self, service_liste_courses, liste_de_courses, idUtilisateur):
         ingredients = IngredientService().obtenirTousLesIngredients()
+        ingredients_a_afficher = []
+        for ingredient in ingredients:
+            if ingredient.nom not in liste_de_courses.ingredientQuantite.keys():
+                ingredients_a_afficher.append(ingredient)
         ingredient_choisi = inquirer.select(
-            message="Choisissez un ingrédient à ajouter :", choices=[ing.nom for ing in ingredients]
+            message="Choisissez un ingrédient à ajouter :",
+            choices=[ing.nom for ing in ingredients_a_afficher],
         ).execute()
 
-        quantite = inquirer.number(
-            message="Entrez la quantité :", float_allowed=True, min_allowed=1
-        ).execute()
-        # Il va falloir faire quelque chose avec les unités
+        quantite = inquirer.text(message="Entrez la quantité :")
 
-        ingredient = next(ing for ing in ingredients if ing.nom == ingredient_choisi)
+        ingredient = next(ing for ing in ingredients_a_afficher if ing.nom == ingredient_choisi)
         service_liste_courses.ajouterUnIngredient(idUtilisateur, ingredient.idIngredient, quantite)
 
     def retirer_ingredient(self, service_liste_courses, liste_de_courses, idUtilisateur):
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à retirer :",
-            choices=[ing.nom for ing in liste_de_courses],
+            choices=[ing.nom for ing in liste_de_courses.ingredientQuantite.keys()],
         ).execute()
 
         ingredient = next(ing for ing in liste_de_courses if ing.nom == ingredient_choisi)
