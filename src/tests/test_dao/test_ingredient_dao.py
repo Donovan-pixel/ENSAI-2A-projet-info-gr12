@@ -5,7 +5,6 @@ from unittest.mock import MagicMock
 
 from dao.ingredient_dao import IngredientDao
 from business_object.ingredient import Ingredient
-from mock_db_connection import MockDBConnection
 
 
 @patch("src.dao.db_connection.DBConnection")

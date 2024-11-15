@@ -1,22 +1,24 @@
-import os
 import pytest
-
-from unittest.mock import patch
-
-from utils.reset_database import ResetDatabase
 
 from dao.avis_dao import AvisDao
 
 from business_object.avis import Avis
+from business_object.recette import Recette
 
 
 def test_obtenirAvisParRecette():
     """Vérifie que la méthode renvoie une liste de Avis"""
 
     # GIVEN
+    idRecette = 3
+    recette = Recette(
+        idRecette=idRecette,
+        titre="nom",
+        ingredientQuantite={"Tomate": 2},
+    )
 
     # WHEN
-    avis = AvisDao().obtenirAvisParRecette()
+    avis = AvisDao().obtenirAvisParRecette(recette)
 
     # THEN
     assert isinstance(avis, list)
@@ -28,9 +30,7 @@ def test_ajouter_avis():
     """Ajout avis réussie"""
 
     # GIVEN
-    avis = Avis(
-        idUtilisateur=123, idRecette=34, note=7, commentaire="un commentaire pour faire joli"
-    )
+    avis = Avis(idUtilisateur=1, idRecette=1, note=7, commentaire="un commentaire pour faire joli")
 
     # WHEN
     creation_ok = AvisDao().ajouter_avis(avis)
