@@ -16,7 +16,6 @@ class FiltrageParIngredientsVue(VueAbstraite):
         service_ingredient = IngredientService()
         ingredients = service_ingredient.obtenirTousLesIngredients()
 
-        # Affichage des ingrédients disponibles pour le filtrage
         choix_ingredients = inquirer.checkbox(
             message="Sélectionnez les ingrédients que vous souhaitez utiliser pour filtrer les recettes :",
             choices=[ingredient.nom for ingredient in ingredients]
@@ -28,7 +27,6 @@ class FiltrageParIngredientsVue(VueAbstraite):
 
             return MenuUtilisateurVue()
 
-        # Confirmation des ingrédients choisis
         print(f"Ingrédients sélectionnés : {', '.join(choix_ingredients)}")
         confirmation = inquirer.select(
             message="Que souhaitez-vous faire ?",
@@ -46,14 +44,12 @@ class FiltrageParIngredientsVue(VueAbstraite):
         elif confirmation == "Modifier la sélection":
             return self.choisir_menu()
 
-        # Filtrer les recettes par ingrédients
         ingredients_objets = [
             ingredient for ingredient in ingredients if ingredient.nom in choix_ingredients
         ]
         service_recette = RecetteService()
         recettes = service_recette.obtenirRecettesParIngredients(ingredients_objets)
 
-        # Affichage des recettes filtrées
         self.afficher_recettes_filtrees(recettes)
 
     def afficher_recettes_filtrees(self, recettes):
@@ -70,7 +66,6 @@ class FiltrageParIngredientsVue(VueAbstraite):
 
                 return MenuUtilisateurVue()
 
-            # Affichage des détails ou ajout aux favoris
             recette = next(rec for rec in recettes if rec.titre == choix_recettes)
             choix_action = inquirer.select(
                 message=f"Que souhaitez-vous faire avec {recette.titre} ?",
