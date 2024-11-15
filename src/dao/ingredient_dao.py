@@ -160,13 +160,12 @@ class IngredientDao(metaclass=Singleton):
                         {"nom": nom},
                     )
                     res = cursor.fetchone()
-                    print(f"Valeur envoyée par cursor.fetchone : {res}")
-
-            if res is None:
+                    # print(f"Valeur envoyée par cursor.fetchone : {res}")
+            if res:
+                return res["id_ingredient"]
+            else:
                 logging.warning(f"L'ingrédient '{nom}' est introuvable dans la base de données.")
                 return None
-
-            return res[0]
 
         except Exception as e:
             logging.error(f"Erreur lors de l'obtention de l'ID pour l'ingrédient '{nom}': {e}")

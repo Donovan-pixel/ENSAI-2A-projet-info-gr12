@@ -61,25 +61,26 @@ class ListeDeCoursesVue(VueAbstraite):
 
     def ajouter_ingredient(self, service_liste_courses, liste_de_courses, idUtilisateur):
         ingredients = IngredientService().obtenirTousLesIngredients()
-        ingredients_a_afficher = []
+        """ingredients_a_afficher = []
         for ingredient in ingredients:
             if ingredient.nom not in liste_de_courses.ingredientQuantite.keys():
                 ingredients_a_afficher.append(ingredient)
+        """
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à ajouter :",
-            choices=[ing.nom for ing in ingredients_a_afficher],
+            choices=[ing.nom for ing in ingredients],
         ).execute()
-
-        quantite = inquirer.text(message="Entrez la quantité :")
-
-        ingredient = next(ing for ing in ingredients_a_afficher if ing.nom == ingredient_choisi)
+        quantite = inquirer.text(message="Entrez la quantité :").execute()
+        ingredient = next(ing for ing in ingredients if ing.nom == ingredient_choisi)
         service_liste_courses.ajouterUnIngredient(idUtilisateur, ingredient.idIngredient, quantite)
 
     def retirer_ingredient(self, service_liste_courses, liste_de_courses, idUtilisateur):
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à retirer :",
-            choices=[ing.nom for ing in liste_de_courses.ingredientQuantite.keys()],
+            choices=[ing_nom for ing_nom in liste_de_courses.ingredientQuantite.keys()],
         ).execute()
-
-        ingredient = next(ing for ing in liste_de_courses if ing.nom == ingredient_choisi)
-        service_liste_courses.retirerUnIngredient(idUtilisateur, ingredient.idIngredient)
+        liste_ingredients = liste_de_courses.ingredientQuantite.keys()
+        ingredient = next(ing_nom for ing_nom in liste_ingredients if ing_nom == ingredient_choisi)
+        idIngredient = IngredientService().obtenirIdPArNom(ingredient)
+        print(idIngredient)
+        service_liste_courses.retirerUnIngredient(idUtilisateur, idIngredient)

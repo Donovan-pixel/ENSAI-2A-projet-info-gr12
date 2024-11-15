@@ -33,8 +33,4 @@ class ListeDeCourses:
         bool
             True si l'ajout/mise à jour est un succès, False sinon.
         """
-        if quantite > 0:
-            self.ingredientQuantite[Ingredient.nom] = quantite
-            return True
-        else:
-            return False
+        self.ingredientQuantite[Ingredient.nom] = quantite

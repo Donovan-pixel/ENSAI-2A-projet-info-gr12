@@ -26,14 +26,12 @@ class ListeDeCourseDAO(metaclass=Singleton):
         created : bool
         True si la création est un succès, False sinon.
         """
-        res = None
-
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO liste_de_courses(id_user) "
-                        "VALUES %(idUtilisateur)s, "
+                        "INSERT INTO liste_de_courses (id_user) "
+                        "VALUES (%(idUtilisateur)s) "
                         "RETURNING id_liste_de_courses;",
                         {"idUtilisateur": idUtilisateur},
                     )
@@ -65,9 +63,9 @@ class ListeDeCourseDAO(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT id_liste_de_courses         "
-                        "FROM liste_de_courses             "
-                        "WHERE id_user = %(idUtilisateur)s;           ",
+                        "SELECT id_liste_de_courses "
+                        "FROM liste_de_courses "
+                        "WHERE id_user = %(idUtilisateur)s ;",
                         {"idUtilisateur": idUtilisateur},
                     )
                     res = cursor.fetchone()
@@ -75,8 +73,10 @@ class ListeDeCourseDAO(metaclass=Singleton):
         except Exception as e:
             logging.info(e)
             raise
-
-        return res[0]
+        if res:
+            return res["id_liste_de_courses"]
+        else:
+            return False
 
     @log
     def listerTous(self, idUtilisateur) -> list[ListeDeCourses]:
@@ -114,15 +114,14 @@ class ListeDeCourseDAO(metaclass=Singleton):
             logging.info(e)
             raise
 
-        liste_courses = None
+        liste_course = ListeDeCourses(idUtilisateur)
 
         if res:
-            liste_course = ListeDeCourses(idUtilisateur)
             for row in res:
                 ingredient = Ingredient(row["nom"])
                 liste_course.ajouterIngredient(ingredient, row["quantite"])
 
-        return liste_courses
+        return liste_course
 
     @log
     def ajouterUnIngredient(self, idUtilisateur, idIngredient, quantite) -> bool:
@@ -141,53 +140,71 @@ class ListeDeCourseDAO(metaclass=Singleton):
         bool
             True si l'ajout est un succès, False sinon.
         """
+        res = None
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    id_liste_de_courses = ListeDeCourseDAO().obtenirIdListeDeCourses(idUtilisateur)
+                    id_liste_de_courses = None
                     # Si la liste de courses n'existe pas, on la crée
-                    if not id_liste_de_courses:
-                        self.creerListeDeCourses(idUtilisateur)
-                        id_liste_de_courses = self.obtenirIdListeDeCourses(idUtilisateur)
-                        if not id_liste_de_courses:
-                            raise ValueError(
-                                "Impossible de créer ou récupérer une liste de courses."
-                            )
-                    # Ajout de l'ingrédient à la liste de courses
                     cursor.execute(
-                        "SELECT 1 "
-                        "FROM ingredients_courses "
-                        "WHERE id_ingredient = %(id_ingredient)s "
-                        "AND id_liste_de_courses = %(id_liste_de_courses)s ",
-                        {"id_ingredient": idIngredient, "id_liste_de_courses": id_liste_de_courses},
+                        "SELECT id_liste_de_courses "
+                        "FROM liste_de_courses "
+                        "WHERE id_user = %(idUtilisateur)s ;",
+                        {"idUtilisateur": idUtilisateur},
                     )
-                    exists = cursor.fetchone()
-                    if exists:
-                        cursor.execute(
-                            "UPDATE ingredients_courses "
-                            "SET quantite = %(quantite)s "
-                            "WHERE id_ingredient = %(id_ingredient)s"
-                            "AND id_liste_de_courses = %(id_liste_de_courses)s"
-                            "RETURNING id_ingredient_courses;",
-                            {
-                                "id_ingredient": idIngredient,
-                                "id_liste_de_courses": id_liste_de_courses,
-                                "quantite": quantite,
-                            },
-                        )
-                    else:
-                        cursor.execute(
-                            "INSERT INTO "
-                            "ingredients_courses (id_ingredient, id_liste_de_courses, quantite) "
-                            "VALUES (%(id_ingredient)s, %(id_liste_de_courses)s, %(quantite)s"
-                            "RETURNING id_ingredient_courses;",
-                            {
-                                "id_ingredient": idIngredient,
-                                "id_liste_de_courses": id_liste_de_courses,
-                                "quantite": quantite,
-                            },
-                        )
                     res = cursor.fetchone()
+                    if res:
+                        id_liste_de_courses = res["id_liste_de_courses"]
+                    if not id_liste_de_courses:
+                        cursor.execute(
+                            "INSERT INTO liste_de_courses (id_user) "
+                            "VALUES (%(idUtilisateur)s) "
+                            "RETURNING id_liste_de_courses;",
+                            {"idUtilisateur": idUtilisateur},
+                        )
+                        res = cursor.fetchone()
+                        if res:
+                            id_liste_de_courses = res["id_liste_de_courses"]
+                    # Vérifie si l'ingrédient existe dans la liste de courses
+                    if id_liste_de_courses:
+                        cursor.execute(
+                            "SELECT 1 "
+                            "FROM ingredients_courses "
+                            "WHERE id_ingredient = %(id_ingredient)s "
+                            "AND id_liste_de_courses = %(id_liste_de_courses)s ",
+                            {
+                                "id_ingredient": idIngredient,
+                                "id_liste_de_courses": id_liste_de_courses,
+                            },
+                        )
+                        exists = cursor.fetchone()
+                        if exists:
+                            cursor.execute(
+                                "UPDATE ingredients_courses "
+                                "SET quantite = %(quantite)s "
+                                "WHERE id_ingredient = %(id_ingredient)s "
+                                "AND id_liste_de_courses = %(id_liste_de_courses)s "
+                                "RETURNING id_ingredient_courses; ",
+                                {
+                                    "id_ingredient": idIngredient,
+                                    "id_liste_de_courses": id_liste_de_courses,
+                                    "quantite": quantite,
+                                },
+                            )
+                            res = cursor.fetchone()
+                        else:
+                            cursor.execute(
+                                "INSERT INTO "
+                                "ingredients_courses(id_ingredient, id_liste_de_courses, quantite) "
+                                "VALUES (%(id_ingredient)s, %(id_liste_de_courses)s, %(quantite)s) "
+                                "RETURNING id_ingredient_courses; ",
+                                {
+                                    "id_ingredient": idIngredient,
+                                    "id_liste_de_courses": id_liste_de_courses,
+                                    "quantite": quantite,
+                                },
+                            )
+                            res = cursor.fetchone()
         except Exception as e:
             logging.error("Erreur lors de l'ajout d'un ingrédient : %s", e)
             return False
@@ -209,22 +226,34 @@ class ListeDeCourseDAO(metaclass=Singleton):
         bool
         True si le retrait est un succès, False sinon.
         """
+        res_col = 0
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    id_liste_de_courses = ListeDeCourseDAO().obtenirIdListeDeCourses(idUtilisateur)
-                    # Supprimer l'ingrédient
+                    id_liste_de_courses = None
+                    # Cherche l'id de la liste de courses
                     cursor.execute(
-                        "DELETE FROM ingredient_courses                  "
-                        " WHERE id_ingredient=%(id_ingredient)s      "
-                        "AND id_liste_de_courses=%(id_liste_de_courses)s ",
-                        {
-                            "id_ingredient": idIngredient,
-                            "id_liste_de_courses": id_liste_de_courses,
-                        },
+                        "SELECT id_liste_de_courses "
+                        "FROM liste_de_courses "
+                        "WHERE id_user = %(idUtilisateur)s ;",
+                        {"idUtilisateur": idUtilisateur},
                     )
-                    res = cursor.rowcount
+                    res = cursor.fetchone()
+                    if res:
+                        id_liste_de_courses = res["id_liste_de_courses"]
+                    # Supprimer l'ingrédient
+                    if id_liste_de_courses:
+                        cursor.execute(
+                            "DELETE FROM ingredients_courses "
+                            " WHERE id_ingredient=%(id_ingredient)s "
+                            "AND id_liste_de_courses=%(id_liste_de_courses)s ",
+                            {
+                                "id_ingredient": idIngredient,
+                                "id_liste_de_courses": id_liste_de_courses,
+                            },
+                        )
+                        res_col = cursor.rowcount
         except Exception as e:
             logging.info(e)
 
-        return res == 1
+        return res_col == 1
