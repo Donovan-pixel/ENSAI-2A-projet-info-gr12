@@ -1,5 +1,6 @@
 from InquirerPy import inquirer
 from InquirerPy.base import Choice
+from InquirerPy.separator import Separator
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
@@ -22,10 +23,16 @@ class SuggestionVue(VueAbstraite):
 
         suggestions = service_suggestions.obtenirSuggestionRecette(utilisateur)
 
-        print("\n" + "-" * 70 + "\nVoici les recettes recommandées\n" + "-" * 70 + "\n")
+        print("\n" + "-" * 70)
+        print(" Voici les recettes recommandées ".center(70))
+        print("-" * 70 + "\n")
 
         if suggestions:
-            choices = [Choice(recette.titre) for recette in suggestions]
+            choices = (
+                [Separator("------------------")]
+                + [Choice(recette.titre) for recette in suggestions]
+                + [Separator("------------------")]
+            )
             choices.append(Choice("Retourner au tableau de bord"))
 
             recette_choisie = inquirer.select(

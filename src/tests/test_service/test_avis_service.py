@@ -15,7 +15,7 @@ liste_avis = [
 
 
 def test_creer_ok():
-    """ "Création d'Avis réussie"""
+    """Création d'Avis réussie"""
 
     # GIVEN
     idUtilisateur, idRecette, note, commentaire = 123, 12, 7, "plutôt bon"
@@ -107,7 +107,7 @@ def test_supprimer_avis_succes():
 
 
 def test_supprimer_avis_echec():
-    """Test de la suppression d'un avis échouée"""
+    """Test de la suppression d'un avis échoué"""
 
     # GIVEN
     avis_dao_mock = MagicMock()

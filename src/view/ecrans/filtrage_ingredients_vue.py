@@ -87,5 +87,6 @@ class FiltrageParIngredientsVue(VueAbstraite):
                     utilisateur = Session().utilisateur
                     RecetteFavoritesService().ajouter_recette_favorite(recette, utilisateur)
                     print(f"{recette.titre} a été ajoutée aux favoris.")
+                    return self.afficher_recettes_filtrees()
                 case "Retourner à la liste des recettes":
                     return self.afficher_recettes_filtrees(recettes)
