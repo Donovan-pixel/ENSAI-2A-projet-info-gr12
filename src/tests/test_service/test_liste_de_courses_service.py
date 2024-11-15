@@ -13,16 +13,16 @@ liste_de_courses = [
         idUtilisateur=1,
         idListeDecourses=1,
         ingredientQuantite={
-            Ingredient(nom="Tomate", idIngredient=1): 3,
-            Ingredient(nom="Oignon", idIngredient=2): 2,
+            "Tomate": 3,
+            "Oignon": 2,
         },
     ),
     ListeDeCourses(
         idUtilisateur=1,
         idListeDecourses=2,
         ingredientQuantite={
-            Ingredient(nom="Mozzarella", idIngredient=3): 3,
-            Ingredient(nom="Oignon", idIngredient=2): 2,
+            "Mozzarella": 3,
+            "Oignon": 2,
         },
     ),
 ]
@@ -177,8 +177,13 @@ def test_listerTous_succes():
     assert isinstance(resultat[1], ListeDeCourses)
     assert resultat[0].idListeDecourses == 1
     assert isinstance(resultat[1].ingredientQuantite, dict)
+    i = 0
     for key in resultat[1].ingredientQuantite.keys():
-        assert isinstance(key, Ingredient)
+        assert isinstance(key, str)
+        if i == 0:
+            assert key == "Mozzarella"
+        else:
+            assert key == "Oignon"
 
 
 def test_obtenirIdListeDeCourses_succes():
