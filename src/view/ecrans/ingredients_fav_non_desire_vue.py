@@ -68,13 +68,13 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
 
             case "Ajouter un ingrédient non désiré":
                 self.ajouter_ingredient_non_desire(
-                    non_desires_service, ingredients_non_desires, utilisateur
+                    non_desires_service, ingredients_non_desires, ingredients_favoris, utilisateur
                 )
                 return IngredientsFavorisNonDesiresVue("Ingrédient non désiré ajouté.")
 
             case "Retirer un ingrédient non désiré":
                 self.retirer_ingredient_non_desire(
-                    non_desires_service, ingredients_non_desires, ingredients_favoris, utilisateur
+                    non_desires_service, ingredients_non_desires, utilisateur
                 )
                 return IngredientsFavorisNonDesiresVue("Ingrédient non désiré retiré.")
 
