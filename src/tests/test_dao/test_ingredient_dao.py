@@ -15,7 +15,7 @@ def test_ajouterIngredient_succes(mock_db):
 
     mock_cursor.fetchone.return_value = (1,)  # L'ingrédient est ajouté avec succès
 
-    ingredient = Ingredient(nom="Tomate")
+    ingredient = Ingredient(nom="Tomate", idIngredient=1)
 
     # WHEN : on tente d'ajouter l'ingrédient
 
@@ -96,7 +96,7 @@ def test_supprimerIngredient_succes(mock_db):
     mock_cursor.rowcount = 1  # Suppression réussie
     mock_db().connection.__enter__().cursor.return_value = mock_cursor
 
-    ingredient = Ingredient(idIngredient=1, nom="Tomate")
+    ingredient = Ingredient(nom="Tomate", idIngredient=1)
 
     # WHEN
 
@@ -109,6 +109,7 @@ def test_supprimerIngredient_succes(mock_db):
 
 @patch("dao.db_connection.DBConnection")
 def test_supprimerIngredient_echec(mock_db):
+    """Echec car mauvais identifiant"""
 
     # GIVEN
 
@@ -116,7 +117,7 @@ def test_supprimerIngredient_echec(mock_db):
     mock_cursor.rowcount = 0  # Aucune ligne supprimée
     mock_db().connection.__enter__().cursor.return_value = mock_cursor
 
-    ingredient = Ingredient(idIngredient=1, nom="Tomate")
+    ingredient = Ingredient(nom="Tomate", idIngredient="Tomate")
 
     # WHEN
 
@@ -139,6 +140,9 @@ def test_obtenirIdParNom_succes(mock_db):
     # WHEN
 
     res = IngredientDao().obtenirIdParNom("Tomate")
+
+    print(f"Valeur renvoyée par fetchone : {mock_cursor.fetchone.return_value}")
+    print(f"Résultat de la méthode : {res}")
 
     # THEN
 

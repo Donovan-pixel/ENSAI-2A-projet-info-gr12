@@ -18,8 +18,8 @@ class IngredientDao(metaclass=Singleton):
 
         Parameters
         ----------
-        ingredient : str
-            nom de l'ingrédient à ajouter
+        ingredient : Ingredient
+            ingrédient à ajouter
 
         Returns
         -------
@@ -160,12 +160,13 @@ class IngredientDao(metaclass=Singleton):
                         {"nom": nom},
                     )
                     res = cursor.fetchone()
+                    print(f"Valeur envoyée par cursor.fetchone : {res}")
 
             if res is None:
                 logging.warning(f"L'ingrédient '{nom}' est introuvable dans la base de données.")
                 return None
 
-            return res["id_ingredient"]
+            return res[0]
 
         except Exception as e:
             logging.error(f"Erreur lors de l'obtention de l'ID pour l'ingrédient '{nom}': {e}")
