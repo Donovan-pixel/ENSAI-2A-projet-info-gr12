@@ -36,8 +36,3 @@ class ListeDeCourses:
             return True
         else:
             return False
-
-    def __str__(self):
-        """Affichage des informations d'une liste de courses"""
-        return f"L'utilisateur({self.idUtilisateur} a les courses suivantes :"
-        " {self.ingredientQuantite}"

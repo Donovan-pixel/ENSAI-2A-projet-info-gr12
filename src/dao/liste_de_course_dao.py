@@ -149,6 +149,10 @@ class ListeDeCourseDAO(metaclass=Singleton):
                     if not id_liste_de_courses:
                         self.creerListeDeCourses(idUtilisateur)
                         id_liste_de_courses = self.obtenirIdListeDeCourses(idUtilisateur)
+                        if not id_liste_de_courses:
+                            raise ValueError(
+                                "Impossible de créer ou récupérer une liste de courses."
+                            )
                     # Ajout de l'ingrédient à la liste de courses
                     cursor.execute(
                         "INSERT INTO  "
@@ -165,12 +169,10 @@ class ListeDeCourseDAO(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
         except Exception as e:
-            logging.info(e)
+            logging.error("Erreur lors de l'ajout d'un ingrédient : %s", e)
+            return False
 
-        created = False
-        if res:
-            created = True
-        return created
+        return res is not None
 
     @log
     def retirerUnIngredient(self, idUtilisateur, idIngredient) -> bool:
