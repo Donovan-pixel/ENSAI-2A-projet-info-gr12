@@ -3,13 +3,13 @@ from unittest import TestCase
 
 from unittest.mock import patch, MagicMock
 
-from src.business_object.recette import Recette
+from business_object.recette import Recette
 
-from src.service.recette_favorite_service import RecetteFavoritesService
+from service.recette_favorite_service import RecetteFavoritesService
 
-from src.dao.recette_favorite_dao import RecettesFavoritesDao
+from dao.recette_favorite_dao import RecettesFavoritesDao
 
-from src.business_object.utilisateur import Utilisateur
+from business_object.utilisateur import Utilisateur
 
 
 class TestRecetteFavoriteService(TestCase):
