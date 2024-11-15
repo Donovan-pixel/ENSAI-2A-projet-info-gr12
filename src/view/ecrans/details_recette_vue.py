@@ -65,8 +65,6 @@ class DetailsRecetteVue(VueAbstraite):
 
         match choix:
             case "Ajouter cette recette aux favorites":
-                from service.recette_favorite_service import RecetteFavoritesService
-
                 RecetteFavoritesService().ajouter_recette_favorite(self.recette, utilisateur)
                 print(f"La recette {self.recette.titre} a été ajoutée à vos favorites.")
                 return self.choisir_menu()
