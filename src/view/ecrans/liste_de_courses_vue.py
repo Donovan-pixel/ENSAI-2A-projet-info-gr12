@@ -82,5 +82,4 @@ class ListeDeCoursesVue(VueAbstraite):
         liste_ingredients = liste_de_courses.ingredientQuantite.keys()
         ingredient = next(ing_nom for ing_nom in liste_ingredients if ing_nom == ingredient_choisi)
         idIngredient = IngredientService().obtenirIdPArNom(ingredient)
-        print(idIngredient)
         service_liste_courses.retirerUnIngredient(idUtilisateur, idIngredient)
