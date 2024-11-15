@@ -65,7 +65,9 @@ class ListeDesRecettesVue(VueAbstraite):
 
         recette_choisie = inquirer.select(
             message="Sélectionnez une recette ou retournez au menu principal :",
-            choices=[recette.titre for recette in recettes] + ["Retourner au tableau de bord"],
+            choices=[recette.titre for recette in recettes]
+            + [Separator("-----------------------")]
+            + ["Retourner au tableau de bord"],
         ).execute()
 
         if recette_choisie == "Retourner au tableau de bord":

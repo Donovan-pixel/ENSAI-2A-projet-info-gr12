@@ -280,6 +280,10 @@ class RecetteDao(metaclass=Singleton):
         """
         ingredients_id = tuple([ing.idIngredient for ing in ingredients])
 
+        if not ingredients_id:
+            logging.info("Aucun ingrédient fourni.")
+            return []
+
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -291,7 +295,6 @@ class RecetteDao(metaclass=Singleton):
                         JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
                         JOIN ingredients i ON mi.id_ingredient = i.id_ingredient
                         WHERE mi.id_ingredient IN %(ingredients_id)s
-                        GROUP BY r.id_meal, mi.id_ingredient, i.nom, mi.quantite
                         """,
                         {"ingredients_id": ingredients_id},
                     )

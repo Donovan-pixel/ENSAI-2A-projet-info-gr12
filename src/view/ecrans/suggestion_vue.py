@@ -36,11 +36,14 @@ class SuggestionVue(VueAbstraite):
             choices.append(Choice("Retourner au tableau de bord"))
 
             recette_choisie = inquirer.select(
-                message="Sélectionnez une recette pour voir les détails ou revenir au tableau de bord :",
+                message=(
+                    "Sélectionnez une recette pour voir les détails\n"
+                    "ou revenir au tableau de bord :"
+                ),
                 choices=choices,
             ).execute()
 
-            if recette_choisie == "Retourner au menu principal":
+            if recette_choisie == "Retourner au tableau de bord":
                 from view.menu_utilisateur_vue import MenuUtilisateurVue
 
                 return MenuUtilisateurVue()
