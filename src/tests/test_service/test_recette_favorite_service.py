@@ -1,13 +1,11 @@
 import pytest
 from unittest import TestCase
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from business_object.recette import Recette
 
 from service.recette_favorite_service import RecetteFavoritesService
-
-from dao.recette_favorite_dao import RecettesFavoritesDao
 
 from business_object.utilisateur import Utilisateur
 
