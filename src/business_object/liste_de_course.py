@@ -8,6 +8,8 @@ class ListeDeCourses:
         identifiant de la liste de courses
     idUtilisateur : int
         identifiant de l'utilisateur
+    ingredientQuantite = dict
+        dictionnaire associant les ingredients de type Ingredient à leur quantité à acheter
     """
 
     def __init__(self, idUtilisateur, idListeDecourses=None, ingredientQuantite=None):
@@ -36,8 +38,3 @@ class ListeDeCourses:
             return True
         else:
             return False
-
-    def __str__(self):
-        """Affichage des informations d'une liste de courses"""
-        return f"L'utilisateur({self.idUtilisateur} a les courses suivantes :"
-        " {self.ingredientQuantite}"
