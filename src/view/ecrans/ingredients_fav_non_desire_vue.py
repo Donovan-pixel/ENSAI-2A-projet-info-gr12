@@ -57,7 +57,9 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
 
         match choix:
             case "Ajouter un ingrédient favori":
-                self.ajouter_ingredient_favori(favoris_service, utilisateur)
+                self.ajouter_ingredient_favori(
+                    favoris_service, ingredients_favoris, ingredients_non_desires, utilisateur
+                )
                 return IngredientsFavorisNonDesiresVue("Ingrédient favori ajouté.")
 
             case "Retirer un ingrédient favori":
@@ -65,12 +67,14 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
                 return IngredientsFavorisNonDesiresVue("Ingrédient favori retiré.")
 
             case "Ajouter un ingrédient non désiré":
-                self.ajouter_ingredient_non_desire(non_desires_service, utilisateur)
+                self.ajouter_ingredient_non_desire(
+                    non_desires_service, ingredients_non_desires, utilisateur
+                )
                 return IngredientsFavorisNonDesiresVue("Ingrédient non désiré ajouté.")
 
             case "Retirer un ingrédient non désiré":
                 self.retirer_ingredient_non_desire(
-                    non_desires_service, ingredients_non_desires, utilisateur
+                    non_desires_service, ingredients_non_desires, ingredients_favoris, utilisateur
                 )
                 return IngredientsFavorisNonDesiresVue("Ingrédient non désiré retiré.")
 
@@ -79,11 +83,17 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
 
                 return MenuUtilisateurVue()
 
-    def ajouter_ingredient_favori(self, favoris_service, utilisateur):
+    def ajouter_ingredient_favori(
+        self, favoris_service, ingredients_favoris, ingredients_non_desires, utilisateur
+    ):
         ingredients = IngredientService().obtenirTousLesIngredients()
+        ingredients_a_afficher = []
+        for ingredient in ingredients:
+            if ingredient not in (ingredients_favoris + ingredients_non_desires):
+                ingredients_a_afficher.append(ingredient)
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à ajouter aux favoris :",
-            choices=[ing.nom for ing in ingredients],
+            choices=[ing.nom for ing in ingredients_a_afficher],
         ).execute()
 
         favoris_service.ajouterIngredientFavori(ingredient_choisi, utilisateur)
@@ -96,11 +106,17 @@ class IngredientsFavorisNonDesiresVue(VueAbstraite):
             ).execute()
             favoris_service.supprimerIngredientFavori(ingredient_choisi, utilisateur)
 
-    def ajouter_ingredient_non_desire(self, non_desires_service, utilisateur):
+    def ajouter_ingredient_non_desire(
+        self, non_desires_service, ingredients_non_desires, ingredients_favoris, utilisateur
+    ):
         ingredients = IngredientService().obtenirTousLesIngredients()
+        ingredients_a_afficher = []
+        for ingredient in ingredients:
+            if ingredient not in (ingredients_non_desires + ingredients_favoris):
+                ingredients_a_afficher.append(ingredient)
         ingredient_choisi = inquirer.select(
             message="Choisissez un ingrédient à ajouter aux non désirés :",
-            choices=[ing.nom for ing in ingredients],
+            choices=[ing.nom for ing in ingredients_a_afficher],
         ).execute()
 
         non_desires_service.ajouterIngredientNonDesire(ingredient_choisi, utilisateur)

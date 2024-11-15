@@ -8,9 +8,11 @@ class ListeDeCourses:
         identifiant de la liste de courses
     idUtilisateur : int
         identifiant de l'utilisateur
+    ingredientQuantite = dict
+        dictionnaire associant les ingredients de type Ingredient à leur quantité à acheter
     """
 
-    def __init__(self, idUtilisateur, idListeDecourses=None):
+    def __init__(self, idUtilisateur, idListeDecourses=None, ingredientQuantite=None):
         """Constructeur"""
         self.idListeDecourses = idListeDecourses
         self.idUtilisateur = idUtilisateur

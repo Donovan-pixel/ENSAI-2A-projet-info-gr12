@@ -39,7 +39,7 @@ class DetailsRecetteVue(VueAbstraite):
             for avis in avis_list:
                 print(f"  - Note: {avis.note}/5")
                 print(f"    Commentaire: {avis.commentaire}")
-                print(" - " * 50)
+                print("-" * 50)
         else:
             print("  Aucun avis disponible pour cette recette.")
 

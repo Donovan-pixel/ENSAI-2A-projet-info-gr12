@@ -18,3 +18,6 @@ class Ingredient:
     def __str__(self):
         """Permet d'afficher les informations d'un ingrédient"""
         return f"Ingredient({self.nom})"
+
+    def __eq__(self, other):
+        return self.idIngredient == other.idIngredient
