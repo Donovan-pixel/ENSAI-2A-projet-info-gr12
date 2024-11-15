@@ -56,7 +56,9 @@ class RecettesFavoritesVue(VueAbstraite):
             return MenuUtilisateurVue()
 
         if choix == "Ajouter une recette aux favoris":
-            self.ajouter_recette_favorite(service_recettes_favorites, utilisateur)
+            self.ajouter_recette_favorite(
+                service_recettes_favorites, recettes_favorites, utilisateur
+            )
             return RecettesFavoritesVue("Recette ajoutée aux favoris.")
 
         if choix == "Supprimer une recette des favoris":
@@ -75,15 +77,19 @@ class RecettesFavoritesVue(VueAbstraite):
 
         return RecettesFavoritesVue()
 
-    def ajouter_recette_favorite(self, service_recettes_favorites, utilisateur):
+    def ajouter_recette_favorite(self, service_recettes_favorites, recettes_favorites, utilisateur):
         """Ajouter une recette aux favoris."""
         recettes = RecetteService().obtenirToutesLesRecettes()
+        recettes_a_afficher = []
+        for recette in recettes:
+            if recette not in recettes_favorites:
+                recettes_a_afficher.append(recette)
         recette_choisie = inquirer.select(
             message="Choisissez une recette à ajouter aux favoris :",
-            choices=[recette.titre for recette in recettes],
+            choices=[recette.titre for recette in recettes_a_afficher],
         ).execute()
 
-        recette = next(rec for rec in recettes if rec.titre == recette_choisie)
+        recette = next(rec for rec in recettes_a_afficher if rec.titre == recette_choisie)
         service_recettes_favorites.ajouter_recette_favorite(recette, utilisateur)
 
     def supprimer_recette_favorite(
