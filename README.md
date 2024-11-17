@@ -82,7 +82,8 @@
 2. **Lancez l'application dans Git Bash** :  
    ```bash
    winpty python src/__main__.py
-   ```  
+   ```
+   
 
 ---
 
