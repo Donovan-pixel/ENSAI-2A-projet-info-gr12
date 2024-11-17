@@ -1,274 +1,149 @@
-# ENSAI-2A-projet-info-template
+# My Kitchen - ENSAI 2A Project
 
-Template du projet informatique de 2e année de l'ENSAI.
+**My Kitchen** est une application de gestion de recettes culinaires développée dans le cadre du projet informatique de 2e année à l'ENSAI. Elle intègre les concepts suivants :  
 
-Cette application très simple comporte quelques éléments qui peuvent aider pour le projet info 2A :
-
-- Programmation en couche (DAO, service, view, business_object)
-- Connexion à une base de données
-- Interface dans le terminal (couche view) avec inquirerPy
-- Appel d'un Webservice
-- Création d'un Webservice
-
-## :arrow_forward: Logiciels requis
-
-- [Visual Studio Code](https://code.visualstudio.com/)
-- [Python 3.10](https://www.python.org/)
-- [Git](https://git-scm.com/)
-- Une base de données [PostgreSQL](https://www.postgresql.org/)
+- Programmation en couches (DAO, service, vue, business_object).  
+- Connexion à une base de données PostgreSQL.  
+- Interface utilisateur basée sur le terminal via InquirerPy.  
+- Appels à un Webservice externe : TheMealDB API.  
+- Gestion des favoris et liste de courses.  
 
 ---
 
-## :arrow_forward: Clonez le dépôt
+## :arrow_forward: Fonctionnalités principales
 
-- [ ] Ouvrez **Git Bash**
-- [ ] Créez un dossier `P:/Cours2A/UE3-Projet-info` et positionnez-vous dedans
-  - `mkdir -p /p/Cours2A/UE3-Projet-info && cd $_`
-- [ ] Clonez ce dépôt
-  - `git clone https://github.com/ludo2ne/ENSAI-2A-projet-info-template.git`
-
----
-
-## :arrow_forward: Ouvrez le dépôt avec VSCode
-
-- [ ] Ouvrez **Visual Studio Code**
-- [ ] File > Open Folder
-- [ ] Cliquez une seule fois sur *ENSAI-2A-projet-info-template* et cliquez sur `Sélectionner un dossier`
-  - :warning: Si le dossier parent dans l'explorer VSCode (à gauche) n'est pas *ENSAI-2A-projet-info-template*, l'application ne fonctionnera pas
-
-### Paramètres VScode
-
-Ce dépôt contient un fichier `.vscode/settings.xml` qui définit des paramètres pour ce projet. Par exemple :
-
-- **Black formatter** permet de mettre en forme automatiquement un fichier python
-  - `editor.formatOnSave` : à chaque savegarde de fichier, le code est automatiquement mis en forme
-- **Flake** est un Linter
-  - il vérifie que le code est propre et affiche un message si ce n'est pas le cas
-- **Path** : indique les dossiers dans lesquels sont les modules python 
-  - `"PYTHONPATH": "${workspaceFolder}/src"` : src est le dossier racine des imports
-
-
-### Fichiers de configuration
-
-Ce dépôt contient de nombreux fichiers de configuration pour paramètrer les différents outils utilisés.
-
-Normalement dans le cadre de votre projet, vous n'aurez pas besoin de modifier ces fichiers, exceptés `.env` et `requirements.txt`. Vous trouverez des explications plus détaillées par la suite.
-
-| Fichier                      | Description                                                         |
-|------------------------------|---------------------------------------------------------------------|
-| `.env`                       | Définir les variables d'environnement                               |
-| `.vscode/settings.json`      | Configuration spécifique à Visual Studio Code                       |
-| `.github/workflows/ci.yml`   | Définition des workflows GitHub Actions                             |
-| `logging_config.yml`         | Configuration du système de journalisation (logging)                |
-| `.gitignore`                 | Liste des fichiers et répertoires à ignorer lors des opérations Git |
-| `.coveragerc`                | Configuration de l'outil de couverture de code (coverage)           |
-| `requirements.txt`           | Liste des dépendances Python requises pour le projet                |
+- **Recherche de recettes** : Affichage d'une liste de recettes et détails associés.  
+- **Favoris** : Ajout ou suppression de recettes et ingrédients dans les favoris.  
+- **Liste de courses** : Gestion des ingrédients nécessaires pour préparer les recettes sélectionnées.  
+- **Administration** : Gestion des recettes via un rôle dédié (Administrateur).  
+- **API externe** : Intégration avec TheMealDB pour enrichir les données des recettes.  
 
 ---
 
-## :arrow_forward: Installez les packages nécessaires
+## :hammer: Pré-requis
 
-Dans VSCode :
+- [Python 3.10](https://www.python.org/)  
+- [PostgreSQL](https://www.postgresql.org/)  
+- [Git](https://git-scm.com/)  
+- [Visual Studio Code](https://code.visualstudio.com/)  
 
-- [ ] Ouvrez un terminal *Git Bash*
-- [ ] Exécutez les commandes suivantes
+---
 
-```bash
-pip install -r requirements.txt
-pip list
+## :computer: Installation
+
+### Cloner le projet
+
+1. Ouvrez **Git Bash** ou un terminal.  
+2. Créez un dossier pour le projet :  
+   ```bash
+   mkdir -p /p/Cours2A/UE3-Projet-info && cd $_
+   ```  
+3. Clonez ce dépôt :  
+   ```bash
+   git clone https://github.com/votre-utilisateur/my-kitchen.git
+   ```  
+
+### Configurer l'environnement
+
+1. Accédez au répertoire du projet :  
+   ```bash
+   cd my-kitchen
+   ```  
+2. Installez les dépendances Python :  
+   ```bash
+   pip install -r requirements.txt
+   ```  
+3. Configurez les variables d'environnement :  
+   - Renommez le fichier `.env.template` en `.env`.  
+   - Renseignez les paramètres PostgreSQL et TheMealDB dans ce fichier. Exemple :  
+     ```env
+     POSTGRES_HOST=localhost
+     POSTGRES_PORT=5432
+     POSTGRES_DATABASE=mykitchen
+     POSTGRES_USER=admin
+     POSTGRES_PASSWORD=password
+
+     THEMEALDB_API=https://www.themealdb.com/api/json/v1/1
+     ```
+
+---
+
+## :rocket: Démarrage
+
+1. **Initialisez la base de données** :  
+   - Lancez le script d'initialisation :  
+     ```bash
+     python src/utils/reset_database.py
+     ```  
+   - Cela créera les tables nécessaires et importera les données de base.  
+
+2. **Lancez l'application** :  
+   ```bash
+   python src/__main__.py
+   ```  
+
+---
+
+## :wrench: Tests unitaires
+
+1. Exécutez les tests :  
+   ```bash
+   pytest -v
+   ```  
+2. Générez un rapport de couverture :  
+   ```bash
+   coverage run -m pytest
+   coverage html
+   ```  
+   - Ouvrez le rapport : `htmlcov/index.html`.
+
+---
+
+## :notebook_with_decorative_cover: Architecture
+
+### Structure du projet
+
+```plaintext
+src/
+├── dao/                # Data Access Objects
+├── services/           # Business logic
+├── views/              # Interface utilisateur
+├── utils/              # Outils divers (logs, BDD, etc.)
+└── business_objects/   # Objets métier
 ```
 
----
+### Tables principales
 
-## :arrow_forward: Variables d'environnement
-
-Vous allez maintenant définir des variables d'environnement pour déclarer la base de données et le webservice auquels vous allez connecter votre application python.
-
-À la racine du projet le fichier :
-
-- [ ] Ouvrez le fichier nommé `.env.template`
-- [ ] Renommez-le '.env' 
-- [ ] Collez-y et complétez les éléments ci-dessous
-
-```default
-WEBSERVICE_HOST=https://pokeapi.co/api/v2
-
-POSTGRES_HOST=sgbd-eleves.domensai.ecole
-POSTGRES_PORT=5432
-POSTGRES_DATABASE=idxxxx
-POSTGRES_USER=idxxxx
-POSTGRES_PASSWORD=idxxxx
-POSTGRES_SCHEMA=projet
-```
+- **recettes** : Stocke les informations des recettes.  
+- **ingredients** : Liste des ingrédients associés aux recettes.  
+- **users** : Gestion des utilisateurs.  
+- **favoris** : Association utilisateur-favoris.  
+- **liste_de_courses** : Gestion des listes de courses par utilisateur.  
 
 ---
 
-## :arrow_forward: Lancer les tests unitaires
+## :page_with_curl: Configuration avancée
 
-- [ ] Dans Git Bash : `pytest -v` 
-  - ou `python -m pytest -v` si *pytest* n'a pas été ajouté au *PATH*
+### Journaux d'exécution
 
-### TU DAO
+- Fichier de configuration : `logging_config.yml`.  
+- Logs accessibles dans le dossier `logs/`.  
 
-Les tests unitaires de la DAO utilisent les données du fichier `data/pop_db_test.sql`.
+### Intégration continue
 
-Ces données sont chargées dans un schéma à part (projet_test_dao) pour ne pas polluer les autres données.
-
-### Couverture de tests
-
-Il est également possible de générer la couverture de tests avec [Coverage](https://coverage.readthedocs.io/en/7.4.0/index.html)
-
-:bulb: Le fichier `.coveragerc` permet de modifier le paramétrage
-
-- [ ] `coverage run -m pytest`
-- [ ] `coverage html`
-- [ ] Ouvrir le fichier coverage_report/index.html
+- Workflows GitHub Actions pour :  
+  - Lancement automatique des tests unitaires.  
+  - Analyse statique du code avec *pylint*.  
 
 ---
 
-## :arrow_forward: Lancer le programme
+## :bulb: Contributions
 
-Cette application propose une interface graphique très basique pour naviguer entre différents menus.
+Ce projet est conçu pour être extensible. Vous pouvez :  
+- Ajouter de nouvelles fonctionnalités (par exemple, une recherche avancée).  
+- Améliorer les performances (optimisation des requêtes SQL).  
+- Renforcer la sécurité (gestion des erreurs, validations).  
 
-- [ ] Dans Git Bash : `winpty python src/__main__.py`
-- [ ] Au premier lancement, choisissez **Ré-initialiser la base de données**
-  - cela appelle le programme `src/utils/reset_database.py`
-  - qui lui même va exécuter les scripts SQL du dossier `data`
+---  
 
----
-
-
-## :arrow_forward: Les logs
-
-L'initalisation se fait dans le module `src/utils/log_init.py` :
-
-- Celui-ci est appelé au démarrage de l'application ou du webservice
-- Il utilise le fichier `logging_config.yml` pour la configuration
-  - pour modifier le niveau de logs :arrow_right: balise *level*
-
-Un décorateur a été créé dans `src/utils/log_decorator.py`.
-
-Appliqué à une méthode, il permettra d'afficher dans les logs :
-
-- les paramétres d'entrée
-- la sortie
-
-Les logs sont consultables dans le dossier `logs`.
-
-Exemple de logs :
-
-```
-07/08/2024 09:07:07 - INFO     - ConnexionVue
-07/08/2024 09:07:08 - INFO     -     JoueurService.se_connecter('a', '*****') - DEBUT
-07/08/2024 09:07:08 - INFO     -         JoueurDao.se_connecter('a', '*****') - DEBUT
-07/08/2024 09:07:08 - INFO     -         JoueurDao.se_connecter('a', '*****') - FIN
-07/08/2024 09:07:08 - INFO     -            └─> Sortie : Joueur(a, 20 ans)
-07/08/2024 09:07:08 - INFO     -     JoueurService.se_connecter('a', '*****') - FIN
-07/08/2024 09:07:08 - INFO     -        └─> Sortie : Joueur(a, 20 ans)
-07/08/2024 09:07:08 - INFO     - MenuJoueurVue
-```
-
----
-
-## :arrow_forward: Intégration continue
-
-Le dépôt contient un fichier `.github/workflow/main.yml`.
-
-Lorsque vous faîtes un *push* sur GitHub, cela déclanche un pipeline qui va effectuer les les étapes suivantes :
-
-- Création d'un conteneur à partir d'une image Ubuntu (Linux)
-  - Autrement dit, cela crée une machine virtuelle avec simplement un noyau Linux
-- Installation de Python
-- Installation des packages requis
-- Lancement des tests unitaires (uniquement les tests de service car plus compliqué de lancer les tests dao)
-- Analyse du code avec *pylint*
-  - Si la note est inférieure à 7.5, l'étape sera en échec
-
-Vous pouvez consulter le bon déroulement de ce pipeline sur la page GitHub de votre dépôt, onglet *Actions*.
-
----
-
-## :construction: Lancer le projet sur le Datalab
-
-Il est également possible de développer sur le Datalab.
-
-:warning: Pensez bien à *push* régulièrement votre code, car les services du Datalab ne sont pas éternels.
-
-
-### Paramétrage Git
-
-Dans un premier temps, il faut autoriser de *push* du code depuis le Datalab vers GitHub.
-
-Générez un jeton dans GitHub :
-
-- [ ] Connectez-vous à [GitHub](https://github.com/)
-- [ ] [Générez un nouveau token (classic)](https://github.com/settings/tokens/new)
-  - si le lien direct ne fonctionne pas : allez dans *Settings* > *Developer Settings* > *Personal access tokens (classic)*
-  - Note : Datalab
-  - Date d'expiration : 90j (minimum)
-  - Cochez repo
-  - `Generate token`
-- [ ] Copiez le token et collez le dans Notepad
-  - :warning: Celui-ci ne sera visible qu'une seule fois
-  - si vous le perdez, il faut en générer un nouveau
-
-Ensuite, déclarez ce jeton au Datalab :
-
-- [ ] Connectez-vous au [Datalab](https://datalab.sspcloud.fr/)
-- [ ] Allez dans *Mon Compte*, puis *Services externes*
-- [ ] Collez le token dans *Jeton d'accès personnel GitHub*
-
-### Lancer les services
-
-Pour commencer, vous avez besoin d'une base de données PostgreSQL. Sur la Datalab
-
-- [ ] Allez dans *Catalogue de services* > *Database* > `PostgreSQL`
-- [ ] Lancez le service
-- [ ] Une fois le service lancé, copiez les infos suivantes
-  ```
-  Hostname : ?
-  Port : 5432
-  Database : ?
-  Username : ?
-  Password : ?
-  ```
-Nous allons ensuite lancer un service VSCode avec Python :
-
-- [ ] Dans le catalogue des services, allez sur *Vscode-python*
-- [ ] Cliquez sur *Configuration Vscode-python*
-- [ ] Allez dans l'onglet Git
-  - Repository : `https://github.com/ludo2ne/ENSAI-2A-projet-info-template.git`
-- [ ] Lancez le service
-
-Un nouvel onglet s'ouvre avec VSCode et le dépôt qui a été cloné.
-
-Positionnez-vous dans le bon dossier :
-
-- [ ] File > Open Folder > `/home/onyxia/work/ENSAI-2A-projet-info-template/`
-
-
-### Connectez votre application et votre base de données
-
-Vous avez lancé 2 services, maintenant il va falloir les relier.
-
-Vous allez utiliser pour cela un fichier `.env` comme décrit dans la section [Variables d'environnement](##:arrow_forward:-Variables-d'environnement) plus haut. Dans votre VScode :
-
-- [ ] Créez à la racine de `ENSAI-2A-projet-info-template` un fichier `.env`
-- [ ] Collez le modèle (voir section *Variables d'environnement*)
-- [ ] Renseignez les champs `HOSTNAME`, `DATABASE`, `USERNAME` et `PASSWORD` avec ceux de votre service *PostgreSQL*
-- [ ] Enregistrez ce fichier
-
-### Installez les packages
-
-- [ ] Ouvrez un terminal (CTRL + ù)
-- [ ] Positionnez-vous dans le dépôt : `cd $ROOT_PROJECT_DIRECTORY/ENSAI-2A-projet-info-template`
-- [ ] `pip install -r requirements.txt`
-
-
-### Lancez l'application
-
-Vous pouvez maintenant lancer l'application, le webservice ou les tests unitaires
-
-- `python src/__main__.py` (puis commencez par ré-initialiser la bdd)
-- `python src/app.py` (à tester)
-- `pytest -v`
+:wave: **Merci de votre intérêt pour *My Kitchen* !** N'hésitez pas à nous faire part de vos retours ou suggestions.
