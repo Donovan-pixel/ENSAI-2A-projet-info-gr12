@@ -1,10 +1,5 @@
 # My Kitchen - Projet informatique 2A
 
-| | | | | |/ /() | |
-| | | | _ _ | ' / _ ___ | |__
-| | | || | | || < | |/ || ' \ | || || || || . \ | |__ | | | | _/ _, |||_|||/|| || / |
-|_/
-
 **My Kitchen** est une application de gestion de recettes culinaires développée dans le cadre du projet informatique de 2e année à l'ENSAI. Elle intègre les concepts suivants :  
 
 - Programmation en couches (DAO, service, vue, business_object).  
@@ -17,7 +12,8 @@
 
 ## :arrow_forward: Fonctionnalités principales
 
-- **Recherche de recettes** : Affichage d'une liste de recettes et détails associés.  
+- **Recherche de recettes** : Affichage d'une liste de recettes et détails associés.
+- **Suggestion de recettes** : Suggestion de recettes personnalisées basées sur les ingrédients favoris et non désirés 
 - **Favoris** : Ajout ou suppression de recettes et ingrédients dans les favoris.  
 - **Liste de courses** : Gestion des ingrédients nécessaires pour préparer les recettes sélectionnées.  
 - **Administration** : Gestion des recettes via un rôle dédié (Administrateur).  
