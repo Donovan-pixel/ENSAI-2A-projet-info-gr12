@@ -1,4 +1,4 @@
-# My Kitchen - ENSAI 2A Project
+# My Kitchen - Projet informatique 2A
 
 **My Kitchen** est une application de gestion de recettes culinaires développée dans le cadre du projet informatique de 2e année à l'ENSAI. Elle intègre les concepts suivants :  
 
