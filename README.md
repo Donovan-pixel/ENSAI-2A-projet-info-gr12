@@ -137,13 +137,13 @@ src/
   - Analyse statique du code avec *pylint*.  
 
 ---
-👨‍💻 Membres du groupe
+## Membres du groupe
 
-Martin Ahouétognon
-Melvin Bazeille
-Maïlis Lanne
-Fathnelle Mehouelley
-Luna Riviere
+- Martin Ahouétognon
+- Melvin Bazeille
+- Maïlis Lanne
+- Fathnelle Mehouelley
+- Luna Riviere
 
 ## :bulb: Contributions
 
