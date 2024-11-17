@@ -5,7 +5,7 @@
 - Programmation en couches (DAO, service, vue, business_object).  
 - Connexion à une base de données PostgreSQL.  
 - Interface utilisateur basée sur le terminal via InquirerPy.  
-- Appels à un Webservice externe : TheMealDB API.  
+- Appels à un Webservice externe : TheMealDB API. 
 - Gestion des favoris et liste de courses.  
 
 ---
@@ -137,6 +137,13 @@ src/
   - Analyse statique du code avec *pylint*.  
 
 ---
+👨‍💻 Membres du groupe
+
+Martin Ahouétognon
+Melvin Bazeille
+Maïlis Lanne
+Fathnelle Mehouelley
+Luna Riviere
 
 ## :bulb: Contributions
 
