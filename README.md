@@ -137,7 +137,7 @@ src/
   - Analyse statique du code avec *pylint*.  
 
 ---
-## Membres du groupe
+## 👨‍💻 Membres du groupe
 
 - Martin Ahouétognon
 - Melvin Bazeille
