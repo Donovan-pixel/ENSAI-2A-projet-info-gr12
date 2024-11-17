@@ -23,12 +23,12 @@ class ListeDeCoursesVue(VueAbstraite):
         liste_de_courses = service_liste_courses.listerTous(utilisateur.idUtilisateur)
 
         print("\n" + "-" * 70)
-        print(" Vos listes de courses ".center(70))
+        print(" Votre liste de courses ".center(70))
         print("-" * 70 + "\n")
 
         if liste_de_courses:
             for ingredient, quantite in liste_de_courses.ingredientQuantite.items():
-                print(f"- {ingredient} (quantité: {quantite})")
+                print(f"- {ingredient} (quantité: {quantite})\n")
         else:
             print("Votre liste de courses est vide.\n".center(70))
 
@@ -37,7 +37,7 @@ class ListeDeCoursesVue(VueAbstraite):
             choices=[
                 "Ajouter un ingrédient à la liste",
                 "Retirer un ingrédient de la liste",
-                "Retourner au menu principal",
+                "Retourner au tableau de bord",
             ],
         ).execute()
 

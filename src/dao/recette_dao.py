@@ -218,53 +218,6 @@ class RecetteDao(metaclass=Singleton):
         return recettes
 
     @log
-    def obtenirRecettesParIngredient(self, ingredient: Ingredient) -> list[Recette]:
-        """Obtention des recettes contenant un ingrédient spécifique
-
-        Parameters
-        ----------
-        ingredient : Ingredient
-            L'ingrédient contenu dans les recettes recherchées
-
-        Returns
-        -------
-        List[Recette]
-            Liste des recettes contenant l'ingrédient spécifié
-        """
-
-        try:
-            with DBConnection().connection as connection:
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        """
-                        SELECT * FROM recettes
-                        JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
-                        WHERE mi.id_ingredient = %(id_ingredient)s ;
-                        """,
-                        {"id_ingredient": ingredient.id_ingredient},
-                    )
-                    res = cursor.fetchall()
-
-        except Exception as e:
-            logging.exception(e)
-            raise
-
-        recettes = []
-
-        if res:
-            for row in res:
-                recette = Recette(
-                    idRecette=row["id_meal"],
-                    titre=row["title"],
-                    categorie=row["category"],
-                    origine=row["area"],
-                    consignes=row["instructions"],
-                )
-                recettes.append(recette)
-
-        return recettes
-
-    @log
     def obtenirRecettesParIngredients(self, ingredients: list[Ingredient]) -> list[Recette]:
         """Retrieve recipes containing specific ingredients.
 
@@ -287,6 +240,7 @@ class RecetteDao(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
+                    nb_ingredients = len(ingredients_id)
                     cursor.execute(
                         """
                         SELECT r.id_meal, r.title, r.category, r.area, r.instructions,
@@ -295,8 +249,11 @@ class RecetteDao(metaclass=Singleton):
                         JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
                         JOIN ingredients i ON mi.id_ingredient = i.id_ingredient
                         WHERE mi.id_ingredient IN %(ingredients_id)s
+                        GROUP BY r.id_meal, r.title, r.category, r.area, r.instructions,
+                        mi.id_ingredient, i.nom, mi.quantite
+                        HAVING COUNT(DISTINCT mi.id_ingredient) = %(nb_ingredients)s;
                         """,
-                        {"ingredients_id": ingredients_id},
+                        {"ingredients_id": ingredients_id, "nb_ingredients": nb_ingredients},
                     )
                     res = cursor.fetchall()
 

@@ -17,7 +17,8 @@ class FiltrageParIngredientsVue(VueAbstraite):
         ingredients = service_ingredient.obtenirTousLesIngredients()
 
         choix_ingredients = inquirer.checkbox(
-            message="Sélectionnez les ingrédients que vous souhaitez utiliser pour filtrer les recettes :",
+            message="Sélectionnez les ingrédients que vous souhaitez\n"
+            "utiliser pour filtrer les recettes :",
             choices=[ingredient.nom for ingredient in ingredients]
             + ["Retourner au menu des recettes"],
         ).execute()
@@ -47,6 +48,7 @@ class FiltrageParIngredientsVue(VueAbstraite):
         ingredients_objets = [
             ingredient for ingredient in ingredients if ingredient.nom in choix_ingredients
         ]
+        print(f"Ingrédients sélectionnés : {ingredients_objets}")
         service_recette = RecetteService()
         recettes = service_recette.obtenirRecettesParIngredients(ingredients_objets)
 

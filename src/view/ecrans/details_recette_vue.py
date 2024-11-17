@@ -1,9 +1,10 @@
 from InquirerPy import inquirer
-
+import textwrap
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
 # from service.recette_service import RecetteService
+from service.ingredient_service import IngredientService
 from service.recette_favorite_service import RecetteFavoritesService
 from service.ingredient_favori_service import IngredientFavoriService
 from service.ingredient_non_desire_service import IngredientNonDesireService
@@ -29,9 +30,19 @@ class DetailsRecetteVue(VueAbstraite):
             print(f"    - {ingredient} : {quantite}")
 
         print("\n  📝 Consignes :")
-        for step in self.recette.consignes.split("STEP"):
-            if step.strip():
-                print(f"    - STEP {step.strip()}")
+        import re
+
+        etapes = re.split(r"(?<=[.!?])\s+", self.recette.consignes.strip())
+
+        for i, etape in enumerate(etapes, start=1):
+            if etape:
+                wrapped_text = textwrap.fill(
+                    etape,
+                    width=110,
+                    initial_indent=f"      {i}. ",
+                    subsequent_indent="         ",
+                )
+                print(wrapped_text)
 
         print("\nAvis :")
         avis_list = AvisService().obtenirAvisParRecette(self.recette)
@@ -101,16 +112,22 @@ class DetailsRecetteVue(VueAbstraite):
             ingredient: ingredients_quantites[ingredient] for ingredient in choix_ingredients
         }
 
-        liste_courses_service = ListeDeCoursesService()
-        success = liste_courses_service.ajouterUnIngredient(
-            utilisateur.idUtilisateur, ingredients_a_ajouter
-        )
+        for ingredient_nom, details in ingredients_a_ajouter.items():
+            idIngredient = IngredientService().obtenirIdPArNom(ingredient_nom)
+            quantite = ingredients_quantites[ingredient_nom]
 
-        if success:
-            print(
-                f"Les ingrédients {', '.join(choix_ingredients)} ont "
-                f"été ajoutés à votre liste de courses."
+            if idIngredient is None or quantite is None:
+                print(f" Impossible d'ajouter {ingredient_nom} : informations manquantes.")
+                continue
+
+            success = ListeDeCoursesService().ajouterUnIngredient(
+                utilisateur.idUtilisateur, idIngredient, quantite
             )
+
+            if success:
+                print(f"{ingredient_nom} ({quantite}) ajouté à la liste de courses.")
+            else:
+                print(f"Échec lors de l'ajout de {ingredient_nom} ({quantite}).")
 
         ingredients = list(self.recette.ingredientQuantite.keys())
         for ingredient in ingredients:
