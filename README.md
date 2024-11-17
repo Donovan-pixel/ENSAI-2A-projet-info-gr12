@@ -56,15 +56,16 @@
    ```  
 3. Configurez les variables d'environnement :  
    - Renommez le fichier `.env.template` en `.env`.  
-   - Renseignez les paramètres PostgreSQL et TheMealDB dans ce fichier. Exemple :  
+   - Renseignez vos informations personnelles au lieu des **xxxx**. Exemple :  
      ```env
-     POSTGRES_HOST=localhost
-     POSTGRES_PORT=5432
-     POSTGRES_DATABASE=mykitchen
-     POSTGRES_USER=admin
-     POSTGRES_PASSWORD=password
+     WEBSERVICE_HOST="https://www.themealdb.com/api/json/v1/1"
 
-     THEMEALDB_API=https://www.themealdb.com/api/json/v1/1
+      POSTGRES_HOST=sgbd-eleves.domensai.ecole
+      POSTGRES_PORT=5432
+      POSTGRES_DATABASE=idxxxx
+      POSTGRES_USER=idxxxx
+      POSTGRES_PASSWORD=idxxxx
+      POSTGRES_SCHEMA=projet
      ```
 
 ---
@@ -80,7 +81,7 @@
 
 2. **Lancez l'application** :  
    ```bash
-   python src/__main__.py
+   winpty python src/__main__.py
    ```  
 
 ---
@@ -89,7 +90,7 @@
 
 1. Exécutez les tests :  
    ```bash
-   pytest -v
+   python -m pytest -v
    ```  
 2. Générez un rapport de couverture :  
    ```bash
