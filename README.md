@@ -48,7 +48,7 @@
 
 1. Accédez au répertoire du projet :  
    ```bash
-   cd my-kitchen
+   cd <chemin_du_dossier>
    ```  
 2. Installez les dépendances Python :  
    ```bash
@@ -79,7 +79,7 @@
      ```  
    - Cela créera les tables nécessaires et importera les données de base.  
 
-2. **Lancez l'application** :  
+2. **Lancez l'application dans Git Bash** :  
    ```bash
    winpty python src/__main__.py
    ```  
@@ -107,11 +107,14 @@
 
 ```plaintext
 src/
-├── dao/                # Data Access Objects
-├── services/           # Business logic
-├── views/              # Interface utilisateur
-├── utils/              # Outils divers (logs, BDD, etc.)
-└── business_objects/   # Objets métier
+├── business_object/                 # Objets métiers et modèles de données
+├── client/                          # Récupération des données de l'API
+├── dao/                             # Accès aux données et interaction avec la base de données
+├── test/                            # Tests du fonctionnement de l'application
+├── service/                         # Services exposant des fonctionnalités de l'application
+├── utils/                           # Fonctions utilitaires (gestion des logs, fichiers, etc.)
+├── view/                            # Interface utilisateur et affichage dans le terminal
+
 ```
 
 ### Tables principales
@@ -125,11 +128,6 @@ src/
 ---
 
 ## :page_with_curl: Configuration avancée
-
-### Journaux d'exécution
-
-- Fichier de configuration : `logging_config.yml`.  
-- Logs accessibles dans le dossier `logs/`.  
 
 ### Intégration continue
 
