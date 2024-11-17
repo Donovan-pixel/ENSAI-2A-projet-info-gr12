@@ -36,11 +36,11 @@
 1. Ouvrez **Git Bash** ou un terminal.  
 2. Créez un dossier pour le projet :  
    ```bash
-   mkdir -p /p/Cours2A/UE3-Projet-info && cd $_
+   mkdir -p <chemin_du_dossier> && cd $_
    ```  
 3. Clonez ce dépôt :  
    ```bash
-   git clone https://github.com/votre-utilisateur/my-kitchen.git
+   https://github.com/Fathnelle/ENSAI-2A-projet-info-gr12.git
    ```  
 
 ### Configurer l'environnement
