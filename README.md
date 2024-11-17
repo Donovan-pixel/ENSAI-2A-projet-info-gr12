@@ -86,7 +86,8 @@ Vous allez maintenant définir des variables d'environnement pour déclarer la b
 
 À la racine du projet le fichier :
 
-- [ ] Créez un fichier nommé `.env` 
+- [ ] Ouvrez le fichier nommé `.env.template`
+- [ ] Renommez-le '.env' 
 - [ ] Collez-y et complétez les éléments ci-dessous
 
 ```default
@@ -129,48 +130,13 @@ Il est également possible de générer la couverture de tests avec [Coverage](h
 
 Cette application propose une interface graphique très basique pour naviguer entre différents menus.
 
-- [ ] Dans Git Bash : `python src/__main__.py`
+- [ ] Dans Git Bash : `winpty python src/__main__.py`
 - [ ] Au premier lancement, choisissez **Ré-initialiser la base de données**
   - cela appelle le programme `src/utils/reset_database.py`
   - qui lui même va exécuter les scripts SQL du dossier `data`
 
 ---
 
-## :arrow_forward: Lancer le webservice
-
-Cette application permet également de créer un webservice.
-
-- [ ] `python src/app.py`
-- Exemples de endpoints (à tester par exemple avec *Insomnia* ou éventuellement un navigateur):
-  - `GET http://localhost/docs` (swagger)
-  - `GET http://localhost/hello/you`
-  - `GET http://localhost/joueur`
-  - `GET http://localhost/joueur/3`
-  - ```
-    POST http://localhost/joueur/
-    JSON body :
-      {
-        "pseudo": "patapouf",
-        "mdp": "9999",
-        "age": "95",
-        "mail": "patapouf@mail.fr",
-        "fan_pokemon": true
-      }
-    ```
-  - ```
-    PUT http://localhost/joueur/3
-    JSON body :
-      {
-         "pseudo": "maurice_new",
-         "mdp": null,
-         "age": 20,
-         "mail": "maurice@ensai.fr",
-         "fan_pokemon": true
-      }
-    ```
-  - `DELETE http://localhost/joueur/5`
-
----
 
 ## :arrow_forward: Les logs
 
