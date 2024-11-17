@@ -12,7 +12,8 @@
 
 ## :arrow_forward: Fonctionnalités principales
 
-- **Recherche de recettes** : Affichage d'une liste de recettes et détails associés.  
+- **Recherche de recettes** : Affichage d'une liste de recettes et détails associés.
+- **Suggestion de recettes** : Suggestion de recettes personnalisées basées sur les ingrédients favoris et non désirés 
 - **Favoris** : Ajout ou suppression de recettes et ingrédients dans les favoris.  
 - **Liste de courses** : Gestion des ingrédients nécessaires pour préparer les recettes sélectionnées.  
 - **Administration** : Gestion des recettes via un rôle dédié (Administrateur).  
@@ -47,7 +48,7 @@
 
 1. Accédez au répertoire du projet :  
    ```bash
-   cd my-kitchen
+   cd <chemin_du_dossier>
    ```  
 2. Installez les dépendances Python :  
    ```bash
@@ -55,15 +56,16 @@
    ```  
 3. Configurez les variables d'environnement :  
    - Renommez le fichier `.env.template` en `.env`.  
-   - Renseignez les paramètres PostgreSQL et TheMealDB dans ce fichier. Exemple :  
+   - Renseignez vos informations personnelles au lieu des **xxxx**. Exemple :  
      ```env
-     POSTGRES_HOST=localhost
-     POSTGRES_PORT=5432
-     POSTGRES_DATABASE=mykitchen
-     POSTGRES_USER=admin
-     POSTGRES_PASSWORD=password
+     WEBSERVICE_HOST="https://www.themealdb.com/api/json/v1/1"
 
-     THEMEALDB_API=https://www.themealdb.com/api/json/v1/1
+      POSTGRES_HOST=sgbd-eleves.domensai.ecole
+      POSTGRES_PORT=5432
+      POSTGRES_DATABASE=idxxxx
+      POSTGRES_USER=idxxxx
+      POSTGRES_PASSWORD=idxxxx
+      POSTGRES_SCHEMA=projet
      ```
 
 ---
@@ -77,9 +79,9 @@
      ```  
    - Cela créera les tables nécessaires et importera les données de base.  
 
-2. **Lancez l'application** :  
+2. **Lancez l'application dans Git Bash** :  
    ```bash
-   python src/__main__.py
+   winpty python src/__main__.py
    ```  
 
 ---
@@ -88,7 +90,7 @@
 
 1. Exécutez les tests :  
    ```bash
-   pytest -v
+   python -m pytest -v
    ```  
 2. Générez un rapport de couverture :  
    ```bash
@@ -105,11 +107,14 @@
 
 ```plaintext
 src/
-├── dao/                # Data Access Objects
-├── services/           # Business logic
-├── views/              # Interface utilisateur
-├── utils/              # Outils divers (logs, BDD, etc.)
-└── business_objects/   # Objets métier
+├── business_object/                 # Objets métiers et modèles de données
+├── client/                          # Récupération des données de l'API
+├── dao/                             # Accès aux données et interaction avec la base de données
+├── test/                            # Tests du fonctionnement de l'application
+├── service/                         # Services exposant des fonctionnalités de l'application
+├── utils/                           # Fonctions utilitaires (gestion des logs, fichiers, etc.)
+├── view/                            # Interface utilisateur et affichage dans le terminal
+
 ```
 
 ### Tables principales
@@ -123,11 +128,6 @@ src/
 ---
 
 ## :page_with_curl: Configuration avancée
-
-### Journaux d'exécution
-
-- Fichier de configuration : `logging_config.yml`.  
-- Logs accessibles dans le dossier `logs/`.  
 
 ### Intégration continue
 
