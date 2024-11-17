@@ -83,6 +83,8 @@
    ```bash
    winpty python src/__main__.py
    ```
+   ![Interface de My Kitchen](doc/Capture d’écran 2024-11-17 160058.png)
+
    
 
 ---
