@@ -1,4 +1,5 @@
 from InquirerPy import inquirer
+from InquirerPy.separator import Separator
 from view.vue_abstraite import VueAbstraite
 
 # from view.session import Session
@@ -24,7 +25,9 @@ class FiltrageParCategorieVue(VueAbstraite):
         if recettes:
             recettes_choisies = inquirer.select(
                 message=f"Recettes dans la catégorie '{categorie_choisie}' :",
-                choices=[recette.titre for recette in recettes] + ["Retour au menu principal"],
+                choices=[recette.titre for recette in recettes]
+                + [Separator("------------------")]
+                + ["Retour au menu principal"],
             ).execute()
 
             if recettes_choisies == "Retour au menu principal":
