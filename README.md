@@ -1,143 +1,142 @@
-# My Kitchen - Projet informatique 2A
+# My Kitchen - 2nd Year Computer Science Project
 
-**My Kitchen** est une application de gestion de recettes culinaires développée dans le cadre du projet informatique de 2e année à l'ENSAI. Elle intègre les concepts suivants :  
+**My Kitchen** is a culinary recipe management application developed as part of the 2nd-year computer science project at ENSAI. It integrates the following concepts:
 
-- Programmation en couches (DAO, service, vue, business_object).  
-- Connexion à une base de données PostgreSQL.  
-- Interface utilisateur basée sur le terminal via InquirerPy.  
-- Appels à un Webservice externe : TheMealDB API. 
-- Gestion des favoris et liste de courses.  
-
----
-
-## :arrow_forward: Fonctionnalités principales
-
-- **Recherche de recettes** : Affichage d'une liste de recettes et détails associés.
-- **Suggestion de recettes** : Suggestion de recettes personnalisées basées sur les ingrédients favoris et non désirés 
-- **Favoris** : Ajout ou suppression de recettes et ingrédients dans les favoris.  
-- **Liste de courses** : Gestion des ingrédients nécessaires pour préparer les recettes sélectionnées.  
-- **Administration** : Gestion des recettes via un rôle dédié (Administrateur).  
-- **API externe** : Intégration avec TheMealDB pour enrichir les données des recettes.  
+- Layered programming (DAO, service, view, business_object)
+- Connection to a PostgreSQL database
+- User interface based on terminal via InquirerPy
+- External Webservice calls: TheMealDB API
+- Favorites and shopping list management
 
 ---
 
-## :hammer: Pré-requis
+## :arrow_forward: Main Features
 
-- [Python 3.10](https://www.python.org/)  
-- [PostgreSQL](https://www.postgresql.org/)  
-- [Git](https://git-scm.com/)  
-- [Visual Studio Code](https://code.visualstudio.com/)  
+- **Recipe Search**: Display a list of recipes and associated details
+- **Recipe Suggestions**: Personalized recipe suggestions based on favorite and unwanted ingredients
+- **Favorites**: Add or remove recipes and ingredients from favorites
+- **Shopping List**: Management of ingredients needed to prepare selected recipes
+- **Administration**: Recipe management via a dedicated role (Administrator)
+- **External API**: Integration with TheMealDB to enrich recipe data
+
+---
+
+## :hammer: Prerequisites
+
+- [Python 3.10](https://www.python.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Git](https://git-scm.com/)
+- [Visual Studio Code](https://code.visualstudio.com/)
 
 ---
 
 ## :computer: Installation
 
-### Cloner le projet
+### Clone the Project
 
-1. Ouvrez **Git Bash** ou un terminal.  
-2. Créez un dossier pour le projet :  
+1. Open **Git Bash** or a terminal
+2. Create a project folder:
    ```bash
-   mkdir -p <chemin_du_dossier> && cd $_
-   ```  
-3. Clonez ce dépôt :  
+   mkdir -p <folder_path> && cd $_
+   ```
+3. Clone this repository:
    ```bash
    https://github.com/Fathnelle/ENSAI-2A-projet-info-gr12.git
-   ```  
+   ```
 
-### Configurer l'environnement
+### Configure Environment
 
-1. Accédez au répertoire du projet :  
+1. Navigate to the project directory:
    ```bash
-   cd <chemin_du_dossier>
-   ```  
-2. Installez les dépendances Python :  
+   cd <folder_path>
+   ```
+2. Install Python dependencies:
    ```bash
    pip install -r requirements.txt
-   ```  
-3. Configurez les variables d'environnement :  
-   - Renommez le fichier `.env.template` en `.env`.  
-   - Renseignez vos informations personnelles au lieu des **xxxx**. Exemple :  
+   ```
+3. Configure environment variables:
+   - Rename `.env.template` to `.env`
+   - Fill in your personal information instead of **xxxx**. Example:
      ```env
      WEBSERVICE_HOST="https://www.themealdb.com/api/json/v1/1"
 
-      POSTGRES_HOST=sgbd-eleves.domensai.ecole
-      POSTGRES_PORT=5432
-      POSTGRES_DATABASE=idxxxx
-      POSTGRES_USER=idxxxx
-      POSTGRES_PASSWORD=idxxxx
-      POSTGRES_SCHEMA=projet
+     POSTGRES_HOST=sgbd-eleves.domensai.ecole
+     POSTGRES_PORT=5432
+     POSTGRES_DATABASE=idxxxx
+     POSTGRES_USER=idxxxx
+     POSTGRES_PASSWORD=idxxxx
+     POSTGRES_SCHEMA=projet
      ```
 
 ---
 
-## :rocket: Démarrage
+## :rocket: Launch
 
-1. **Initialisez la base de données** :  
-   - Lancez le script d'initialisation :  
+1. **Initialize the database**:
+   - Run the initialization script:
      ```bash
      python src/utils/reset_database.py
-     ```  
-   - Cela créera les tables nécessaires et importera les données de base.  
+     ```
+   - This will create the necessary tables and import base data
 
-2. **Lancez l'application dans Git Bash** :  
+2. **Launch the application in Git Bash**:
    ```bash
    winpty python src/__main__.py
    ```
-   ![Interface de My Kitchen](./doc/Capture%20d’écran%202024-11-17%20160058.png)   
+   ![My Kitchen Interface](./doc/Capture%20d'écran%202024-11-17%20160058.png)
 
 ---
 
-## :wrench: Tests unitaires
+## :wrench: Unit Tests
 
-1. Exécutez les tests :  
+1. Run tests:
    ```bash
    python -m pytest -v
-   ```  
-2. Générez un rapport de couverture :  
+   ```
+2. Generate coverage report:
    ```bash
    coverage run -m pytest
    coverage html
-   ```  
-   - Ouvrez le rapport : `htmlcov/index.html`.
+   ```
+   - Open report: `htmlcov/index.html`
 
 ---
 
 ## :notebook_with_decorative_cover: Architecture
 
-### Structure du projet
+### Project Structure
 
 ```plaintext
 src/
-├── business_object/                 # Objets métiers et modèles de données
-├── client/                          # Récupération des données de l'API
-├── dao/                             # Accès aux données et interaction avec la base de données
-├── test/                            # Tests du fonctionnement de l'application
-├── service/                         # Services exposant des fonctionnalités de l'application
-├── utils/                           # Fonctions utilitaires (gestion des logs, fichiers, etc.)
-├── view/                            # Interface utilisateur et affichage dans le terminal
-
+├── business_object/                 # Business objects and data models
+├── client/                          # API data retrieval
+├── dao/                             # Data access and database interaction
+├── test/                            # Application functionality tests
+├── service/                         # Services exposing application features
+├── utils/                           # Utility functions (log management, files, etc.)
+├── view/                            # User interface and terminal display
 ```
 
-### Tables principales
+### Main Tables
 
-- **recettes** : Stocke les informations des recettes.  
-- **ingredients** : Liste des ingrédients associés aux recettes.  
-- **users** : Gestion des utilisateurs.  
-- **favoris** : Association utilisateur-favoris.  
-- **liste_de_courses** : Gestion des listes de courses par utilisateur.  
-
----
-
-## :page_with_curl: Configuration avancée
-
-### Intégration continue
-
-- Workflows GitHub Actions pour :  
-  - Lancement automatique des tests unitaires.  
-  - Analyse statique du code avec *pylint*.  
+- **recettes**: Stores recipe information
+- **ingredients**: List of ingredients associated with recipes
+- **users**: User management
+- **favoris**: User-favorites association
+- **liste_de_courses**: Shopping list management per user
 
 ---
-## 👨‍💻 Membres du groupe
+
+## :page_with_curl: Advanced Configuration
+
+### Continuous Integration
+
+- GitHub Actions workflows for:
+  - Automatic unit test launches
+  - Static code analysis with *pylint*
+
+---
+## 👨‍💻 Group Members
 
 - Martin Ahouétognon
 - Melvin Bazeille
@@ -147,11 +146,11 @@ src/
 
 ## :bulb: Contributions
 
-Ce projet est conçu pour être extensible. Vous pouvez :  
-- Ajouter de nouvelles fonctionnalités (par exemple, une recherche avancée).  
-- Améliorer les performances (optimisation des requêtes SQL).  
-- Renforcer la sécurité (gestion des erreurs, validations).  
+This project is designed to be extensible. You can:
+- Add new features (e.g., advanced search)
+- Improve performance (SQL query optimization)
+- Enhance security (error handling, validations)
 
----  
+---
 
-:wave: **Merci de votre intérêt pour *My Kitchen* !** N'hésitez pas à nous faire part de vos retours ou suggestions.
+:wave: **Thank you for your interest in *My Kitchen*!** Feel free to share your feedback or suggestions.
