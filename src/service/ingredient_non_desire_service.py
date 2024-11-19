@@ -11,7 +11,7 @@ class IngredientNonDesireService:
 
     @log
     def ajouterIngredientNonDesire(self, nom_ingredient, utilisateur: Utilisateur) -> bool:
-        """Ajout d'un ingrédient favori d'un utilisateur"""
+        """Ajout d'un ingrédient non désiré d'un utilisateur"""
 
         id_ingredient = IngredientDao().obtenirIdParNom(nom_ingredient)
 
