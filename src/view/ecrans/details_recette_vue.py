@@ -59,7 +59,7 @@ class DetailsRecetteVue(VueAbstraite):
         choices = [
             "Gérer les ingrédients",
             "Ajouter un avis",
-            "Retourner à la liste des recettes",
+            "Retourner au tableau de bord",
         ]
 
         favorites = RecetteFavoritesService().obtenirRecettesFavorites(utilisateur)
@@ -93,10 +93,10 @@ class DetailsRecetteVue(VueAbstraite):
                 self.ajouter_avis()
                 return self.choisir_menu()
 
-            case "Retourner à la liste des recettes":
-                from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
+            case "Retourner au tableau de bord":
+                from view.menu_utilisateur_vue import MenuUtilisateurVue
 
-                return ListeDesRecettesVue()
+                return MenuUtilisateurVue().choisir_menu()
 
     def gerer_ingredients(self):
         utilisateur = Session().utilisateur
@@ -193,8 +193,8 @@ class DetailsRecetteVue(VueAbstraite):
         avis = inquirer.text(message="Entrez votre avis :").execute()
         note = inquirer.number(
             message="Entrez une note (sur 5) :",
-            validate=lambda _, x: (x <= 5 and x >= 0)
-            or "La note doit être un chiffre compris entre 0 et 5",
+            min_allowed=0,
+            max_allowed=5,
         ).execute()
 
         AvisService().ajouterNouvelAvis(

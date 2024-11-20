@@ -1,4 +1,5 @@
 from InquirerPy import inquirer
+from InquirerPy.separator import Separator
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
@@ -34,13 +35,16 @@ class FiltrageParLettreVue(VueAbstraite):
         else:
             choix_recettes = inquirer.select(
                 message="Recettes correspondant à votre sélection :",
-                choices=[recette.titre for recette in recettes] + ["Retourner au menu principal"],
+                choices=[Separator("------------------")]
+                + [recette.titre for recette in recettes]
+                + [Separator("------------------")]
+                + ["Retourner au menu des recettes"],
             ).execute()
 
-            if choix_recettes == "Retourner au menu principal":
-                from view.menu_utilisateur_vue import MenuUtilisateurVue
+            if choix_recettes == "Retourner au menu des recettes":
+                from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
 
-                return MenuUtilisateurVue()
+                return ListeDesRecettesVue().choisir_menu()
 
             # Affichage des détails ou ajout aux favoris
             recette = next(rec for rec in recettes if rec.titre == choix_recettes)
@@ -59,10 +63,11 @@ class FiltrageParLettreVue(VueAbstraite):
 
                     return DetailsRecetteVue(recette).choisir_menu()
                 case "Ajouter cette recette aux favoris":
-                    from service.recette_favorites_service import RecetteFavoritesService
+                    from service.recette_favorite_service import RecetteFavoritesService
 
                     utilisateur = Session().utilisateur
                     RecetteFavoritesService().ajouter_recette_favorite(recette, utilisateur)
                     print(f"{recette.titre} a été ajoutée aux favoris.")
+                    return self.afficher_recettes_filtrees(recettes)
                 case "Retourner à la liste des recettes":
                     return self.afficher_recettes_filtrees(recettes)

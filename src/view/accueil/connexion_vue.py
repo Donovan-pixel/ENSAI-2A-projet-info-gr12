@@ -25,9 +25,9 @@ class ConnexionVue(VueAbstraite):
 
         # Si l'utilisateur a été trouvé à partir des ses identifiants de connexion
         if user:
-            print(f"Vous êtes connecté sous le pseudo {user.pseudo}")
+            print(f"\nVous êtes connecté sous le pseudo {user.pseudo}\n")
             Session().connexion(user)
             return MenuUtilisateurVue()
         else:
-            print("Erreur de connexion (pseudo ou mot de passe invalide)")
+            print("\nErreur de connexion (pseudo ou mot de passe invalide)\n")
             return ConnexionVue()

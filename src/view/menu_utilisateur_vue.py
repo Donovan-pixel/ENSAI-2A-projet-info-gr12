@@ -48,31 +48,31 @@ class MenuUtilisateurVue(VueAbstraite):
                 Session().deconnexion()
                 from view.accueil.accueil_vue import AccueilVue
 
-                return AccueilVue()
+                return AccueilVue().choisir_menu()
 
             case "Voir mes recettes favorites":
                 from view.ecrans.recettes_favorites_vue import RecettesFavoritesVue
 
-                return RecettesFavoritesVue()
+                return RecettesFavoritesVue().choisir_menu()
 
             case "Afficher la liste des recettes":
                 from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
 
-                return ListeDesRecettesVue()
+                return ListeDesRecettesVue().choisir_menu()
 
             case "Gérer mes ingrédients favoris/non désirés":
                 from view.ecrans.ingredients_fav_non_desire_vue import (
                     IngredientsFavorisNonDesiresVue,
                 )
 
-                return IngredientsFavorisNonDesiresVue()
+                return IngredientsFavorisNonDesiresVue().choisir_menu()
 
             case "Obtenir des suggestions de recettes":
                 from view.ecrans.suggestion_vue import SuggestionVue
 
-                return SuggestionVue()
+                return SuggestionVue().choisir_menu()
 
             case "Accéder à ma liste de courses":
                 from view.ecrans.liste_de_courses_vue import ListeDeCoursesVue
 
-                return ListeDeCoursesVue()
+                return ListeDeCoursesVue().choisir_menu()

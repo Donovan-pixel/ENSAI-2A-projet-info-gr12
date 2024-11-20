@@ -21,10 +21,10 @@ class FiltrageParCategorieVue(VueAbstraite):
             choices=[Separator("------------------")]
             + categories
             + [Separator("------------------")]
-            + ["Retourner à la liste des recettes"],
+            + ["Retourner au menu des recettes"],
         ).execute()
 
-        if categorie_choisie == "Retourner à la liste des recettes":
+        if categorie_choisie == "Retourner au menu des recettes":
             return ListeDesRecettesVue().choisir_menu()
 
         recettes = RecetteService().obtenirRecettesParCategorie(categorie_choisie)

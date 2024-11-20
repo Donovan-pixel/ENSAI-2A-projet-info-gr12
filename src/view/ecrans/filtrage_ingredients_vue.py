@@ -2,7 +2,7 @@ from InquirerPy import inquirer
 from InquirerPy.separator import Separator
 
 from view.vue_abstraite import VueAbstraite
-from view.session import Session
+
 from service.ingredient_service import IngredientService
 from service.recette_service import RecetteService
 
@@ -25,9 +25,9 @@ class FiltrageParIngredientsVue(VueAbstraite):
         ).execute()
 
         if "Retourner au menu des recettes" in choix_ingredients:
-            from view.menu_utilisateur_vue import MenuUtilisateurVue
+            from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
 
-            return MenuUtilisateurVue()
+            return ListeDesRecettesVue().choisir_menu()
 
         print(f"Ingrédients sélectionnés : {', '.join(choix_ingredients)}")
         confirmation = inquirer.select(
@@ -40,9 +40,9 @@ class FiltrageParIngredientsVue(VueAbstraite):
         ).execute()
 
         if confirmation == "Retourner au menu des recettes":
-            from view.ecrans.liste_des_recettes_vue import ListeRecettesVue
+            from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
 
-            return ListeRecettesVue()
+            return ListeDesRecettesVue().choisir_menu()
         elif confirmation == "Modifier la sélection":
             return self.choisir_menu()
 
@@ -61,22 +61,22 @@ class FiltrageParIngredientsVue(VueAbstraite):
         else:
             choix_recettes = inquirer.select(
                 message="Recettes correspondant à votre sélection :",
-                choices=[recette.titre for recette in recettes]
+                choices=[Separator("------------------")]
+                + [recette.titre for recette in recettes]
                 + [Separator("------------------")]
-                + ["Retourner au menu principal"],
+                + ["Retourner au tableau de bord"],
             ).execute()
 
-            if choix_recettes == "Retourner au menu principal":
+            if choix_recettes == "Retourner au tableau de bord":
                 from view.menu_utilisateur_vue import MenuUtilisateurVue
 
-                return MenuUtilisateurVue()
+                return MenuUtilisateurVue().choisir_menu()
 
             recette = next(rec for rec in recettes if rec.titre == choix_recettes)
             choix_action = inquirer.select(
                 message=f"Que souhaitez-vous faire avec {recette.titre} ?",
                 choices=[
                     "Voir les détails de la recette",
-                    "Ajouter cette recette aux favoris",
                     "Retourner à la liste des recettes",
                 ],
             ).execute()
@@ -86,12 +86,5 @@ class FiltrageParIngredientsVue(VueAbstraite):
                     from view.ecrans.details_recette_vue import DetailsRecetteVue
 
                     return DetailsRecetteVue(recette).choisir_menu()
-                case "Ajouter cette recette aux favoris":
-                    from service.recette_favorite_service import RecetteFavoritesService
-
-                    utilisateur = Session().utilisateur
-                    RecetteFavoritesService().ajouter_recette_favorite(recette, utilisateur)
-                    print(f"{recette.titre} a été ajoutée aux favoris.")
-                    return self.afficher_recettes_filtrees()
                 case "Retourner à la liste des recettes":
                     return self.afficher_recettes_filtrees(recettes)
