@@ -219,17 +219,17 @@ class RecetteDao(metaclass=Singleton):
 
     @log
     def obtenirRecettesParIngredients(self, ingredients: list[Ingredient]) -> list[Recette]:
-        """Retourne les recettes contenant les ingrédients voulus.
+        """Retourne les recettes contenant TOUS les ingrédients voulus.
 
         Parameters
         ----------
         ingredients : list[Ingredient]
-            Liste des ingrédients contenus dans les recettes recherchées
+            Liste des ingrédients qui doivent TOUS être présents dans les recettes recherchées
 
         Returns
         -------
         list[Recette]
-            Liste des recettes contenant les ingrédients spécifiés
+            Liste des recettes contenant tous les ingrédients spécifiés
         """
         ingredients_id = tuple([ing.idIngredient for ing in ingredients])
 
@@ -240,20 +240,24 @@ class RecetteDao(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    nb_ingredients = len(ingredients_id)
                     cursor.execute(
                         """
-                        SELECT r.id_meal, r.title, r.category, r.area, r.instructions,
-                        mi.id_ingredient, i.nom, mi.quantite
-                        FROM recettes r
+                        WITH RecettesAvecTousIngredients AS (
+                            SELECT r.id_meal
+                            FROM recettes r
+                            JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
+                            WHERE mi.id_ingredient IN %(ingredients_id)s
+                            GROUP BY r.id_meal
+                            HAVING COUNT(DISTINCT mi.id_ingredient) = %(nb_ingredients)s
+                        )
+                        SELECT DISTINCT r.id_meal, r.title, r.category, r.area, r.instructions,
+                                mi.id_ingredient, i.nom, mi.quantite
+                        FROM RecettesAvecTousIngredients rat
+                        JOIN recettes r ON r.id_meal = rat.id_meal
                         JOIN meals_ingredients mi ON r.id_meal = mi.id_meal
                         JOIN ingredients i ON mi.id_ingredient = i.id_ingredient
-                        WHERE mi.id_ingredient IN %(ingredients_id)s
-                        GROUP BY r.id_meal, r.title, r.category, r.area, r.instructions,
-                        mi.id_ingredient, i.nom, mi.quantite
-                        HAVING COUNT(DISTINCT mi.id_ingredient) = %(nb_ingredients)s;
                         """,
-                        {"ingredients_id": ingredients_id, "nb_ingredients": nb_ingredients},
+                        {"ingredients_id": ingredients_id, "nb_ingredients": len(ingredients_id)},
                     )
                     res = cursor.fetchall()
 
@@ -282,16 +286,16 @@ class RecetteDao(metaclass=Singleton):
                 if ingredient:
                     recettes_dict[id_meal]["ingredientQuantite"][ingredient] = quantite
 
-        for recette_data in recettes_dict.values():
-            recette = Recette(
-                idRecette=recette_data["idRecette"],
-                titre=recette_data["titre"],
-                categorie=recette_data["categorie"],
-                origine=recette_data["origine"],
-                consignes=recette_data["consignes"],
-                ingredientQuantite=recette_data["ingredientQuantite"],
-            )
-            recettes.append(recette)
+            for recette_data in recettes_dict.values():
+                recette = Recette(
+                    idRecette=recette_data["idRecette"],
+                    titre=recette_data["titre"],
+                    categorie=recette_data["categorie"],
+                    origine=recette_data["origine"],
+                    consignes=recette_data["consignes"],
+                    ingredientQuantite=recette_data["ingredientQuantite"],
+                )
+                recettes.append(recette)
 
         return recettes
 
