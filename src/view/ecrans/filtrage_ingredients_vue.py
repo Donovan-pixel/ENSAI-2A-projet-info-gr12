@@ -1,4 +1,5 @@
 from InquirerPy import inquirer
+from InquirerPy.separator import Separator
 
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
@@ -48,7 +49,6 @@ class FiltrageParIngredientsVue(VueAbstraite):
         ingredients_objets = [
             ingredient for ingredient in ingredients if ingredient.nom in choix_ingredients
         ]
-        print(f"Ingrédients sélectionnés : {ingredients_objets}")
         service_recette = RecetteService()
         recettes = service_recette.obtenirRecettesParIngredients(ingredients_objets)
 
@@ -56,11 +56,14 @@ class FiltrageParIngredientsVue(VueAbstraite):
 
     def afficher_recettes_filtrees(self, recettes):
         if not recettes:
-            print("Aucune recette ne correspond à votre sélection.")
+            print("\nAucune recette ne correspond à votre sélection.\n")
+            return self.choisir_menu()
         else:
             choix_recettes = inquirer.select(
                 message="Recettes correspondant à votre sélection :",
-                choices=[recette.titre for recette in recettes] + ["Retourner au menu principal"],
+                choices=[recette.titre for recette in recettes]
+                + [Separator("------------------")]
+                + ["Retourner au menu principal"],
             ).execute()
 
             if choix_recettes == "Retourner au menu principal":

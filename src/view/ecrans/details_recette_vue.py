@@ -191,7 +191,11 @@ class DetailsRecetteVue(VueAbstraite):
     def ajouter_avis(self):
         """Permet d'ajouter un avis à la recette"""
         avis = inquirer.text(message="Entrez votre avis :").execute()
-        note = inquirer.number(message="Entrez une note (sur 5) :").execute()
+        note = inquirer.number(
+            message="Entrez une note (sur 5) :",
+            validate=lambda _, x: (x <= 5 and x >= 0)
+            or "La note doit être un chiffre compris entre 0 et 5",
+        ).execute()
 
         AvisService().ajouterNouvelAvis(
             Session().utilisateur.idUtilisateur, self.recette.idRecette, note, avis

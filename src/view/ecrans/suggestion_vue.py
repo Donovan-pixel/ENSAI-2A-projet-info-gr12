@@ -37,8 +37,8 @@ class SuggestionVue(VueAbstraite):
 
             recette_choisie = inquirer.select(
                 message=(
-                    "Sélectionnez une recette pour voir les détails\n"
-                    "ou revenir au tableau de bord :"
+                    "Sélectionnez une recette pour voir les détails"
+                    " ou revenir au tableau de bord :"
                 ),
                 choices=choices,
             ).execute()

@@ -1,6 +1,7 @@
 from InquirerPy import inquirer
 from InquirerPy.separator import Separator
 from view.vue_abstraite import VueAbstraite
+from view.ecrans.liste_des_recettes_vue import ListeDesRecettesVue
 
 # from view.session import Session
 from service.recette_service import RecetteService
@@ -17,23 +18,28 @@ class FiltrageParCategorieVue(VueAbstraite):
 
         categorie_choisie = inquirer.select(
             message="Choisissez une catégorie :",
-            choices=categories,
+            choices=[Separator("------------------")]
+            + categories
+            + [Separator("------------------")]
+            + ["Retourner à la liste des recettes"],
         ).execute()
+
+        if categorie_choisie == "Retourner à la liste des recettes":
+            return ListeDesRecettesVue().choisir_menu()
 
         recettes = RecetteService().obtenirRecettesParCategorie(categorie_choisie)
 
         if recettes:
             recettes_choisies = inquirer.select(
                 message=f"Recettes dans la catégorie '{categorie_choisie}' :",
-                choices=[recette.titre for recette in recettes]
+                choices=[Separator("------------------")]
+                + [recette.titre for recette in recettes]
                 + [Separator("------------------")]
-                + ["Retour au menu principal"],
+                + ["Retourner à la liste des catégories"],
             ).execute()
 
-            if recettes_choisies == "Retour au menu principal":
-                from view.menu_utilisateur_vue import MenuUtilisateurVue
-
-                return MenuUtilisateurVue()
+            if recettes_choisies == "Retourner à la liste des catégories":
+                self.choisir_menu()
             else:
                 recette_selectionnee = next(
                     recette for recette in recettes if recette.titre == recettes_choisies
