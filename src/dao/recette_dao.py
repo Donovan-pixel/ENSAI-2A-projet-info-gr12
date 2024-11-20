@@ -151,17 +151,17 @@ class RecetteDao(metaclass=Singleton):
 
     @log
     def obtenirRecettesparLettre(self, lettre: str) -> list[Recette]:
-        """Search for recipes starting with a given letter.
+        """Cherche les recettes commençant par la lettre donnée.
 
         Parameters
         ----------
         lettre : str
-            The first letter of the recipes to search for
+            La première lettre des recettes que l'on cherche
 
         Returns
         -------
         list[Recette]
-            List of recipes starting with the given letter
+            Liste des recettes commençant par la lettre donnée
         """
         try:
             with DBConnection().connection as connection:
@@ -219,17 +219,17 @@ class RecetteDao(metaclass=Singleton):
 
     @log
     def obtenirRecettesParIngredients(self, ingredients: list[Ingredient]) -> list[Recette]:
-        """Retrieve recipes containing specific ingredients.
+        """Retourne les recettes contenant les ingrédients voulus.
 
         Parameters
         ----------
         ingredients : list[Ingredient]
-            List of ingredients included in the desired recipes
+            Liste des ingrédients contenus dans les recettes recherchées
 
         Returns
         -------
         list[Recette]
-            List of recipes containing the specified ingredients
+            Liste des recettes contenant les ingrédients spécifiés
         """
         ingredients_id = tuple([ing.idIngredient for ing in ingredients])
 
@@ -297,17 +297,17 @@ class RecetteDao(metaclass=Singleton):
 
     @log
     def obtenirRecettesParCategorie(self, categorie: str) -> list[Recette]:
-        """Obtains recipes by category from the database.
+        """Retourne les recettes de la catégorie souhaitée.
 
         Parameters
         ----------
         categorie : str
-            Category of the recipes to retrieve
+            Catégorie des recettes que l'on cherche
 
         Returns
         -------
         list[Recette]
-            List of recipes in the specified category
+            Liste des recettes de la catégorie souhaitée
         """
         try:
             with DBConnection().connection as connection:
