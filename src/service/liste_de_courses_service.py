@@ -96,8 +96,3 @@ class ListeDeCoursesService:
             Retourne l'ID de la liste de courses.
         """
         return ListeDeCourseDAO().obtenirIdListeDeCourses(id_utilisateur)
-
-
-"""
-print(ListeDeCoursesService().retirerUnIngredient(1, 4))
-"""
