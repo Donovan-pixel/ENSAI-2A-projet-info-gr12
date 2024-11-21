@@ -99,34 +99,27 @@ class DetailsRecetteVue(VueAbstraite):
                 return MenuUtilisateurVue().choisir_menu()
 
     def gerer_ingredients(self):
-        utilisateur = Session().utilisateur
-        ingredients_quantites = self.recette.ingredientQuantite
+        while True:
+            # Afficher le menu pour choisir une action
+            choix_action = inquirer.select(
+                message="Que voulez-vous faire ?",
+                choices=[
+                    "Ajouter des ingrédients à la liste de courses",
+                    "Ajouter des ingrédients aux favoris",
+                    "Ajouter des ingrédients aux non désirés",
+                    "Revenir au menu principal",
+                ],
+            ).execute()
 
-        choix_ingredients = inquirer.checkbox(
-            message="Sélectionnez les ingrédients à ajouter à la liste de courses :",
-            choices=list(ingredients_quantites.keys()),
-        ).execute()
-
-        for ingredient_nom in choix_ingredients:
-            idIngredient = IngredientService().obtenirIdPArNom(ingredient_nom)
-            quantite = ingredients_quantites[ingredient_nom]
-
-            if idIngredient is None or quantite is None:
-                print(f"Impossible d'ajouter {ingredient_nom} : informations manquantes.")
-                continue
-
-            succes = ListeDeCoursesService().ajouterUnIngredient(
-                utilisateur.idUtilisateur, idIngredient, quantite
-            )
-
-            if succes:
-                print(f"{ingredient_nom} ({quantite}) ajouté à la liste de courses.")
-            else:
-                print(f"Échec lors de l'ajout de {ingredient_nom} ({quantite}).")
-
-        self.ajouter_ingredients_favoris()
-
-        self.ajouter_ingredients_non_desires()
+            match choix_action:
+                case "Ajouter des ingrédients à la liste de courses":
+                    self.ajouter_ingredients_liste_de_courses()
+                case "Ajouter des ingrédients aux favoris":
+                    self.ajouter_ingredients_favoris()
+                case "Ajouter des ingrédients aux non désirés":
+                    self.ajouter_ingredients_non_desires()
+                case "Revenir au menu principal":
+                    self.choisir_menu()
 
     def ajouter_ingredients_favoris(self):
         """Ajoute des ingrédients de la recette affichée aux favoris en évitant les doublons."""
@@ -187,6 +180,34 @@ class DetailsRecetteVue(VueAbstraite):
         for ingredient_nom in choix_non_desires:
             non_desire_service.ajouterIngredientNonDesire(ingredient_nom, utilisateur)
             print(f"L'ingrédient {ingredient_nom} a été ajouté aux non désirés.")
+
+    def ajouter_ingredients_liste_de_courses(self):
+        """Ajoute des ingrédients sélectionnés à la liste de courses."""
+        utilisateur = Session().utilisateur
+        ingredients_quantites = self.recette.ingredientQuantite
+
+        choix_ingredients = inquirer.checkbox(
+            message="Sélectionnez les ingrédients à ajouter à la liste de courses :",
+            choices=list(ingredients_quantites.keys()),
+        ).execute()
+
+        # Ajouter chaque ingrédient sélectionné
+        for ingredient_nom in choix_ingredients:
+            idIngredient = IngredientService().obtenirIdPArNom(ingredient_nom)
+            quantite = ingredients_quantites[ingredient_nom]
+
+            if idIngredient is None or quantite is None:
+                print(f"Impossible d'ajouter {ingredient_nom} : informations manquantes.")
+                continue
+
+            succes = ListeDeCoursesService().ajouterUnIngredient(
+                utilisateur.idUtilisateur, idIngredient, quantite
+            )
+
+            if succes:
+                print(f"{ingredient_nom} ({quantite}) ajouté à la liste de courses.")
+            else:
+                print(f"Échec lors de l'ajout de {ingredient_nom} ({quantite}).")
 
     def ajouter_avis(self):
         """Permet d'ajouter un avis à la recette"""
