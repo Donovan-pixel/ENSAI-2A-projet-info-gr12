@@ -22,14 +22,14 @@ class DetailsRecetteVue(VueAbstraite):
         utilisateur = Session().utilisateur
 
         print("\n" + "=" * 70)
-        print(f"  🍝 Titre : {self.recette.titre}")
-        print(f"  📂 Catégorie : {self.recette.categorie}")
-        print(f"  🌍 Origine : {self.recette.origine}")
-        print("\n  📋 Ingrédients :")
+        print(f"  • Titre : {self.recette.titre}")
+        print(f"  • Catégorie : {self.recette.categorie}")
+        print(f"  • Origine : {self.recette.origine}")
+        print("\n  • Ingrédients :")
         for ingredient, quantite in self.recette.ingredientQuantite.items():
             print(f"    - {ingredient} : {quantite}")
 
-        print("\n  📝 Consignes :")
+        print("\n  • Consignes :")
         import re
 
         etapes = re.split(r"(?<=[.!?])\s+", self.recette.consignes.strip())
