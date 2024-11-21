@@ -80,7 +80,7 @@ class ListeDeCourseDAO(metaclass=Singleton):
 
     @log
     def listerTous(self, idUtilisateur) -> list[ListeDeCourses]:
-        """Lister les listes de courses de l'utilisateur grâce à son id
+        """Lister la liste de courses de l'utilisateur grâce à son id
 
         Parameters
         ----------
@@ -130,8 +130,10 @@ class ListeDeCourseDAO(metaclass=Singleton):
         Parameters
         ----------
 
-        IngredientQuantite : dict
-            un dictionnaire d'ingrédients et leurs quantités
+        idIngredient : int
+            L'identifiant de l'ingredient
+        quantité : string
+            La quantité de l'ingredient y compris son unité
         idUtilisateur : int
             L'identifiant de l'utilisateur
 
@@ -218,8 +220,8 @@ class ListeDeCourseDAO(metaclass=Singleton):
         ----------
         idUtilisateur : int
             L'identifiant de l'utilisateur.
-        Ingredient : Ingredient
-            L'ingrédient à retirer.
+        idIngredient : int
+            l'identifiant de l'ingrédient à retirer.
 
         Returns
         -------
