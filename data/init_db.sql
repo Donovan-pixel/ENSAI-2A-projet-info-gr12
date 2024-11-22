@@ -7,6 +7,8 @@ CREATE TABLE users(
     mot_de_passe TEXT,
     role VARCHAR(255)
 );
+INSERT INTO users (pseudo, mot_de_passe, role)
+VALUES ('admin', 'f3408d18a3f3e0ad710413e87c854d77014dc5d5c5ad706f6a13f2a400ca204e', 'administrateur');
 DROP TABLE IF EXISTS recettes CASCADE;
 CREATE TABLE recettes(
     id_meal SERIAL PRIMARY KEY,
