@@ -9,8 +9,7 @@ class MenuUtilisateurVue(VueAbstraite):
 
     Attributes
     ----------
-    message=''
-        str
+    None
 
     Returns
     ------

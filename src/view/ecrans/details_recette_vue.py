@@ -100,7 +100,6 @@ class DetailsRecetteVue(VueAbstraite):
 
     def gerer_ingredients(self):
         while True:
-            # Afficher le menu pour choisir une action
             choix_action = inquirer.select(
                 message="Que voulez-vous faire ?",
                 choices=[
@@ -122,7 +121,7 @@ class DetailsRecetteVue(VueAbstraite):
                     self.choisir_menu()
 
     def ajouter_ingredients_favoris(self):
-        """Ajoute des ingrédients de la recette affichée aux favoris en évitant les doublons."""
+        """Ajoute des ingrédients de la recette affichée aux favoris."""
         utilisateur = Session().utilisateur
         favoris_service = IngredientFavoriService()
         ingredients_favoris = favoris_service.obtenirIngredientsFavoris(utilisateur)
@@ -153,7 +152,7 @@ class DetailsRecetteVue(VueAbstraite):
             print(f"L'ingrédient {ingredient_nom} a été ajouté aux favoris.")
 
     def ajouter_ingredients_non_desires(self):
-        """Ajoute des ingrédients de la recette affichée aux non désirés en évitant les doublons."""
+        """Ajoute des ingrédients de la recette affichée aux non désirés."""
         utilisateur = Session().utilisateur
         non_desire_service = IngredientNonDesireService()
         ingredients_favoris = IngredientFavoriService().obtenirIngredientsFavoris(utilisateur)

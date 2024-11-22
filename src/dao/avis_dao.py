@@ -129,3 +129,39 @@ class AvisDao(metaclass=Singleton):
             return False
         print(res)
         return bool(res)
+
+    @log
+    def obtenirTousLesAvis(self) -> list[Avis]:
+        """Obtient tous les avis dans la base de données
+
+        Returns
+        -------
+        list[Avis]
+            Liste contenant tous les avis enregistrés
+        """
+
+        res = None
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT * FROM avis;")
+                    res = cursor.fetchall()
+        except Exception as e:
+            logging.exception(e)
+            return []
+
+        liste_avis = []
+
+        if res:
+            for row in res:
+                avis = Avis(
+                    idAvis=row["id_avis"],
+                    idUtilisateur=row["id_user"],
+                    idRecette=row["id_meal"],
+                    note=row["note"],
+                    commentaire=row["commentaire"],
+                )
+                liste_avis.append(avis)
+
+        return liste_avis

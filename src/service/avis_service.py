@@ -28,3 +28,8 @@ class AvisService:
     def supprimer_avis(self, avis: Avis) -> bool:
         """Supprimer un ingredient"""
         return AvisDao().supprimer_avis(avis)
+
+    @log
+    def obtenirTousLesAvis(self) -> list[Avis]:
+        """Lister tous les avis"""
+        return AvisDao().obtenirTousLesAvis()
