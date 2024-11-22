@@ -6,8 +6,10 @@ class ListeDeCourses:
     ----------
     idListeDeCourses : int
         identifiant de la liste de courses
+
     idUtilisateur : int
         identifiant de l'utilisateur
+        
     ingredientQuantite = dict
         dictionnaire associant les ingredients à leur quantité à acheter
     """

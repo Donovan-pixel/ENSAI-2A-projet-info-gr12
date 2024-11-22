@@ -10,7 +10,3 @@ def hash_password(password, sel=""):
     password_bytes = password.encode("utf-8") + sel.encode("utf-8")
     hash_object = hashlib.sha256(password_bytes)
     return hash_object.hexdigest()
-
-
-load_dotenv()
-admin_password = os.getenv("ADMIN_PASSWORD")

@@ -6,6 +6,7 @@ class Ingredient:
     ----------
     idIngrédient : int
         identifiant
+        
     nom : str
         nom de l'ingrédient
     """

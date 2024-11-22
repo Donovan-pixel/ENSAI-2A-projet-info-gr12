@@ -6,14 +6,18 @@ class Avis:
     ----------
     idAvis : int
         identifiant de l'avis
+
     idUtilisateur : int
         identifiant de l'utilisateur
+
     idRecette : int
         identifiant de la recette
+
     note : float
         note donnée par cet utilisateur pour la recette
+        
     commentaire : str
-        commentaire donnée par l'utilisateur pour la recette
+        commentaire donné par l'utilisateur pour la recette
     """
 
     def __init__(self, idUtilisateur, idRecette, note, commentaire, idAvis=None):
