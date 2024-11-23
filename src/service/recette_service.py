@@ -94,18 +94,6 @@ class RecetteService:
         return RecetteDao().obtenirRecettesparLettre(lettre=lettre)
 
     @log
-    def obtenirRecettesParIngredient(self, ingredient: Ingredient) -> list[Recette]:
-        """obtenir la liste des recettes contenant un ingrédient spécifique
-        Parameters
-        ----------
-        ingredient : Ingredient
-        Return
-        -----
-        Recette : une liste d'objets de type Recette
-        """
-        return RecetteDao().obtenirRecettesParIngredient(ingredient)
-
-    @log
     def obtenirRecettesParIngredients(self, ingredients: list[Ingredient]) -> list[Recette]:
         """obtenir la liste des recettes contenant deux ou plusieurs ingrédients
         Parameters
