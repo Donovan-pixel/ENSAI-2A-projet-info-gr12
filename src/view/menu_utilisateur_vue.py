@@ -38,6 +38,7 @@ class MenuUtilisateurVue(VueAbstraite):
                 "Gérer mes ingrédients favoris/non désirés",
                 "Obtenir des suggestions de recettes",
                 "Accéder à ma liste de courses",
+                "Modifier mon profil",
                 "Se déconnecter",
             ],
         ).execute()
@@ -75,3 +76,7 @@ class MenuUtilisateurVue(VueAbstraite):
                 from view.ecrans.liste_de_courses_vue import ListeDeCoursesVue
 
                 return ListeDeCoursesVue().choisir_menu()
+            case "Modifier mon profil":
+                from view.ecrans.modifier_profile_vue import ModifierProfilVue
+
+                ModifierProfilVue().choisir_menu()

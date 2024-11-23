@@ -33,7 +33,7 @@ class UtilisateurDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO users(pseudo, mot_de_passe, role) VALUES"
+                        "INSERT INTO users(pseudo, mot_de_passe, user_role) VALUES"
                         "(%(pseudo)s, %(motDePasse)s, %(role)s)              "
                         "RETURNING id_user;                                ",
                         {
@@ -86,9 +86,9 @@ class UtilisateurDao(metaclass=Singleton):
         if res:
             utilisateur = Utilisateur(
                 pseudo=res["pseudo"],
-                motDePasse=res["motDePasse"],
-                role=res["role"],
-                idUtilisateur=res["idUtilisateur"],
+                motDePasse=res["mot_de_passe"],
+                role=res["user_role"],
+                idUtilisateur=res["id_user"],
             )
 
         return utilisateur
@@ -128,7 +128,7 @@ class UtilisateurDao(metaclass=Singleton):
                     idUtilisateur=row["id_user"],
                     pseudo=row["pseudo"],
                     motDePasse=row["mot_de_passe"],
-                    role=row["role"],
+                    role=row["user_role"],
                 )
 
                 liste_utilisateur.append(utilisateur)
@@ -159,7 +159,7 @@ class UtilisateurDao(metaclass=Singleton):
                         "UPDATE users                                 "
                         "   SET pseudo             = %(pseudo)s,            "
                         "       mot_de_passe         = %(motDePasse)s,      "
-                        "       role               = %(role)s,              "
+                        "       user_role               = %(role)s             "
                         " WHERE id_user = %(idUtilisateur)s;                ",
                         {
                             "pseudo": utilisateur.pseudo,
@@ -243,7 +243,7 @@ class UtilisateurDao(metaclass=Singleton):
                 idUtilisateur=res["id_user"],
                 pseudo=res["pseudo"],
                 motDePasse=res["mot_de_passe"],
-                role=res["role"],
+                role=res["user_role"],
             )
 
         return utilisateur

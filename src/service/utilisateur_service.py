@@ -46,7 +46,7 @@ class UtilisateurService:
     def modifier(self, utilisateur) -> Utilisateur:
         """Modification d'un utilisateur"""
 
-        utilisateur.mdp = hash_password(utilisateur.motDePasse, utilisateur.pseudo)
+        utilisateur.motDePasse = hash_password(utilisateur.motDePasse, utilisateur.pseudo)
         return UtilisateurDao().modifier(utilisateur)
 
     @log
