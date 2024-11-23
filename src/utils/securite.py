@@ -1,6 +1,5 @@
 import hashlib
 import os
-from dotenv import load_dotenv
 
 
 def hash_password(password, sel=""):
