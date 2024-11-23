@@ -14,7 +14,7 @@ class ModerationAvisVue(VueAbstraite):
         self.message = message
 
     def choisir_menu(self):
-        avis = AvisService().obtenirAvisSignales()
+        avis = AvisService().obtenirTousLesAvis()
 
         if not avis:
             print("\nAucun avis.\n")
