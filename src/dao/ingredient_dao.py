@@ -13,8 +13,7 @@ class IngredientDao(metaclass=Singleton):
 
     @log
     def ajouterIngredient(self, ingredient) -> bool:
-        """
-        Ajouter un ingrédient dans la base de données
+        """Ajouter un ingrédient dans la base de données
 
         Parameters
         ----------
