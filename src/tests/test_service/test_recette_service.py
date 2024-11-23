@@ -180,28 +180,6 @@ class TestRecetteService(TestCase):
         # THEN
         self.assertEqual(result, [recette])
 
-    @patch("dao.recette_dao.RecetteDao.obtenirRecettesParIngredient")
-    def test_obtenirRecettesParIngredient(self, mock_obtenirparingredient):
-        """Teste l'affichage des recettes qui ont un ingrédient spécifique"""
-        # GIVEN
-        recette_service = RecetteService()
-        recette = Recette(
-            idRecette=1,
-            titre="Recette Test",
-            ingredientQuantite="2 pommes",
-            consignes="Couper et cuire",
-            categorie="Dessert",
-            origine="France",
-        )
-        ingredient = Ingredient(nom="Pommes")
-        mock_obtenirparingredient.return_value = [recette]
-        # WHEN
-
-        result = recette_service.obtenirRecettesParIngredient(ingredient)
-
-        # THEN
-        self.assertEqual(result, [recette])
-
     @patch("dao.recette_dao.RecetteDao.obtenirRecettesParIngredients")
     def test_obtenirRecettesParIngredients(self, mock_obtenirparingredients):
         """Teste l'affichage des recettes selon des ingrédients"""

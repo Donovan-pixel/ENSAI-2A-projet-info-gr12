@@ -13,37 +13,35 @@ from service.utilisateur_service import UtilisateurService
 class ConnexionVue(VueAbstraite):
     """Vue de Connexion (saisie de pseudo et mdp)"""
 
-    def __init__(self, message="",tentatives=0):
+    def __init__(self, message=""):
         self.message = message
-        self.tentatives = tentatives
-        self.MAX_TENTATIVES = 3
+        self.tentatives_restantes = 3
 
     def choisir_menu(self):
+        while self.tentatives_restantes > 0:
+            # Demande à l'utilisateur de saisir pseudo et mot de passe
+            pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()
+            mdp = inquirer.secret(message="Entrez votre mot de passe :").execute()
 
-        if self.tentatives >= self.MAX_TENTATIVES:
-            print("\nNombre maximum de tentatives atteint.\n")
-            return AccueilVue().choisir_menu()
+            # Appel du service pour trouver l'utilisateur
+            user = UtilisateurService().seConnecter(pseudo, mdp)
 
-        # Demande à l'utilisateur de saisir pseudo et mot de passe
-        pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()
-        mdp = inquirer.secret(message="Entrez votre mot de passe :").execute()
+            # Si l'utilisateur a été trouvé à partir de ses identifiants de connexion
+            if user:
+                if user.role == "Utilisateur":
+                    print(f"\nVous êtes connecté sous le pseudo {user.pseudo}\n")
+                    Session().connexion(user)
+                    return MenuUtilisateurVue()
+                else:
+                    print("\nVous êtes connecté en tant qu'administrateur\n")
+                    Session().connexion(user)
+                    return MenuAdministrateurVue()
 
-        # Appel du service pour trouver l'utilisateur
-        user = UtilisateurService().seConnecter(pseudo, mdp)
+            self.tentatives_restantes -= 1
+            print(
+                f"\nErreur de connexion (pseudo ou mot de passe invalide). "
+                f"Tentatives restantes : {self.tentatives_restantes}\n"
+            )
 
-        # Si l'utilisateur a été trouvé à partir des ses identifiants de connexion
-        if user:
-            if user.role == "Utilisateur":
-                print(f"\nVous êtes connecté sous le pseudo {user.pseudo}\n")
-                Session().connexion(user)
-                return MenuUtilisateurVue()
-            else:
-                print("\nVous êtes connecté en tant qu'administrateur\n")
-                Session().connexion(user)
-                return MenuAdministrateurVue()
-        else:
-            tentatives_restantes = self.MAX_TENTATIVES - (self.tentatives + 1)
-            print(f"\nErreur de connexion (pseudo ou mot de passe invalide)")
-            if tentatives_restantes > 0:
-                print(f"Il vous reste {tentatives_restantes} tentatives\n")
-            return self.choisir_menu(tentatives=self.tentatives + 1)
+        print("Vous avez dépassé le nombre maximum de tentatives.\n")
+        return AccueilVue().choisir_menu()

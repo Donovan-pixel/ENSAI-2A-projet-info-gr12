@@ -14,7 +14,8 @@ class SuppressionUtilisateurVue(VueAbstraite):
         self.message = message
 
     def choisir_menu(self):
-        utilisateurs = UtilisateurService().obtenirTousLesUtilisateurs()
+        utilisateurs = UtilisateurService().lister_tous()
+        utilisateurs.pop(0)
 
         if not utilisateurs:
             print("\nAucun utilisateur trouvé.\n")
@@ -22,7 +23,7 @@ class SuppressionUtilisateurVue(VueAbstraite):
 
         choix_utilisateurs = [
             {
-                "name": f"ID: {u.idUtilisateur}, Nom: {u.nom}, Email: {u.email}",
+                "name": f"ID: {u.idUtilisateur}, Nom: {u.pseudo}",
                 "value": u.idUtilisateur,
             }
             for u in utilisateurs
