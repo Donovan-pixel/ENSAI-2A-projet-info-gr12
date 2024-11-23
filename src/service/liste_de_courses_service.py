@@ -21,7 +21,10 @@ class ListeDeCoursesService:
         ListeDeCourses : ListeDeCourses
             Retourne l'objet ListeDeCourses créé, ou None en cas d'échec.
         """
-        return ListeDeCourseDAO().creerListeDeCourses(id_utilisateur)
+        resultat = ListeDeCourseDAO().creerListeDeCourses(id_utilisateur)
+        if not resultat:
+            return None  # Retourne None en cas d'échec
+        return resultat
 
     @log
     def ajouterUnIngredient(self, idUtilisateur, idIngredient, quantite) -> bool:
