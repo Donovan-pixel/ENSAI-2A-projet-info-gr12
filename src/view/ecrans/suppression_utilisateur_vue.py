@@ -46,7 +46,7 @@ class SuppressionUtilisateurVue(VueAbstraite):
         ).execute()
 
         if confirmation:
-            succes = UtilisateurService().supprimerUtilisateur(id_utilisateur)
+            succes = UtilisateurService().supprimerUnCompte(id_utilisateur)
             if succes:
                 print("L'utilisateur a été supprimé avec succès.")
             else:

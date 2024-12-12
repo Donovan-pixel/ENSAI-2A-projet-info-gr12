@@ -62,7 +62,7 @@ class ModerationAvisVue(VueAbstraite):
         ).execute()
 
         if confirmation:
-            succes = AvisService().supprimerAvis(id_avis)
+            succes = AvisService().supprimer_avis(id_avis)
             if succes:
                 print("L'avis a été supprimé avec succès.")
             else:
