@@ -102,13 +102,13 @@ class AvisDao(metaclass=Singleton):
         return liste
 
     @log
-    def supprimer_avis(self, avis: Avis) -> bool:
+    def supprimer_avis(self, id_avis: int) -> bool:
         """Suppression d'un avis dans la base de données
 
         Parameters
         ----------
-        avis : Avis
-            L'avis à supprimer
+        id_avis : int
+            L'id de l'avis à supprimer
 
         Returns
         -------
@@ -121,7 +121,7 @@ class AvisDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "DELETE FROM avis WHERE id_avis = %(id_avis)s;",
-                        {"id_avis": avis.idAvis},
+                        {"id_avis": id_avis},
                     )
                     res = cursor.rowcount
         except Exception as e:

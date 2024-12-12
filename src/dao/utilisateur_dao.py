@@ -175,13 +175,13 @@ class UtilisateurDao(metaclass=Singleton):
         return res == 1
 
     @log
-    def supprimer(self, utilisateur) -> bool:
+    def supprimer(self, id_utilisateur: int) -> bool:
         """Suppression d'un utilisateur dans la base de données
 
         Parameters
         ----------
-        utilisateur : Utilisateur
-            utilisateur à supprimer de la base de données
+        id_utilisateur : int
+            id de l'utilisateur à supprimer de la base de données
 
         Returns
         -------
@@ -195,7 +195,7 @@ class UtilisateurDao(metaclass=Singleton):
                     cursor.execute(
                         "DELETE FROM users                  "
                         " WHERE id_user=%(idUtilisateur)s      ",
-                        {"idUtilisateur": utilisateur.idUtilisateur},
+                        {"idUtilisateur": id_utilisateur},
                     )
                     res = cursor.rowcount
         except Exception as e:

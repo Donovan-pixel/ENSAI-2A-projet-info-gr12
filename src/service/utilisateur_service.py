@@ -50,9 +50,9 @@ class UtilisateurService:
         return UtilisateurDao().modifier(utilisateur)
 
     @log
-    def supprimerUnCompte(self, utilisateur) -> bool:
+    def supprimerUnCompte(self, id_utilisateur: int) -> bool:
         """Supprimer le compte d'un utilisateur"""
-        return UtilisateurDao().supprimer(utilisateur)
+        return UtilisateurDao().supprimer(id_utilisateur)
 
     @log
     def seConnecter(self, pseudo, motDePasse) -> Utilisateur:
